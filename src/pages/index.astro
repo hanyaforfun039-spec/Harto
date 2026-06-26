@@ -1,11 +1,9 @@
 ---
-/* Beranda Web2 "Harto" — JAECOO Hybrid (tema TERANG, SITE_ID=hybrid).
-   Tampilan SIMPEL (tanpa kalkulator / angka efisiensi): hero foto + CTA,
-   teknologi SHS (kualitatif), lineup, promo, trust, galeri serah terima, form. */
+/* Beranda Web Harto — Dealer Resmi JAECOO Semarang (umum, jual semua model
+   merata). Tanpa angle hybrid/efisiensi & tanpa kalkulator. Tema terang. */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Hero from '../components/Hero.astro';
-import TechSection from '../components/TechSection.astro';
 import LineupSpec from '../components/LineupSpec.astro';
 import PromoHybrid from '../components/PromoHybrid.astro';
 import TrustHybrid from '../components/TrustHybrid.astro';
@@ -25,23 +23,23 @@ const kota = site.address.locality;
 
 const siteUrl = Astro.site ?? new URL('https://jaecoo-semarang.example');
 
-/* FAQ beranda (intent hybrid/listrik lokal) — juga FAQPage JSON-LD. */
+/* FAQ beranda (umum, lokal) — juga FAQPage JSON-LD. */
 const homeFaq = [
   {
-    q: 'Apa beda mobil hybrid (PHEV) dan mobil listrik (EV) JAECOO?',
-    a: 'JAECOO J7 SHS adalah hybrid plug-in (PHEV): bisa berjalan penuh listrik untuk harian dan memakai bensin untuk jarak jauh. JAECOO J5 EV bertenaga listrik penuh tanpa bensin. Keduanya jauh lebih hemat biaya energi dibanding SUV bensin biasa.',
+    q: 'Model JAECOO apa saja yang tersedia di Semarang?',
+    a: 'Tersedia lineup lengkap: J5, J7 SHS, J8 ARDIS, dan J8 SHS ARDIS. Lihat harga OTR dan spesifikasi tiap model di halaman ini.',
   },
   {
-    q: `Apakah melayani pembelian mobil hybrid & listrik di luar Kota ${kota}?`,
+    q: `Apakah melayani pembelian JAECOO di luar Kota ${kota}?`,
     a: `Ya. Kami melayani ${kota}, Ungaran, Salatiga, Kendal, Demak, hingga Solo (Surakarta) dan area Jawa Tengah lainnya — termasuk test drive dan serah terima lintas kota.`,
   },
   {
-    q: 'Apakah mobil listrik JAECOO J5 EV perlu charger di rumah?',
-    a: 'Tidak wajib, tetapi disarankan. J5 EV bisa diisi di stasiun pengisian umum dan pengisian cepat DC; home charger membuat pengisian harian lebih praktis dan murah.',
+    q: 'Apakah bisa dibeli secara kredit?',
+    a: `Bisa. Buka halaman tiap model untuk simulasi cicilan sesuai DP dan tenor, lalu kirim hasilnya ke WhatsApp ${site.salesName} untuk diproses.`,
   },
   {
-    q: 'Apakah servis mobil hybrid JAECOO lebih mahal?',
-    a: 'Tidak harus. Pengereman regeneratif memperpanjang usia kampas rem, interval servis mengikuti panduan pabrikan, dan baterai memiliki garansi resmi.',
+    q: 'Bagaimana cara mengatur test drive?',
+    a: `Isi formulir test drive di halaman ini. Jadwal akan diatur di ${kota} dan sekitarnya sesuai waktu Anda.`,
   },
 ];
 
@@ -52,19 +50,12 @@ const homeSchemas = [
 ];
 
 const homeDescription =
-  `Dealer resmi JAECOO Semarang untuk mobil hybrid & listrik: J7 SHS (PHEV) & J5 EV. ` +
-  `SUV hemat BBM — test drive & konsultasi. Melayani Semarang, Solo & Jawa Tengah.`;
-
-const techPoin = [
-  { icon: 'battery', judul: 'Mode listrik untuk harian', teks: 'Untuk komuter dalam kota, J7 SHS dapat berjalan penuh listrik — senyap, responsif, tanpa konsumsi bensin.' },
-  { icon: 'engine', judul: 'Mesin bekerja di titik teririt', teks: 'Saat dibutuhkan, mesin bensin Super Hybrid menyala pada putaran paling efisien sambil mengisi ulang baterai.' },
-  { icon: 'range', judul: 'Jangkauan tanpa cemas', teks: 'Gabungan bensin dan listrik memberi jarak tempuh jauh — lintas kota tanpa berhenti mengisi daya.' },
-  { icon: 'fuel', judul: 'Hemat di tiap kilometer', teks: 'Konsumsi gabungan yang sangat rendah menekan biaya energi harian secara signifikan.' },
-];
+  `Dealer resmi JAECOO Semarang: J5, J7 SHS, J8 ARDIS & J8 SHS ARDIS. ` +
+  `Harga OTR terbaik, simulasi kredit & test drive. Melayani Semarang, Solo & Jawa Tengah.`;
 ---
 <BaseLayout
   title="Beranda"
-  seoTitle="Mobil Hybrid & Listrik JAECOO Semarang — SUV Hemat BBM"
+  seoTitle="Dealer Resmi JAECOO Semarang — Harga OTR, Kredit & Test Drive"
   description={homeDescription}
   jsonLd={homeSchemas}
 >
@@ -73,16 +64,7 @@ const techPoin = [
   <Hero
     site={site}
     primaryCta={{ label: 'Jadwalkan Test Drive', href: linkTestDrive(site, heroCar.nama), variant: 'whatsapp', iconLeft: 'whatsapp', target: '_blank' }}
-    secondaryCta={{ label: 'Pelajari Teknologi SHS', href: '/teknologi', variant: 'outline' }}
-  />
-
-  <TechSection
-    eyebrow="Teknologi Super Hybrid System"
-    heading="Listrik untuk harian, bensin untuk jauh"
-    lead="Super Hybrid System (SHS) memadukan motor listrik dan mesin bensin efisiensi tinggi. Hasilnya: kenyamanan mobil listrik untuk keseharian, dengan ketenangan jangkauan bensin saat menempuh jarak jauh."
-    poin={techPoin}
-    ctaHref="/teknologi"
-    ctaLabel="Pelajari teknologi SHS"
+    secondaryCta={{ label: 'Lihat Semua Model', href: '/#lineup', variant: 'outline' }}
   />
 
   <LineupSpec cars={lineup} site={site} />
@@ -93,7 +75,7 @@ const techPoin = [
 
   <DeliveryGallery site={site} />
 
-  <!-- Area Layanan (sinyal local SEO — kalimat natural + internal link) -->
+  <!-- Area Layanan (sinyal local SEO — kalimat natural) -->
   <section class="section" id="area" aria-labelledby="area-h">
     <div class="container container--narrow">
       <div class="sec-head" data-reveal>
@@ -101,12 +83,10 @@ const techPoin = [
         <h2 id="area-h">Melayani Semarang &amp; sekitarnya</h2>
       </div>
       <p class="area-copy" data-reveal>
-        {site.dealerName} melayani pembelian dan test drive mobil hybrid &amp; listrik JAECOO untuk {kota} Kota,
+        {site.dealerName} melayani pembelian dan test drive JAECOO untuk {kota} Kota,
         Ungaran, Salatiga, Kendal, Demak, hingga Solo (Surakarta) dan kota-kota lain di Jawa Tengah.
-        Lihat <a href="/mobil/j7-shs">JAECOO J7 SHS (hybrid)</a> dan
-        <a href="/mobil/j5">JAECOO J5 EV (listrik)</a>, atau pahami
-        <a href="/teknologi">teknologi Super Hybrid System</a> — konsultasi &amp; test drive lintas kota
-        dibantu {site.salesName} via WhatsApp.
+        Lihat <a href="/#lineup">lineup lengkap dan harga OTR</a> tiap model — konsultasi, kredit,
+        dan test drive lintas kota dibantu {site.salesName} via WhatsApp.
       </p>
     </div>
   </section>
@@ -116,7 +96,7 @@ const techPoin = [
     <div class="container container--narrow">
       <div class="sec-head" data-reveal>
         <p class="eyebrow">Pertanyaan Umum</p>
-        <h2 id="faq-h">Seputar mobil hybrid &amp; listrik JAECOO di {kota}</h2>
+        <h2 id="faq-h">Seputar pembelian JAECOO di {kota}</h2>
       </div>
       <div class="faq" data-reveal>
         {homeFaq.map((f) => (

@@ -6,7 +6,8 @@
    Mobile: hamburger <details>/<summary> => BERFUNGSI TANPA JS. */
 import Button from './Button.astro';
 import Icon from './Icon.astro';
-import BrandWordmark from './BrandWordmark.astro';
+/* Logo resmi JAECOO (header TERANG → wordmark hitam di latar terang). Supabase Storage. */
+const LOGO = 'https://yvbpnlbwaundqhyrvdwg.supabase.co/storage/v1/object/public/Faiz/Jaecoo_wordmark.svg';
 import type { SiteConfig } from '../lib/types';
 import { linkPenawaran } from '../lib/whatsapp';
 
@@ -16,7 +17,7 @@ const wa = linkPenawaran(site);
 
 /* IA Harto (efisiensi-led) — kredit BUKAN item nav (hanya di /mobil/[slug]). */
 const nav = [
-  { label: 'Teknologi SHS', href: '/teknologi' },
+  { label: 'Beranda', href: '/' },
   { label: 'Model', href: '/#lineup' },
   { label: 'Promo', href: '/promo' },
   { label: 'Tentang', href: '/tentang' },
@@ -33,8 +34,8 @@ function isActive(href: string): boolean {
   <span class="header-accent" aria-hidden="true"></span>
   <div class="container site-header-inner">
     <a class="brand" href="/" aria-label={`${site.brand}, beranda`}>
-      <BrandWordmark class="brand-logo" />
-      <span class="brand-sub">Hybrid · {site.address.locality}</span>
+      <img class="brand-logo" src={LOGO} width="1272" height="197" alt={site.brand} />
+      <span class="brand-sub">{site.address.locality}</span>
     </a>
 
     <nav class="nav-desktop" aria-label="Navigasi utama">
@@ -96,8 +97,8 @@ function isActive(href: string): boolean {
   @media (min-width: 64rem) { .site-header-inner { min-height: var(--header-h-lg); } }
 
   .brand { display: flex; align-items: center; gap: var(--space-xs); margin-right: auto; }
-  .brand-logo { display: block; height: 1rem; width: auto; color: var(--color-text); }
-  @media (min-width: 64rem) { .brand-logo { height: 1.15rem; } }
+  .brand-logo { display: block; height: 1.15rem; width: auto; }
+  @media (min-width: 64rem) { .brand-logo { height: 1.35rem; } }
   .brand-sub {
     font-size: var(--fs-caption);
     letter-spacing: var(--ls-wide);

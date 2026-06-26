@@ -14,7 +14,7 @@ const consultantPhoto = 'https://fxjspvdkeybabxotniov.supabase.co/storage/v1/obj
 
 const metrics = [
   { value: '[4,9]', unit: '/ 5', label: 'Kepuasan layanan' },
-  { value: '[120]', unit: '+', label: 'Keluarga beralih ke hybrid' },
+  { value: '[120]', unit: '+', label: 'Pelanggan terbantu' },
   { value: String(site.serviceAreas.length), unit: 'kota', label: 'Area layanan Jawa Tengah' },
 ];
 ---
@@ -22,7 +22,7 @@ const metrics = [
   <div class="container">
     <div class="th-head" data-reveal>
       <p class="eyebrow">Bukti &amp; Pengalaman</p>
-      <h2 id="th-h">Mereka sudah merasakan efisiensinya</h2>
+      <h2 id="th-h">Dipercaya pembeli di {site.address.region}</h2>
     </div>
 
     <!-- Trust metrics: tile instrumen (angka mono) -->

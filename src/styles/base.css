@@ -44,7 +44,16 @@ body {
   font-size: var(--fs-body);
   line-height: var(--lh-body);
   color: var(--color-text);
+  /* Kanvas TIDAK polos: sheen putih lembut dari atas + kedalaman tipis ke bawah
+     + grid "blueprint" super-samar. Kartu putih (surface) mengambang di atasnya.
+     CSS-only, ringan; fixed agar terasa seperti backdrop stabil. */
   background-color: var(--color-bg);
+  background-image:
+    radial-gradient(120% 80% at 50% -12%, rgba(255, 253, 247, 0.6), transparent 55%),
+    linear-gradient(180deg, transparent 62%, rgba(43, 35, 24, 0.05)),
+    repeating-linear-gradient(0deg, rgba(43, 35, 24, 0.028) 0 1px, transparent 1px 80px),
+    repeating-linear-gradient(90deg, rgba(43, 35, 24, 0.028) 0 1px, transparent 1px 80px);
+  background-attachment: fixed;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;

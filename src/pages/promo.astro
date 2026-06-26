@@ -18,17 +18,17 @@ const lineup = getLineup(site);
 const promo = site.promo;
 
 const manfaat = [
-  { judul: 'Program hybrid terbaik bulan ini', teks: 'Penawaran OTR plus paket pengisian daya dan bonus aksesori untuk unit hybrid & listrik.' },
-  { judul: 'Hemat sejak hari pertama', teks: `Hitung estimasi penghematan energi sesuai pemakaian Anda bersama ${site.salesName}, bukan sekadar janji.` },
-  { judul: 'Konsultasi teknologi, bukan obral', teks: 'Tanya cara kerja SHS, pengisian EV, garansi baterai, dan perawatan — dijelaskan tuntas.' },
+  { judul: 'Penawaran terbaik bulan ini', teks: 'Harga OTR terbaik plus bonus aksesori dan paket perawatan untuk semua model JAECOO.' },
+  { judul: 'Kredit yang dibantu sampai approve', teks: `Simulasi cicilan jujur dan pengajuan kredit dibantu langsung oleh ${site.salesName}, bukan sekadar janji.` },
+  { judul: 'Konsultasi, bukan obral', teks: 'Tanya spesifikasi, fitur, garansi, dan perawatan tiap model — dijelaskan tuntas.' },
   { judul: 'Layanan lintas kota', teks: `Test drive & serah terima menjangkau ${site.serviceAreas.join(', ')}.` },
 ];
 
 const bulanTahun = new Intl.DateTimeFormat('id-ID', { month: 'long', year: 'numeric' }).format(new Date());
-const seoTitle = `Promo Mobil Hybrid JAECOO ${site.address.locality} — J7 SHS & J5 EV`;
+const seoTitle = `Promo JAECOO ${site.address.locality} — Harga Terbaik & Kredit`;
 const description =
-  `Promo mobil hybrid & listrik JAECOO di ${site.address.locality} ${bulanTahun}: ${promo.aktif ? promo.headline + '. ' : ''}` +
-  `Paket pengisian daya, estimasi penghematan, dan test drive. Konsultasi via WhatsApp ${site.salesName}.`;
+  `Promo JAECOO di ${site.address.locality} ${bulanTahun}: ${promo.aktif ? promo.headline + '. ' : ''}` +
+  `Harga OTR terbaik, bonus, simulasi kredit & test drive. Konsultasi via WhatsApp ${site.salesName}.`;
 ---
 <BaseLayout title="Promo & Penawaran" seoTitle={seoTitle} description={description}>
   <Header slot="header" site={site} />
@@ -41,8 +41,8 @@ const description =
       </nav>
       <div class="ph-head" data-reveal>
         <p class="eyebrow">Promo &amp; Program</p>
-        <h1>Promo Mobil Hybrid JAECOO {site.address.locality} Bulan Ini</h1>
-        <p class="lead">Manfaatkan program efisiensi bulan ini sebelum berakhir — semua dibantu langsung oleh {site.salesName}.</p>
+        <h1>Promo JAECOO {site.address.locality} Bulan Ini</h1>
+        <p class="lead">Manfaatkan penawaran bulan ini sebelum berakhir — semua dibantu langsung oleh {site.salesName}.</p>
       </div>
     </div>
   </section>

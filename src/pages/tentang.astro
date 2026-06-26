@@ -15,10 +15,10 @@ import { getCarBySlug } from '../lib/cars';
 
 const featured = getCarBySlug(site.featuredSlug);
 const description =
-  `${site.salesName}, ${site.salesTitle} spesialis hybrid & mobil listrik di ${site.address.locality}. ` +
-  `Konsultasi teknologi, estimasi penghematan & test drive JAECOO. ` +
+  `${site.salesName}, ${site.salesTitle} di ${site.address.locality}. ` +
+  `Konsultasi, harga OTR, simulasi kredit & test drive JAECOO. ` +
   `Melayani ${site.address.locality}, Solo & Jawa Tengah via WhatsApp.`;
-const seoTitle = `Tentang ${site.salesName} — Konsultan Hybrid JAECOO ${site.address.locality}`;
+const seoTitle = `Tentang ${site.salesName} — Sales JAECOO ${site.address.locality}`;
 ---
 <BaseLayout title="Tentang Kami" seoTitle={seoTitle} description={description}>
   <Header slot="header" site={site} />
@@ -31,14 +31,13 @@ const seoTitle = `Tentang ${site.salesName} — Konsultan Hybrid JAECOO ${site.a
       </nav>
       <div class="about-intro" data-reveal>
         <p class="eyebrow">Tentang Kami</p>
-        <h1>{site.salesName} — Konsultan Hybrid &amp; Mobil Listrik JAECOO {site.address.locality}</h1>
+        <h1>{site.salesName} — Sales Consultant JAECOO {site.address.locality}</h1>
         <p class="lead">{site.positioning}</p>
         <p>
-          Membeli mobil hybrid atau listrik semestinya berangkat dari paham, bukan ragu. {site.salesName},
-          {site.salesTitle}, membantu Anda memahami cara kerja Super Hybrid System dan penggerak listrik —
-          dari estimasi penghematan, test drive, hingga pengisian daya dan perawatan — dengan layanan personal
-          untuk {site.serviceAreas.join(', ')}. Mengusung semangat “{site.tagline}”, kami menghadirkan
-          teknologi JAECOO secara jernih dan tanpa rumit.
+          Membeli mobil semestinya tenang dan jelas. {site.salesName}, {site.salesTitle}, mendampingi Anda
+          dari konsultasi pertama, pemilihan model, simulasi kredit, test drive, hingga serah terima unit —
+          dengan layanan personal untuk {site.serviceAreas.join(', ')}. Kami menghadirkan lineup lengkap
+          JAECOO secara jelas dan tanpa rumit.
         </p>
       </div>
     </div>

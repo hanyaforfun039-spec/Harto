@@ -1,13 +1,13 @@
 {
   "id": "hybrid",
   "theme": "hybrid",
-  "brand": "JAECOO Hybrid Semarang",
+  "brand": "JAECOO Semarang",
   "dealerName": "Dealer Resmi JAECOO Semarang",
   "salesName": "Harto",
   "salesTitle": "Sales Consultant JAECOO",
   "salesCredentials": [
-    "Sales Consultant Resmi",
-    "Spesialis Hybrid & Mobil Listrik",
+    "Sales Consultant Resmi JAECOO",
+    "Harga OTR & Simulasi Kredit",
     "Melayani Semarang & Jawa Tengah"
   ],
   "whatsapp": "6287830360876",
@@ -45,66 +45,49 @@
     }
   ],
   "mapUrl": "https://www.google.com/maps/search/?api=1&query=JAECOO+SEMARANG",
-  "tagline": "Irit harian, tenang jarak jauh.",
-  "subheadline": "Mesin bensin efisiensi tinggi berpadu motor listrik: irit seperti mobil listrik untuk harian, tenang tanpa cemas untuk jarak jauh. Dealer resmi JAECOO Semarang.",
-  "positioning": "Spesialis JAECOO hybrid & mobil listrik di Semarang — J7 SHS (PHEV) dan J5 EV. Efisiensi, teknologi, dan kenyamanan tanpa kompromi.",
+  "tagline": "JAECOO Semarang — pilihan tepat untuk setiap perjalanan.",
+  "subheadline": "Lineup lengkap JAECOO, dari J5 hingga J8 ARDIS flagship. Harga OTR terbaik, simulasi kredit, dan test drive di Semarang & sekitarnya — dibantu langsung oleh Harto.",
+  "positioning": "Dealer resmi JAECOO di Semarang — lineup lengkap, harga terbaik, simulasi kredit, dan layanan personal untuk Semarang & Jawa Tengah.",
   "heroVariant": "car-first",
-  "heroCarSlug": "j7-shs",
-  "heroHeadline": "Mobil Hybrid & Listrik JAECOO di Semarang — Efisiensi Tanpa Kompromi",
+  "heroCarSlug": "j8-ardis",
+  "heroHeadline": "Dealer Resmi JAECOO Semarang — Harga Terbaik & Test Drive",
   "lineup": [
-    "j7-shs",
     "j5",
-    "j8-shs-ardis",
-    "j8-ardis"
+    "j7-shs",
+    "j8-ardis",
+    "j8-shs-ardis"
   ],
-  "featuredSlug": "j7-shs",
+  "featuredSlug": "j8-ardis",
   "kredit": {
     "dpDefaultPct": 20,
     "tenorDefaultYears": 5,
     "bungaFlatPctPerYear": 3.8
   },
-  "efisiensi": {
-    "bbmDefault": 13000,
-    "kmDefault": 1500,
-    "baselineDefaultKmpl": 9,
-    "baselinePresets": [
-      { "label": "SUV bensin biasa", "kmpl": 9 },
-      { "label": "MPV bensin", "kmpl": 11 },
-      { "label": "Sedan bensin", "kmpl": 13 }
-    ],
-    "model": {
-      "j7-shs": { "kmpl": 30, "rangeKm": 1200 },
-      "j5": { "kmpl": 45, "rangeKm": 500 },
-      "j8-shs-ardis": { "kmpl": 26, "rangeKm": 1100 },
-      "j7": { "kmpl": 14, "rangeKm": 800 },
-      "j8-ardis": { "kmpl": 11, "rangeKm": 750 }
-    }
-  },
   "promo": {
-    "sub": "Paket pengisian daya & bonus aksesori untuk pembelian J7 SHS.",
+    "sub": "Harga terbaik, bonus aksesori & paket perawatan untuk semua model JAECOO. Konsultasi gratis, tanpa biaya tersembunyi.",
     "aktif": true,
     "deadline": "2026-06-30",
-    "headline": "Promo Hybrid Hemat Bulan Ini"
+    "headline": "Penawaran JAECOO Semarang Bulan Ini"
   },
   "testimoni": [
     {
       "kota": "Semarang",
       "nama": "Bapak Adi",
-      "teks": "Konsumsi bahan bakar turun drastis untuk komuter harian. Penjelasannya sangat membantu.",
+      "teks": "Prosesnya jelas dari awal sampai serah terima unit. Penjelasannya sangat membantu dan tidak terburu-buru.",
       "mobil": "J7 SHS"
     },
     {
       "kota": "Salatiga",
       "nama": "Ibu Lina",
-      "teks": "Dibimbing soal cara isi daya dan perawatan hybrid. Pelayanan ramah dan sabar.",
-      "mobil": "J7 SHS"
+      "teks": "Dibimbing dari pemilihan model sampai administrasi dan kredit. Pelayanan ramah dan sabar.",
+      "mobil": "J5 EV"
     }
   ],
   "seo": {
     "locale": "id_ID",
-    "ogImage": "https://yvbpnlbwaundqhyrvdwg.supabase.co/storage/v1/object/public/Faiz/J7-shs-banner.webp",
-    "titleSuffix": "JAECOO Hybrid Semarang",
-    "defaultDescription": "Mobil hybrid & listrik JAECOO di Semarang — J7 SHS (PHEV) & J5 EV. Efisiensi terdepan, teknologi Super Hybrid. Test drive & konsultasi via WhatsApp. Melayani Semarang–Solo & Jawa Tengah."
+    "ogImage": "https://yvbpnlbwaundqhyrvdwg.supabase.co/storage/v1/object/public/Faiz/J8-ardis-banner.webp",
+    "titleSuffix": "JAECOO Semarang",
+    "defaultDescription": "Dealer resmi JAECOO Semarang: lineup lengkap J5, J7 SHS, J8 ARDIS & J8 SHS ARDIS. Harga OTR, simulasi kredit & test drive. Melayani Semarang, Solo & Jawa Tengah."
   },
   "social": {
     "instagram": "https://instagram.com/jaecoo_purianjasmoro_smg"

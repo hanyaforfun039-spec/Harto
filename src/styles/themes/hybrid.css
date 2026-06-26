@@ -18,12 +18,13 @@
   --color-accent-soft:   #E3F4EC; /* tint chip/badge/highlight */
   --color-on-accent:     #FFFFFF;
 
-  /* SURFACE — putih premium */
-  --color-bg:            #FFFFFF;
-  --color-surface:       #F4F6F8;
-  --color-surface-2:     #EDEFF2;
-  --color-border:        #DCE0E5;
-  --color-border-strong: #C5CBD2;
+  /* SURFACE — kanvas GREIGE HANGAT (senada JAECOO "Classic", BUKAN putih polos)
+     + kartu off-white hangat yang "mengambang". Tekstur halus di base.css. */
+  --color-bg:            #EEEAE3; /* greige/champagne hangat */
+  --color-surface:       #FBFAF6; /* kartu/panel off-white hangat → clean */
+  --color-surface-2:     #F3EFE8; /* band alternatif lembut */
+  --color-border:        #DED8CE;
+  --color-border-strong: #C9C2B6;
 
   /* TEKS — near-black kebiruan */
   --color-text:        #0B0F14;
