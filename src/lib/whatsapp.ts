@@ -5,7 +5,6 @@
    ============================================================================ */
 import type { SiteConfig } from './types';
 import type { CicilanResult } from './credit';
-import type { EfisiensiResult } from './efisiensi';
 import { formatRupiah } from './format';
 
 /** Susun URL wa.me dengan pesan ter-encode. number = E.164 tanpa '+'. */
@@ -36,23 +35,6 @@ export function pesanSimulasiKredit(
     `- Tenor: ${r.tenorYears} tahun (${r.tenorMonths} bulan)\n` +
     `- Estimasi cicilan: ${formatRupiah(r.cicilanPerBulan)} / bulan\n` +
     `Mohon dibantu proses pengajuannya.`
-  );
-}
-
-/** Pesan hasil kalkulator efisiensi (Web2 hybrid) terisi. */
-export function pesanEfisiensi(
-  site: SiteConfig,
-  modelNama: string,
-  r: EfisiensiResult,
-): string {
-  return (
-    `Halo ${site.salesName}, saya menghitung penghematan dengan JAECOO ${modelNama}:\n` +
-    `- Jarak tempuh: ${r.kmPerMonth.toLocaleString('id-ID')} km/bulan\n` +
-    `- Biaya BBM JAECOO: ${formatRupiah(r.biayaJaecooPerBulan)} / bulan\n` +
-    `- Biaya mobil lama: ${formatRupiah(r.biayaLamaPerBulan)} / bulan\n` +
-    `- Estimasi hemat: ${formatRupiah(r.hematPerBulan)} / bulan (${formatRupiah(r.hematPerTahun)} / tahun)\n` +
-    `- Jangkauan: ${r.rangeKm.toLocaleString('id-ID')} km sekali isi penuh\n` +
-    `Mohon info lebih lanjut dan jadwal test drive.`
   );
 }
 

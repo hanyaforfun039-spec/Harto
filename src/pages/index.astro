@@ -1,11 +1,10 @@
 ---
-/* Beranda Web2 "Harto" — JAECOO Hybrid & Efisiensi (tema TERANG, SITE_ID=hybrid).
-   Merangkai fondasi jaecoo-base + 3 section baru (EfficiencyStrip, TechSection,
-   SavingsCalc). Urutan menonjolkan teknologi & efisiensi lebih dulu. */
+/* Beranda Web2 "Harto" — JAECOO Hybrid (tema TERANG, SITE_ID=hybrid).
+   Tampilan SIMPEL (tanpa kalkulator / angka efisiensi): hero foto + CTA,
+   teknologi SHS (kualitatif), lineup, promo, trust, galeri serah terima, form. */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
-import HeroEfficiency from '../components/HeroEfficiency.astro';
-import EfficiencyStrip from '../components/EfficiencyStrip.astro';
+import Hero from '../components/Hero.astro';
 import TechSection from '../components/TechSection.astro';
 import LineupSpec from '../components/LineupSpec.astro';
 import PromoHybrid from '../components/PromoHybrid.astro';
@@ -16,21 +15,18 @@ import StickyWhatsAppBar from '../components/StickyWhatsAppBar.astro';
 import Footer from '../components/Footer.astro';
 import Icon from '../components/Icon.astro';
 import { site } from '../lib/site';
-import { getLineup } from '../lib/cars';
+import { getLineup, getCarBySlug } from '../lib/cars';
+import { linkTestDrive } from '../lib/whatsapp';
 import { organizationSchema, webSiteSchema, faqPageSchema } from '../lib/schema';
 
 const lineup = getLineup(site);
+const heroCar = getCarBySlug(site.heroCarSlug) ?? lineup[0];
 const kota = site.address.locality;
-const kmDefault = site.efisiensi?.kmDefault.toLocaleString('id-ID') ?? '1.500';
 
 const siteUrl = Astro.site ?? new URL('https://jaecoo-semarang.example');
 
-/* FAQ beranda (intent hybrid/listrik/efisiensi lokal) — juga FAQPage JSON-LD. */
+/* FAQ beranda (intent hybrid/listrik lokal) — juga FAQPage JSON-LD. */
 const homeFaq = [
-  {
-    q: 'Berapa hemat biaya bensin per bulan dengan mobil hybrid JAECOO?',
-    a: `Tergantung jarak tempuh Anda. Pada pemakaian sekitar ${kmDefault} km/bulan, JAECOO J7 SHS dapat menekan biaya energi hingga jutaan rupiah per bulan dibanding SUV bensin biasa. Hitung angka pasti sesuai pemakaian Anda di kalkulator efisiensi pada halaman ini.`,
-  },
   {
     q: 'Apa beda mobil hybrid (PHEV) dan mobil listrik (EV) JAECOO?',
     a: 'JAECOO J7 SHS adalah hybrid plug-in (PHEV): bisa berjalan penuh listrik untuk harian dan memakai bensin untuk jarak jauh. JAECOO J5 EV bertenaga listrik penuh tanpa bensin. Keduanya jauh lebih hemat biaya energi dibanding SUV bensin biasa.',
@@ -43,6 +39,10 @@ const homeFaq = [
     q: 'Apakah mobil listrik JAECOO J5 EV perlu charger di rumah?',
     a: 'Tidak wajib, tetapi disarankan. J5 EV bisa diisi di stasiun pengisian umum dan pengisian cepat DC; home charger membuat pengisian harian lebih praktis dan murah.',
   },
+  {
+    q: 'Apakah servis mobil hybrid JAECOO lebih mahal?',
+    a: 'Tidak harus. Pengereman regeneratif memperpanjang usia kampas rem, interval servis mengikuti panduan pabrikan, dan baterai memiliki garansi resmi.',
+  },
 ];
 
 const homeSchemas = [
@@ -53,14 +53,7 @@ const homeSchemas = [
 
 const homeDescription =
   `Dealer resmi JAECOO Semarang untuk mobil hybrid & listrik: J7 SHS (PHEV) & J5 EV. ` +
-  `SUV hemat BBM — hitung penghematan & test drive. Melayani Semarang, Solo & Jawa Tengah.`;
-
-const effMetrics = [
-  { value: '44,5', unit: '%', label: 'Efisiensi termal mesin Super Hybrid' },
-  { value: '106', unit: 'km', label: 'Jarak tempuh listrik (mode EV)' },
-  { value: '1,0', unit: 'L/100km', label: 'Konsumsi gabungan PHEV' },
-  { value: '347', unit: 'hp', label: 'Tenaga gabungan J7 SHS' },
-];
+  `SUV hemat BBM — test drive & konsultasi. Melayani Semarang, Solo & Jawa Tengah.`;
 
 const techPoin = [
   { icon: 'battery', judul: 'Mode listrik untuk harian', teks: 'Untuk komuter dalam kota, J7 SHS dapat berjalan penuh listrik — senyap, responsif, tanpa konsumsi bensin.' },
@@ -77,13 +70,10 @@ const techPoin = [
 >
   <Header slot="header" site={site} />
 
-  <HeroEfficiency site={site} />
-
-  <EfficiencyStrip
-    eyebrow="Angka Efisiensi"
-    heading="Efisiensi yang bisa Anda ukur"
-    metrics={effMetrics}
-    note="Angka berdasarkan data pabrikan/kondisi pengujian; pemakaian nyata dapat berbeda. [Angka resmi diisi]."
+  <Hero
+    site={site}
+    primaryCta={{ label: 'Jadwalkan Test Drive', href: linkTestDrive(site, heroCar.nama), variant: 'whatsapp', iconLeft: 'whatsapp', target: '_blank' }}
+    secondaryCta={{ label: 'Pelajari Teknologi SHS', href: '/teknologi', variant: 'outline' }}
   />
 
   <TechSection
@@ -113,7 +103,7 @@ const techPoin = [
       <p class="area-copy" data-reveal>
         {site.dealerName} melayani pembelian dan test drive mobil hybrid &amp; listrik JAECOO untuk {kota} Kota,
         Ungaran, Salatiga, Kendal, Demak, hingga Solo (Surakarta) dan kota-kota lain di Jawa Tengah.
-        Pelajari efisiensi <a href="/mobil/j7-shs">JAECOO J7 SHS (hybrid)</a> dan
+        Lihat <a href="/mobil/j7-shs">JAECOO J7 SHS (hybrid)</a> dan
         <a href="/mobil/j5">JAECOO J5 EV (listrik)</a>, atau pahami
         <a href="/teknologi">teknologi Super Hybrid System</a> — konsultasi &amp; test drive lintas kota
         dibantu {site.salesName} via WhatsApp.

@@ -16,9 +16,9 @@ const wa = linkPenawaran(site);
 
 /* IA Harto (efisiensi-led) — kredit BUKAN item nav (hanya di /mobil/[slug]). */
 const nav = [
-  { label: 'Hitung Hemat', href: '/#hitung-hemat' },
   { label: 'Teknologi SHS', href: '/teknologi' },
   { label: 'Model', href: '/#lineup' },
+  { label: 'Promo', href: '/promo' },
   { label: 'Tentang', href: '/tentang' },
 ];
 
@@ -46,7 +46,7 @@ function isActive(href: string): boolean {
     </nav>
 
     <div class="header-cta-desktop">
-      <Button href="/#hitung-hemat" variant="primary" size="sm" icon="arrow-right">Hitung Hemat</Button>
+      <Button href={wa} variant="primary" size="sm" iconLeft="whatsapp" target="_blank">Minta Penawaran</Button>
     </div>
 
     <details class="mnav" data-mobile-nav>
@@ -62,8 +62,7 @@ function isActive(href: string): boolean {
             ))}
           </ul>
         </nav>
-        <Button href="/#hitung-hemat" variant="primary" icon="arrow-right" block>Hitung Hemat</Button>
-        <Button href={wa} variant="accent" iconLeft="whatsapp" target="_blank" block>Chat WhatsApp</Button>
+        <Button href={wa} variant="primary" iconLeft="whatsapp" target="_blank" block>Minta Penawaran</Button>
       </div>
     </details>
   </div>

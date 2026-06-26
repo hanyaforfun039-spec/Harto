@@ -51,17 +51,10 @@
   "heroVariant": "car-first",
   "heroCarSlug": "j7-shs",
   "heroHeadline": "Mobil Hybrid & Listrik JAECOO di Semarang — Efisiensi Tanpa Kompromi",
-  "heroStat": {
-    "value": "1.200",
-    "unit": "km",
-    "label": "Jangkauan total sekali isi penuh (SHS)",
-    "note": "Estimasi gabungan bensin + listrik; berdasarkan data pabrikan/kondisi pengujian, pemakaian nyata dapat berbeda. [Isi angka resmi]."
-  },
   "lineup": [
     "j7-shs",
     "j5",
     "j8-shs-ardis",
-    "j7",
     "j8-ardis"
   ],
   "featuredSlug": "j7-shs",

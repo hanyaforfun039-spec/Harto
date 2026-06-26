@@ -11,8 +11,6 @@ import CarDetailHybrid from '../../components/CarDetailHybrid.astro';
 import { getAllCars, hargaMulai } from '../../lib/cars';
 import { site } from '../../lib/site';
 import { formatRupiahShort } from '../../lib/format';
-import { efisiensiModel, estimasiEfisiensiDefault } from '../../lib/efisiensi';
-import { efisiensiFaq } from '../../lib/harto-faq';
 import { linkTestDrive, linkPenawaran } from '../../lib/whatsapp';
 import { productSchema, faqPageSchema, breadcrumbSchema } from '../../lib/schema';
 import type { Car } from '../../lib/types';
@@ -46,27 +44,16 @@ const waTd = linkTestDrive(site, car.nama);
 const waPenawaran = linkPenawaran(site, car.nama);
 const kota = site.address.locality;
 
-/* Readout efisiensi per-model (angle Harto): jangkauan, konsumsi efektif, dan
-   estimasi hemat/tahun vs baseline default — tarik dari lib/efisiensi config. */
-const effModel = efisiensiModel(site, car.slug);
-const eff = effModel ? estimasiEfisiensiDefault(site, car.slug) : null;
-
-/* FAQ efisiensi Harto DILAPIS di atas car.faq (cars.json utuh) — tampilan & schema. */
-const faqAll = [...efisiensiFaq(car, site), ...car.faq];
-
-/* additionalProperty Product: jenis bahan bakar + jarak tempuh (EV/PHEV). */
+/* additionalProperty Product: jenis bahan bakar (tanpa angka efisiensi). */
 const fuelLabel = car.powertrain === 'ev' ? 'Listrik (EV)' : car.powertrain === 'phev' ? 'Hybrid Plug-in (PHEV)' : 'Bensin Turbo';
-const additionalProperty = [
-  { name: 'Jenis bahan bakar', value: fuelLabel },
-  ...(effModel ? [{ name: 'Jarak tempuh', value: `±${effModel.rangeKm.toLocaleString('id-ID')} km sekali isi` }] : []),
-];
+const additionalProperty = [{ name: 'Jenis bahan bakar', value: fuelLabel }];
 
 const siteUrl = Astro.site ?? new URL('https://jaecoo-semarang.example');
 const pageUrl = new URL(Astro.url.pathname, siteUrl).href;
 
 const jsonLd = [
   productSchema(car, site, pageUrl, siteUrl.href, additionalProperty),
-  faqPageSchema(faqAll),
+  faqPageSchema(car.faq),
   breadcrumbSchema([
     { name: 'Beranda', url: new URL('/', siteUrl).href },
     { name: 'Model', url: new URL('/#lineup', siteUrl).href },
@@ -74,16 +61,8 @@ const jsonLd = [
   ]),
 ];
 
-/* Meta: model + lokasi + angka efisiensi + ajakan test drive (intent efisiensi). */
-const effBit = eff
-  ? car.powertrain === 'ev'
-    ? `Jarak tempuh ±${effModel!.rangeKm.toLocaleString('id-ID')} km, biaya listrik jauh di bawah bensin. `
-    : car.powertrain === 'phev'
-      ? `Konsumsi efektif ±${effModel!.kmpl} km/L, hemat s/d ${formatRupiahShort(eff.hematPerBulan)}/bln vs SUV bensin. `
-      : `Mesin turbo efisien, konsumsi ±${effModel!.kmpl} km/L. `
-  : '';
 const description =
-  `JAECOO ${car.namaPendek} di ${kota} — ${ptShort[car.powertrain].toLowerCase()}. ${effBit}` +
+  `JAECOO ${car.namaPendek} di ${kota} — ${ptShort[car.powertrain].toLowerCase()}. ` +
   `Harga OTR mulai ${formatRupiahShort(harga)}. Test drive & konsultasi via WhatsApp ${site.salesName}.`;
 
 const seoTitle = `JAECOO ${car.namaPendek} ${kota} — ${ptTitle[car.powertrain]} & Harga`;
@@ -112,31 +91,7 @@ const seoTitle = `JAECOO ${car.namaPendek} ${kota} — ${ptTitle[car.powertrain]
             <dt>Harga OTR {site.address.locality} mulai</dt>
             <dd class="price">{formatRupiahShort(harga)}</dd>
           </div>
-          {eff && (
-            <>
-              <div class="dh-fig dh-fig--eff">
-                <dt>Jangkauan sekali isi</dt>
-                <dd class="tnum">{eff.rangeKm.toLocaleString('id-ID')} km</dd>
-              </div>
-              <div class="dh-fig dh-fig--eff">
-                <dt>Konsumsi efektif</dt>
-                <dd class="tnum">{eff.modelKmpl} km/L</dd>
-              </div>
-              <div class="dh-fig dh-fig--eff dh-fig--save">
-                <dt>Estimasi hemat / tahun</dt>
-                <dd class="tnum">{formatRupiahShort(eff.hematPerTahun)}</dd>
-              </div>
-            </>
-          )}
         </dl>
-        <span class="dh-gauge" aria-hidden="true"></span>
-        {eff && site.efisiensi && (
-          <p class="dh-eff-note">
-            Estimasi hemat vs SUV bensin ±{site.efisiensi.baselineDefaultKmpl} km/L pada
-            {' '}{site.efisiensi.kmDefault.toLocaleString('id-ID')} km/bln, BBM Rp {site.efisiensi.bbmDefault.toLocaleString('id-ID')}/L.
-            Hitung sesuai pemakaian Anda di <a href="/#hitung-hemat">kalkulator efisiensi</a>. [Angka resmi diisi].
-          </p>
-        )}
 
         <div class="dh-cta">
           <Button href={waTd} variant="whatsapp" size="lg" iconLeft="whatsapp" target="_blank">Test Drive {car.namaPendek}</Button>
@@ -146,7 +101,7 @@ const seoTitle = `JAECOO ${car.namaPendek} ${kota} — ${ptTitle[car.powertrain]
     </div>
   </section>
 
-  <CarDetailHybrid car={car} site={site} faq={faqAll} />
+  <CarDetailHybrid car={car} site={site} />
 
   <StickyWhatsAppBar slot="footer" site={site} car={car} />
   <Footer slot="footer" site={site} />
