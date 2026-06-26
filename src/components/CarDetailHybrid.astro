@@ -1,0 +1,288 @@
+---
+/* CarDetailHybrid — blok detail mobil versi Web2 (hybrid/efisiensi).
+   Beda dari CarDetailSections (Faiz): ada blok TEKNOLOGI POWERTRAIN gelap
+   (penekanan ekstra utk PHEV/EV), spesifikasi gaya "data sheet", galeri mosaik,
+   fitur ber-tick. Reuse primitif + CreditCalculator. */
+import CarImage from './CarImage.astro';
+import Icon from './Icon.astro';
+import Button from './Button.astro';
+import CreditCalculator from './CreditCalculator.astro';
+import type { Car, CarFaq, SiteConfig } from '../lib/types';
+import { getLineup } from '../lib/cars';
+import { formatRupiah } from '../lib/format';
+import { linkTestDrive, linkPenawaran } from '../lib/whatsapp';
+
+interface Props { car: Car; site: SiteConfig; faq?: CarFaq[] }
+const { car, site, faq } = Astro.props;
+const galeri = [car.foto.hero, ...car.foto.galeri];
+const lineup = getLineup(site);
+const faqList = faq ?? car.faq;
+/* Model lain utk internal linking (anchor deskriptif, sinyal SEO). */
+const others = lineup.filter((c) => c.slug !== car.slug);
+
+const pt = car.powertrain;
+const ptLabel = pt === 'phev' ? 'Hybrid · PHEV' : pt === 'ev' ? 'Listrik · EV' : 'Bensin Turbo';
+
+const tech: Record<Car['powertrain'], { heading: string; lead: string; poin: { icon: string; judul: string; teks: string }[] }> = {
+  phev: {
+    heading: `Teknologi Super Hybrid pada ${car.namaPendek}`,
+    lead: 'Plug-in hybrid yang mengatur listrik dan bensin secara otomatis — selalu memilih sumber paling efisien untuk kondisi berkendara Anda.',
+    poin: [
+      { icon: 'battery', judul: 'Mode listrik harian', teks: 'Berjalan penuh listrik untuk komuter kota — senyap dan tanpa konsumsi bensin.' },
+      { icon: 'engine', judul: 'Mesin di titik teririt', teks: 'Mesin bensin menyala pada putaran efisiensi puncak sambil mengisi ulang baterai.' },
+      { icon: 'range', judul: 'Jangkauan tanpa cemas', teks: 'Gabungan listrik dan bensin untuk perjalanan lintas kota tanpa berhenti mengisi daya.' },
+      { icon: 'fuel', judul: 'Konsumsi sangat rendah', teks: 'Biaya energi harian turun signifikan dibanding SUV bensin biasa.' },
+    ],
+  },
+  ev: {
+    heading: `Listrik penuh: ${car.namaPendek}`,
+    lead: 'SUV bertenaga listrik penuh untuk pengalaman berkendara paling senyap dengan biaya energi terendah.',
+    poin: [
+      { icon: 'battery', judul: 'Tanpa bensin, tanpa emisi', teks: 'Penggerak listrik penuh — berkendara paling senyap dan bersih.' },
+      { icon: 'power', judul: 'Torsi instan', teks: 'Akselerasi halus dan responsif sejak pedal pertama diinjak.' },
+      { icon: 'range', judul: 'Jangkauan harian lebih dari cukup', teks: 'Pas untuk komuter dan mobilitas kota; pengisian cepat DC mempersingkat henti.' },
+      { icon: 'check', judul: 'Perawatan ringkas', teks: 'Tanpa oli mesin; pengereman regeneratif mengawetkan kampas rem.' },
+    ],
+  },
+  ice: {
+    heading: `Performa ${car.namaPendek}`,
+    lead: 'Mesin turbo yang lugas dan bertenaga — karakter SUV yang siap untuk harian maupun perjalanan luar kota.',
+    poin: [
+      { icon: 'engine', judul: 'Mesin turbo bertenaga', teks: 'Tenaga mengalir mulus di berbagai putaran untuk berkendara percaya diri.' },
+      { icon: 'power', judul: 'Tenaga & torsi siap pakai', teks: 'Respons mantap saat menyalip maupun menanjak.' },
+      { icon: 'drivetrain', judul: 'Penggerak sesuai kebutuhan', teks: 'Pilihan penggerak untuk kestabilan dan traksi optimal.' },
+    ],
+  },
+};
+const t = tech[pt];
+---
+<!-- Teknologi powertrain (gelap — penekanan ekstra) -->
+<section class="section section--lg section--dark cdh-tech" data-surface="dark" aria-labelledby="cdh-tech-h">
+  <div class="container">
+    <div class="cdh-tech-head" data-reveal>
+      <p class="eyebrow">{ptLabel}</p>
+      <h2 id="cdh-tech-h">{t.heading}</h2>
+      <p class="lead">{t.lead}</p>
+      <p class="cdh-tech-link"><a href="/teknologi">Pelajari cara kerja Super Hybrid System (SHS)</a></p>
+    </div>
+    <div class="cdh-tech-grid">
+      {t.poin.map((p, i) => (
+        <article class="cdh-tech-item" data-reveal data-reveal-delay={String((i % 4) + 1)}>
+          <span class="cdh-tech-ico"><Icon name={p.icon} size={22} /></span>
+          <h3>{p.judul}</h3>
+          <p>{p.teks}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- Galeri mosaik -->
+<section class="section cdh-gallery-sec">
+  <div class="container">
+    <div class="cdh-gallery">
+      {galeri.map((g, i) => (
+        <CarImage src={g.src} alt={g.alt} label={car.namaPendek} priority={i === 0} ratio={i === 0 ? '4 / 3' : '4 / 3'} class={i === 0 ? 'cdh-gallery-lead' : ''} />
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- Spesifikasi: data sheet -->
+<section class="section">
+  <div class="container container--narrow">
+    <h2>Spesifikasi {car.namaPendek}</h2>
+    <dl class="cdh-specs">
+      {car.specs.map((s) => (
+        <div class="cdh-spec-row">
+          <dt><Icon name={s.icon} size={18} /> {s.label}</dt>
+          <dd class="tnum">{s.value}</dd>
+        </div>
+      ))}
+    </dl>
+  </div>
+</section>
+
+<!-- Varian & harga -->
+<section class="section section--alt">
+  <div class="container container--narrow">
+    <h2>Varian &amp; Harga OTR</h2>
+    <table class="cdh-price-table">
+      <thead><tr><th scope="col">Varian</th><th scope="col">Harga OTR</th></tr></thead>
+      <tbody>
+        {car.varian.map((v) => (
+          <tr>
+            <td>{v.nama}{v.highlight && <span class="cdh-tag-rec">Populer</span>}</td>
+            <td class="tnum">{formatRupiah(v.hargaOtr)}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- Fitur -->
+<section class="section">
+  <div class="container container--narrow">
+    <h2>Fitur Unggulan</h2>
+    <ul class="cdh-fitur" role="list">
+      {car.fitur.map((f) => (
+        <li><span class="cdh-fitur-ico"><Icon name="check" size={16} /></span> <span>{f}</span></li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<!-- Kalkulator -->
+<section class="section section--alt">
+  <div class="container">
+    <h2>Simulasi Kredit {car.namaPendek}</h2>
+    <p class="lead">Atur DP dan tenor, lalu kirim simulasinya langsung ke WhatsApp.</p>
+    <div class="cdh-calc">
+      <CreditCalculator cars={lineup} site={site} preselectSlug={car.slug} heading={`Cicilan ${car.namaPendek}`} />
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section">
+  <div class="container container--narrow">
+    <h2>Pertanyaan Umum</h2>
+    <div class="cdh-faq">
+      {faqList.map((f) => (
+        <details class="cdh-faq-item">
+          <summary><span>{f.q}</span><Icon name="chevron-down" size={20} class="cdh-faq-chev" /></summary>
+          <div class="cdh-faq-body"><p>{f.a}</p></div>
+        </details>
+      ))}
+    </div>
+    <div class="cdh-cta">
+      <Button href={linkTestDrive(site, car.nama)} variant="whatsapp" size="lg" iconLeft="whatsapp" target="_blank">Test Drive {car.namaPendek}</Button>
+      <Button href={linkPenawaran(site, car.nama)} variant="accent" size="lg" iconLeft="whatsapp" target="_blank">Minta Penawaran</Button>
+    </div>
+  </div>
+</section>
+
+<!-- Model lain (internal linking) -->
+{others.length > 0 && (
+  <section class="section section--alt cdh-others" aria-labelledby="cdh-others-h">
+    <div class="container container--narrow">
+      <h2 id="cdh-others-h">Model JAECOO lainnya</h2>
+      <ul class="cdh-others-list" role="list">
+        {others.map((c) => (
+          <li>
+            <a href={`/mobil/${c.slug}`}>
+              <span class="cdh-others-name">{c.nama}</span>
+              <span class="cdh-others-kat">{c.kategori}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <p class="cdh-others-tech"><a href="/teknologi">Pahami teknologi hybrid &amp; listrik JAECOO</a></p>
+    </div>
+  </section>
+)}
+
+<style>
+  .section--alt { background: var(--color-surface-2); }
+
+  /* Teknologi powertrain (gelap) */
+  .cdh-tech-head { display: grid; gap: var(--space-sm); max-width: 60ch; }
+  .cdh-tech-grid {
+    display: grid; gap: var(--space-xl); margin-top: var(--space-2xl);
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 40rem) { .cdh-tech-grid { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 64rem) { .cdh-tech-grid { grid-template-columns: repeat(4, 1fr); } }
+  .cdh-tech-item { display: grid; gap: var(--space-2xs); align-content: start; }
+  .cdh-tech-ico {
+    display: grid; place-items: center; width: 3rem; height: 3rem;
+    border-radius: var(--radius-md); color: var(--color-accent);
+    background: var(--color-accent-soft); border: 1px solid var(--color-border-inverse);
+    margin-bottom: var(--space-2xs);
+  }
+  .cdh-tech-item h3 { font-size: var(--fs-h5); color: var(--color-text-inverse); }
+  .cdh-tech-item p { color: var(--color-text-inverse-muted); font-size: var(--fs-body-sm); }
+
+  /* Galeri mosaik */
+  .cdh-gallery { display: grid; gap: var(--space-sm); grid-template-columns: repeat(2, 1fr); }
+  @media (min-width: 56rem) {
+    .cdh-gallery { grid-template-columns: repeat(4, 1fr); }
+    .cdh-gallery :global(.cdh-gallery-lead) { grid-column: span 2; grid-row: span 2; }
+  }
+
+  /* Spesifikasi data sheet */
+  .cdh-specs { margin-top: var(--space-lg); display: grid; }
+  .cdh-spec-row {
+    display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-md);
+    padding-block: var(--space-md);
+    border-top: 1px solid var(--color-border);
+  }
+  .cdh-spec-row:last-child { border-bottom: 1px solid var(--color-border); }
+  .cdh-spec-row dt {
+    display: inline-flex; align-items: center; gap: var(--space-2xs);
+    font-size: var(--fs-caption); text-transform: uppercase; letter-spacing: var(--ls-wide);
+    color: var(--color-text-subtle);
+  }
+  .cdh-spec-row dt :global(.icon) { color: var(--color-accent-ink); }
+  .cdh-spec-row dd { font-family: var(--font-display); font-size: var(--fs-h5); font-weight: var(--fw-semibold); color: var(--color-text); text-align: right; }
+
+  /* Varian table */
+  .cdh-price-table { width: 100%; border-collapse: collapse; margin-top: var(--space-lg); }
+  .cdh-price-table th, .cdh-price-table td {
+    text-align: left; padding: var(--space-sm) var(--space-2xs);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .cdh-price-table th { font-size: var(--fs-caption); text-transform: uppercase; letter-spacing: var(--ls-wide); color: var(--color-text-muted); }
+  .cdh-price-table td:last-child { text-align: right; font-weight: var(--fw-semibold); }
+  .cdh-tag-rec {
+    margin-left: var(--space-2xs); padding: 0.1em 0.5em;
+    background: var(--color-accent-soft); color: var(--color-accent-ink);
+    border-radius: var(--radius-pill); font-size: var(--fs-caption); font-weight: var(--fw-semibold);
+  }
+
+  /* Fitur 2 kolom ber-tick */
+  .cdh-fitur { margin-top: var(--space-lg); display: grid; gap: var(--space-sm); grid-template-columns: 1fr; }
+  @media (min-width: 40rem) { .cdh-fitur { grid-template-columns: 1fr 1fr; gap: var(--space-sm) var(--space-xl); } }
+  .cdh-fitur li { display: flex; align-items: flex-start; gap: var(--space-2xs); color: var(--color-text); font-size: var(--fs-body-sm); }
+  .cdh-fitur-ico { display: grid; place-items: center; width: 1.5rem; height: 1.5rem; border-radius: 50%; background: var(--color-accent-soft); color: var(--color-accent-ink); flex: none; margin-top: 0.05em; }
+
+  .cdh-calc { margin-top: var(--space-lg); }
+
+  /* FAQ */
+  .cdh-faq { display: grid; gap: var(--space-2xs); margin-top: var(--space-lg); }
+  .cdh-faq-item { border-bottom: 1px solid var(--color-border); }
+  .cdh-faq-item summary {
+    display: flex; align-items: center; justify-content: space-between; gap: var(--space-sm);
+    padding: var(--space-md) 0; cursor: pointer; list-style: none;
+    font-family: var(--font-display); font-weight: var(--fw-semibold); font-size: var(--fs-h6);
+  }
+  .cdh-faq-item summary::-webkit-details-marker { display: none; }
+  .cdh-faq-chev { color: var(--color-text-muted); transition: transform var(--dur) var(--ease); flex: none; }
+  .cdh-faq-item[open] .cdh-faq-chev { transform: rotate(180deg); }
+  .cdh-faq-body { padding-bottom: var(--space-md); color: var(--color-text-muted); }
+
+  .cdh-cta { display: flex; flex-wrap: wrap; gap: var(--space-sm); margin-top: var(--space-xl); }
+
+  /* Link teknologi di blok powertrain (section gelap) */
+  .cdh-tech-link { margin-top: var(--space-2xs); }
+  .cdh-tech-link a {
+    color: var(--color-accent-ink); font-weight: var(--fw-semibold); font-size: var(--fs-body-sm);
+    text-decoration: underline; text-underline-offset: 0.2em;
+  }
+  .cdh-tech-link a:hover { color: var(--color-text-inverse); }
+
+  /* Model lain — internal linking */
+  .cdh-others h2 { font-size: var(--fs-h4); }
+  .cdh-others-list { margin-top: var(--space-lg); display: grid; gap: var(--space-2xs); }
+  @media (min-width: 40rem) { .cdh-others-list { grid-template-columns: 1fr 1fr; gap: var(--space-2xs) var(--space-lg); } }
+  .cdh-others-list a {
+    display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-md);
+    padding: var(--space-md) 0; border-bottom: 1px solid var(--color-border);
+  }
+  .cdh-others-list a:hover .cdh-others-name { color: var(--color-accent-ink); }
+  .cdh-others-name { font-family: var(--font-display); font-weight: var(--fw-semibold); color: var(--color-text); }
+  .cdh-others-kat { font-size: var(--fs-caption); color: var(--color-text-subtle); }
+  .cdh-others-tech { margin-top: var(--space-lg); }
+  .cdh-others-tech a { color: var(--color-accent-ink); font-weight: var(--fw-semibold); text-decoration: underline; text-underline-offset: 0.2em; }
+</style>

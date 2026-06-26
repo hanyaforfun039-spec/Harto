@@ -1,0 +1,97 @@
+{
+  "id": "premium",
+  "theme": "premium",
+  "brand": "JAECOO Semarang",
+  "dealerName": "Dealer Resmi JAECOO Semarang",
+  "salesName": "Faiz",
+  "salesTitle": "Sales Consultant JAECOO",
+  "salesCredentials": [
+    "Sales Consultant Resmi",
+    "Harga OTR & Simulasi Kredit",
+    "Melayani Semarang & Jawa Tengah"
+  ],
+  "whatsapp": "628120000001",
+  "phoneDisplay": "0812-0000-0001",
+  "email": "faiz@example.com",
+  "address": {
+    "region": "Jawa Tengah",
+    "street": "Jl. Pemuda No. 000",
+    "country": "ID",
+    "locality": "Semarang",
+    "postalCode": "50132"
+  },
+  "geo": {
+    "lat": -6.9839,
+    "lng": 110.4093
+  },
+  "serviceAreas": [
+    "Semarang",
+    "Ungaran",
+    "Salatiga",
+    "Kudus",
+    "Demak",
+    "Kendal",
+    "Surakarta"
+  ],
+  "openingHours": [
+    {
+      "buka": "08:30",
+      "hari": "Senin - Sabtu",
+      "tutup": "17:00"
+    },
+    {
+      "buka": "09:00",
+      "hari": "Minggu",
+      "tutup": "15:00"
+    }
+  ],
+  "mapUrl": "https://maps.google.com/?q=JAECOO+Semarang",
+  "tagline": "From Classic, Beyond Classic.",
+  "subheadline": "Dari JAECOO J5 listrik yang irit hingga J8 ARDIS flagship — harga OTR, simulasi kredit & test drive di Semarang.",
+  "positioning": "Dealer resmi JAECOO di Semarang — dari J5 listrik sampai J8 ARDIS flagship. Konsultasi, penawaran terbaik, dan test drive untuk Semarang & Jawa Tengah.",
+  "heroVariant": "premium-fullbleed",
+  "heroCarSlug": "j5",
+  "lineup": [
+    "j5",
+    "j7",
+    "j7-shs",
+    "j8-ardis",
+    "j8-shs-ardis"
+  ],
+  "featuredSlug": "j5",
+  "kredit": {
+    "dpDefaultPct": 25,
+    "tenorDefaultYears": 5,
+    "bungaFlatPctPerYear": 4
+  },
+  "promo": {
+    "sub": "Harga terbaik, tukar tambah & paket perawatan untuk JAECOO J5, J7, hingga J8 ARDIS.",
+    "aktif": true,
+    "deadline": "2026-06-30",
+    "headline": "Penawaran JAECOO Semarang Bulan Ini"
+  },
+  "testimoni": [
+    {
+      "kota": "Semarang",
+      "nama": "Bapak Hendra",
+      "teks": "Pelayanan sangat personal, proses jelas dari awal sampai serah terima unit.",
+      "mobil": "J8 ARDIS"
+    },
+    {
+      "kota": "Ungaran",
+      "nama": "Ibu Sari",
+      "teks": "Dijelaskan detail fitur dan simulasi kredit, tidak terburu-buru. Recommended.",
+      "mobil": "J7"
+    }
+  ],
+  "seo": {
+    "locale": "id_ID",
+    "ogImage": "https://yvbpnlbwaundqhyrvdwg.supabase.co/storage/v1/object/public/Faiz/J5-banner.webp",
+    "titleSuffix": "JAECOO Semarang",
+    "defaultDescription": "Dealer resmi JAECOO Semarang: JAECOO J5, J7 & J8 ARDIS. Harga OTR, simulasi kredit & test drive. Melayani Semarang, Solo & Jawa Tengah. Chat WhatsApp Faiz."
+  },
+  "social": {
+    "tiktok": "https://tiktok.com/",
+    "instagram": "https://instagram.com/"
+  }
+}

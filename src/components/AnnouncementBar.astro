@@ -1,0 +1,88 @@
+---
+/* AnnouncementBar — strip pengumuman di paling atas (sebelum header).
+   Markup STATIS & tersembunyi; diisi + ditampilkan client-side oleh
+   scripts/announcements.ts (data dari Supabase, instan tanpa rebuild).
+   Tanpa JS / tanpa pengumuman aktif: tidak tampil sama sekali. */
+import { site } from '../lib/site';
+---
+<aside id="pengumuman" class="announce" data-site={site.id} hidden aria-live="polite">
+  <div class="announce-inner">
+    <span class="announce-dot" aria-hidden="true"></span>
+    <p class="announce-text"></p>
+    <a class="announce-link" target="_blank" rel="noopener" hidden></a>
+    <button type="button" class="announce-close" aria-label="Tutup pengumuman">
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
+        <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+      </svg>
+    </button>
+  </div>
+</aside>
+
+<script>
+  import '../scripts/announcements.ts';
+</script>
+
+<style>
+  .announce {
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-text);
+    font-size: var(--fs-body-sm);
+  }
+  .announce[hidden] { display: none; }
+
+  .announce-inner {
+    max-width: var(--container-wide);
+    margin-inline: auto;
+    padding-block: var(--space-2xs);
+    padding-inline: var(--gutter);
+    min-height: 2.75rem;
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+  }
+
+  .announce-dot {
+    flex: none;
+    width: 0.4rem;
+    height: 0.4rem;
+    border-radius: var(--radius-pill);
+    background: var(--color-accent);
+  }
+
+  .announce-text {
+    margin: 0;
+    line-height: 1.35;
+    color: var(--color-text);
+  }
+
+  .announce-link {
+    flex: none;
+    margin-left: auto;
+    font-weight: var(--fw-semibold);
+    color: var(--color-accent-ink);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    white-space: nowrap;
+  }
+  .announce-link[hidden] { display: none; }
+
+  .announce-close {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: var(--radius-sm);
+    color: var(--color-text-subtle);
+    cursor: pointer;
+    transition: color var(--dur) var(--ease), background var(--dur) var(--ease);
+  }
+  .announce-close:hover {
+    color: var(--color-text);
+    background: var(--color-surface-2);
+  }
+  /* Tanpa link: tombol tutup yang mendorong ke kanan. */
+  .announce-link[hidden] + .announce-close { margin-left: auto; }
+</style>

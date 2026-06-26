@@ -1,0 +1,108 @@
+---
+/* Button — CTA konsisten. Render <a> bila ada `href`, selain itu <button>.
+   Varian: primary | accent | outline | whatsapp | ghost. Ukuran: sm | md | lg.
+   Target sentuh >= 44px. Ikon opsional (kiri/kanan) via nama Icon. */
+import Icon from './Icon.astro';
+
+interface Props {
+  href?: string;
+  variant?: 'primary' | 'accent' | 'outline' | 'whatsapp' | 'ghost';
+  size?: 'sm' | 'md' | 'lg';
+  type?: 'button' | 'submit';
+  icon?: string;
+  iconLeft?: string;
+  block?: boolean;
+  target?: string;
+  rel?: string;
+  class?: string;
+  'aria-label'?: string;
+}
+const {
+  href,
+  variant = 'primary',
+  size = 'md',
+  type = 'button',
+  icon,
+  iconLeft,
+  block = false,
+  target,
+  rel,
+  class: className = '',
+  ...rest
+} = Astro.props;
+
+const Tag = href ? 'a' : 'button';
+const cls = `btn btn--${variant} btn--${size} ${block ? 'btn--block' : ''} ${className}`;
+const relFinal = target === '_blank' ? rel ?? 'noopener noreferrer' : rel;
+---
+<Tag
+  class={cls}
+  href={href}
+  type={href ? undefined : type}
+  target={target}
+  rel={relFinal}
+  {...rest}
+>
+  {iconLeft && <Icon name={iconLeft} size={20} />}
+  <span><slot /></span>
+  {icon && <Icon name={icon} size={20} />}
+</Tag>
+
+<style>
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2xs);
+    min-height: var(--tap-min);
+    padding-inline: var(--space-md);
+    border-radius: var(--radius-md); /* soft instrumen — bukan pill (Faiz) / kotak tajam (Putri) */
+    font-family: var(--font-body);
+    font-weight: var(--fw-semibold);
+    line-height: 1.1;
+    text-align: center;
+    cursor: pointer;
+    border: 1.5px solid transparent;
+    transition:
+      background var(--dur) var(--ease),
+      border-color var(--dur) var(--ease),
+      color var(--dur) var(--ease),
+      box-shadow var(--dur) var(--ease),
+      transform var(--dur) var(--ease-out);
+  }
+  .btn:hover { transform: translateY(-1px); }
+  .btn:active { transform: translateY(0); box-shadow: none; }
+
+  .btn--sm { min-height: 2.25rem; padding-inline: var(--space-sm); font-size: var(--fs-body-sm); }
+  .btn--lg { min-height: 3.25rem; padding-inline: var(--space-lg); font-size: var(--fs-lead); }
+  .btn--block { display: flex; width: 100%; }
+
+  .btn--primary { background: var(--color-brand); color: var(--color-on-brand); }
+  .btn--primary:hover { background: var(--color-brand-strong); box-shadow: var(--shadow-md); }
+
+  .btn--accent { background: var(--color-accent); color: var(--color-on-accent); }
+  .btn--accent:hover { background: var(--color-accent-strong); box-shadow: var(--shadow-md); }
+
+  .btn--outline {
+    background: transparent;
+    border-color: var(--color-border-strong);
+    color: var(--color-text);
+  }
+  .btn--outline:hover { border-color: var(--color-brand); color: var(--color-brand); }
+
+  .btn--whatsapp { background: var(--wa-action); color: var(--color-on-wa); }
+  .btn--whatsapp:hover { background: var(--wa-action-strong); box-shadow: var(--shadow-md); }
+
+  .btn--ghost { background: transparent; color: var(--color-accent-ink); padding-inline: var(--space-2xs); }
+  .btn--ghost:hover { color: var(--color-brand); }
+
+  /* di permukaan gelap */
+  :global(.section--dark) .btn--outline {
+    border-color: var(--color-border-inverse);
+    color: var(--color-text-inverse);
+  }
+  :global(.section--dark) .btn--outline:hover {
+    border-color: var(--color-text-inverse);
+    color: var(--color-text-inverse);
+  }
+</style>

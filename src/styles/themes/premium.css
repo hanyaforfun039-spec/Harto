@@ -1,0 +1,12 @@
+/* Tema: PREMIUM (flagship J8) · accent SILVER / PLATINUM-METALIK
+   Identitas gelap monokrom; aksen metalik dipakai HEMAT (CTA, link, angka).
+   Kontras WCAG (di atas bg gelap #0C1117):
+     on-accent #0B0F14 di atas #C7CDD6  ~ 12:1  (AA besar+kecil OK)
+     accent-ink #C9CFD8 di atas bg      ~ 12:1  (AA teks OK) */
+[data-theme='premium'] {
+  --color-accent:        #C7CDD6;
+  --color-accent-strong: #DBE0E6;
+  --color-accent-ink:    #C9CFD8;
+  --color-accent-soft:   #232C37;
+  --color-on-accent:     var(--ink-900);
+}

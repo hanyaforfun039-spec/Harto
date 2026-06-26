@@ -1,0 +1,138 @@
+---
+/* LineupSpec — lineup gaya "lembar spesifikasi" (Web2 hybrid). Baris horizontal
+   berselang-seling: foto + tag powertrain + 3 spesifikasi kunci (data-forward).
+   Beda total dari grid kartu (Faiz). Reuse primitif: CarImage, Button, token. */
+import CarImage from './CarImage.astro';
+import Button from './Button.astro';
+import type { Car, SiteConfig } from '../lib/types';
+import { hargaMulai } from '../lib/cars';
+import { formatRupiahShort } from '../lib/format';
+import { linkTestDrive } from '../lib/whatsapp';
+
+interface Props { cars: Car[]; site: SiteConfig }
+const { cars, site } = Astro.props;
+
+const tagOf = (c: Car) =>
+  c.powertrain === 'phev' ? 'Hybrid · PHEV' : c.powertrain === 'ev' ? 'Listrik · EV' : 'Bensin';
+---
+<section class="section section--lg lineupspec" id="lineup" aria-labelledby="ls-h">
+  <div class="container">
+    <div class="ls-head" data-reveal>
+      <p class="eyebrow">Lineup</p>
+      <h2 id="ls-h">Satu DNA efisiensi, lima karakter</h2>
+      <p class="lead">{site.positioning}</p>
+    </div>
+
+    <ol class="ls-list" role="list">
+      {cars.map((car, i) => {
+        const detail = `/mobil/${car.slug}`;
+        return (
+          <li class="ls-row" data-reveal>
+            <a class="ls-media" href={detail} tabindex="-1" aria-hidden="true">
+              <CarImage src={car.foto.hero.src} alt={car.foto.hero.alt} label={car.namaPendek} priority={i === 0} ratio="16 / 10" />
+            </a>
+            <div class="ls-body">
+              <p class={`ls-tag ls-tag--${car.powertrain}`}>{tagOf(car)}</p>
+              <h3 class="ls-name"><a href={detail}>{car.nama}</a></h3>
+              <p class="ls-kat">{car.kategori}</p>
+
+              <dl class="ls-specs">
+                {car.specs.slice(0, 3).map((s) => (
+                  <div class="ls-spec">
+                    <dt>{s.label}</dt>
+                    <dd class="tnum">{s.value}</dd>
+                  </div>
+                ))}
+              </dl>
+
+              <div class="ls-foot">
+                <p class="ls-price"><span class="ls-price-lbl">Mulai</span> <span class="price">{formatRupiahShort(hargaMulai(car))}</span></p>
+                <div class="ls-cta">
+                  <Button href={detail} variant="primary" size="sm" icon="arrow-right">Detail</Button>
+                  <Button href={linkTestDrive(site, car.nama)} variant="whatsapp" size="sm" iconLeft="whatsapp" target="_blank">Test Drive</Button>
+                </div>
+              </div>
+            </div>
+          </li>
+        );
+      })}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .ls-head { display: grid; gap: var(--space-2xs); max-width: 56ch; }
+  .ls-head .lead { margin-top: var(--space-2xs); }
+
+  .ls-list { margin-top: var(--space-2xl); display: grid; }
+  .ls-row {
+    display: grid;
+    gap: var(--space-lg);
+    padding-block: var(--space-2xl);
+    border-top: 1px solid var(--color-border);
+  }
+  .ls-row:first-child { border-top: 0; padding-top: 0; }
+  @media (min-width: 56rem) {
+    .ls-row { grid-template-columns: 1.05fr 1fr; gap: var(--space-3xl); align-items: center; }
+    /* selang-seling: foto pindah ke kanan pada baris genap */
+    .ls-row:nth-child(even) .ls-media { order: 2; }
+  }
+
+  .ls-media { display: block; overflow: hidden; border-radius: var(--radius-lg); }
+  .ls-media :global(.carimg) { transition: transform var(--dur-slow) var(--ease-out); }
+  .ls-row:hover .ls-media :global(.carimg) { transform: scale(1.02); }
+
+  .ls-body { display: grid; gap: var(--space-2xs); align-content: center; }
+  .ls-tag {
+    justify-self: start;
+    font-size: var(--fs-caption);
+    font-weight: var(--fw-semibold);
+    letter-spacing: var(--ls-wide);
+    text-transform: uppercase;
+    padding: var(--space-3xs) var(--space-xs);
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--color-border-strong);
+    color: var(--color-text-muted);
+  }
+  .ls-tag--phev, .ls-tag--ev {
+    color: var(--color-accent-ink);
+    border-color: var(--color-accent);
+    background: var(--color-accent-soft);
+  }
+  .ls-name { font-size: var(--fs-h2); margin-top: var(--space-2xs); }
+  .ls-name a { color: inherit; }
+  .ls-name a:hover { color: var(--color-accent-ink); }
+  .ls-kat { color: var(--color-text-muted); font-size: var(--fs-body-sm); }
+
+  /* spesifikasi: deret data dengan pemisah hairline (rasa lembar teknik) */
+  .ls-specs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+    margin-top: var(--space-md);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--color-border);
+  }
+  .ls-spec { display: grid; gap: var(--space-3xs); padding-right: var(--space-md); }
+  .ls-spec + .ls-spec { border-left: 1px solid var(--color-border); padding-left: var(--space-md); }
+  .ls-spec dt {
+    font-size: var(--fs-caption);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-wide);
+    color: var(--color-text-subtle);
+  }
+  .ls-spec dd { font-family: var(--font-display); font-size: var(--fs-h5); font-weight: var(--fw-semibold); color: var(--color-text); }
+
+  .ls-foot {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+    align-items: center;
+    justify-content: space-between;
+    margin-top: var(--space-lg);
+  }
+  .ls-price { display: flex; align-items: baseline; gap: var(--space-2xs); }
+  .ls-price-lbl { font-size: var(--fs-caption); text-transform: uppercase; letter-spacing: var(--ls-wide); color: var(--color-text-subtle); }
+  .ls-price .price { font-size: var(--fs-h3); }
+  .ls-cta { display: flex; gap: var(--space-2xs); }
+</style>

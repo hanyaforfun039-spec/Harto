@@ -1,0 +1,111 @@
+---
+/* CarCard — kartu mobil: foto besar, kategori, harga "mulai dari",
+   estimasi cicilan/bln, badge opsional, 2 CTA (Detail / Test Drive). */
+import CarImage from './CarImage.astro';
+import Button from './Button.astro';
+import type { Car, SiteConfig } from '../lib/types';
+import { hargaMulai, cicilanMulai } from '../lib/cars';
+import { formatRupiahShort, formatRupiah } from '../lib/format';
+import { linkTestDrive } from '../lib/whatsapp';
+
+interface Props {
+  car: Car;
+  site: SiteConfig;
+  badge?: string;
+  priority?: boolean;
+  family?: string; // utk filter lineup (mis. "J8"); opsional
+}
+const { car, site, badge, priority = false, family } = Astro.props;
+const detail = `/mobil/${car.slug}`;
+const harga = hargaMulai(car);
+const cicilan = cicilanMulai(car, site).cicilanPerBulan;
+const waTd = linkTestDrive(site, car.nama);
+---
+<article class="card" data-reveal data-family={family}>
+  <a class="card-media" href={detail} tabindex="-1" aria-hidden="true">
+    <CarImage src={car.foto.hero.src} alt={car.foto.hero.alt} label={car.namaPendek} priority={priority} />
+    {badge && <span class="card-badge">{badge}</span>}
+  </a>
+  <div class="card-body">
+    <p class="eyebrow">{car.kategori}</p>
+    <h3 class="card-title"><a href={detail}>{car.nama}</a></h3>
+    <p class="card-tagline">{car.tagline}</p>
+
+    <div class="card-price">
+      <span class="card-price-label">Mulai dari</span>
+      <span class="price">{formatRupiahShort(harga)}</span>
+      <span class="card-cicilan tnum">Estimasi cicilan {formatRupiah(cicilan)}/bln</span>
+    </div>
+
+    <div class="card-cta">
+      <Button href={detail} variant="primary" icon="arrow-right">Detail</Button>
+      <Button href={waTd} variant="whatsapp" iconLeft="whatsapp" target="_blank">Test Drive</Button>
+    </div>
+  </div>
+</article>
+
+<style>
+  .card {
+    display: flex;
+    flex-direction: column;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow var(--dur) var(--ease), transform var(--dur) var(--ease-out);
+  }
+  .card:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
+
+  .card-media {
+    position: relative;
+    display: block;
+    overflow: hidden;
+  }
+  .card-media :global(.carimg) { border-radius: 0; transition: transform var(--dur-slow) var(--ease-out); }
+  .card:hover .card-media :global(.carimg) { transform: scale(1.03); }
+
+  .card-badge {
+    position: absolute;
+    top: var(--space-sm);
+    left: var(--space-sm);
+    padding: var(--space-3xs) var(--space-xs);
+    background: var(--color-accent);
+    color: var(--color-on-accent);
+    font-size: var(--fs-caption);
+    font-weight: var(--fw-semibold);
+    letter-spacing: var(--ls-wide);
+    text-transform: uppercase;
+    border-radius: var(--radius-pill);
+  }
+
+  .card-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xs);
+    padding: var(--space-lg);
+  }
+  .card-title { font-size: var(--fs-h4); margin-top: var(--space-3xs); }
+  .card-title a { color: inherit; }
+  .card-title a:hover { color: var(--color-accent-ink); }
+  .card-tagline { color: var(--color-text-muted); font-size: var(--fs-body-sm); }
+
+  .card-price {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3xs);
+    margin-top: var(--space-sm);
+    padding-top: var(--space-sm);
+    border-top: 1px solid var(--color-border);
+  }
+  .card-price-label { font-size: var(--fs-caption); color: var(--color-text-muted); }
+  .card-price .price { font-size: var(--fs-h3); line-height: 1; }
+  .card-cicilan { font-size: var(--fs-body-sm); color: var(--color-text-muted); }
+
+  .card-cta {
+    display: flex;
+    gap: var(--space-2xs);
+    margin-top: var(--space-md);
+  }
+  .card-cta :global(.btn) { flex: 1; }
+</style>

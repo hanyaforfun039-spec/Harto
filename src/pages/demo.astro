@@ -1,0 +1,62 @@
+---
+/* /_demo — galeri komponen (di-noindex & di-exclude dari sitemap).
+   Merakit semua komponen Tahap 3 dengan data & theme dari site config aktif.
+   Tahap 5 akan menambah peraga 4 theme sekaligus. */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import CarCard from '../components/CarCard.astro';
+import CreditCalculator from '../components/CreditCalculator.astro';
+import PromoStrip from '../components/PromoStrip.astro';
+import TrustSection from '../components/TrustSection.astro';
+import TestDriveForm from '../components/TestDriveForm.astro';
+import StickyWhatsAppBar from '../components/StickyWhatsAppBar.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../lib/site';
+import { getLineup } from '../lib/cars';
+
+const lineup = getLineup(site);
+---
+<BaseLayout title="Demo Komponen" description="Galeri komponen internal jaecoo-base." noindex={true}>
+  <Header slot="header" site={site} />
+
+  <Hero site={site} />
+
+  <section class="section" id="lineup">
+    <div class="container">
+      <p class="eyebrow">Lineup</p>
+      <h2>Model JAECOO</h2>
+      <div class="demo-cards">
+        {lineup.map((car, i) => (
+          <CarCard car={car} site={site} priority={i < 2} badge={i === 0 ? 'Unggulan' : undefined} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section demo-alt">
+    <div class="container">
+      <p class="eyebrow">Kalkulator</p>
+      <h2>Simulasi Kredit</h2>
+      <div class="demo-calc"><CreditCalculator cars={lineup} site={site} /></div>
+    </div>
+  </section>
+
+  <PromoStrip site={site} />
+  <TrustSection site={site} />
+  <TestDriveForm cars={lineup} site={site} />
+
+  <StickyWhatsAppBar slot="footer" site={site} />
+  <Footer slot="footer" site={site} />
+</BaseLayout>
+
+<style>
+  .demo-cards {
+    display: grid;
+    gap: var(--space-lg);
+    grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+    margin-top: var(--space-lg);
+  }
+  .demo-calc { margin-top: var(--space-lg); }
+  .demo-alt { background: var(--color-surface-2); }
+</style>

@@ -1,0 +1,181 @@
+---
+/* CarDetailSections — blok-blok halaman mobil/[slug]:
+   galeri (grid, bukan slider), tabel varian+harga, spesifikasi, fitur,
+   kalkulator (pre-select model ini), FAQ (<details>/<summary>), CTA. */
+import CarImage from './CarImage.astro';
+import Icon from './Icon.astro';
+import Button from './Button.astro';
+import CreditCalculator from './CreditCalculator.astro';
+import type { Car, SiteConfig } from '../lib/types';
+import { getLineup } from '../lib/cars';
+import { formatRupiah } from '../lib/format';
+import { linkTestDrive, linkPenawaran } from '../lib/whatsapp';
+
+interface Props { car: Car; site: SiteConfig }
+const { car, site } = Astro.props;
+const galeri = [car.foto.hero, ...car.foto.galeri];
+const lineup = getLineup(site);
+---
+<!-- Galeri (grid foto) -->
+<section class="section detail-gallery">
+  <div class="container">
+    <div class="gallery-grid">
+      {galeri.map((g, i) => (
+        <CarImage
+          src={g.src}
+          alt={g.alt}
+          label={car.namaPendek}
+          priority={i === 0}
+          ratio={i === 0 ? '16 / 10' : '4 / 3'}
+          class={i === 0 ? 'gallery-hero' : ''}
+        />
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- Varian & harga -->
+<section class="section detail-alt">
+  <div class="container container--narrow">
+    <h2>Varian &amp; Harga OTR</h2>
+    <table class="price-table">
+      <thead><tr><th scope="col">Varian</th><th scope="col">Harga OTR</th></tr></thead>
+      <tbody>
+        {car.varian.map((v) => (
+          <tr>
+            <td>{v.nama}{v.highlight && <span class="tag-rec">Populer</span>}</td>
+            <td class="tnum">{formatRupiah(v.hargaOtr)}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- Spesifikasi -->
+<section class="section">
+  <div class="container">
+    <h2>Spesifikasi Utama</h2>
+    <dl class="spec-grid">
+      {car.specs.map((s) => (
+        <div class="spec-item">
+          <dt><Icon name={s.icon} size={22} /> {s.label}</dt>
+          <dd>{s.value}</dd>
+        </div>
+      ))}
+    </dl>
+  </div>
+</section>
+
+<!-- Fitur -->
+<section class="section detail-alt">
+  <div class="container container--narrow">
+    <h2>Fitur Unggulan</h2>
+    <ul class="feature-list" role="list">
+      {car.fitur.map((f) => (
+        <li><Icon name="check" size={20} /> <span>{f}</span></li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<!-- Kalkulator pre-select -->
+<section class="section">
+  <div class="container">
+    <h2>Simulasi Kredit {car.namaPendek}</h2>
+    <p class="lead">Atur DP dan tenor, lalu kirim simulasinya langsung ke WhatsApp.</p>
+    <div class="detail-calc">
+      <CreditCalculator cars={lineup} site={site} preselectSlug={car.slug} heading={`Cicilan ${car.namaPendek}`} />
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section detail-alt">
+  <div class="container container--narrow">
+    <h2>Pertanyaan Umum</h2>
+    <div class="faq">
+      {car.faq.map((f) => (
+        <details class="faq-item">
+          <summary><span>{f.q}</span><Icon name="chevron-down" size={20} class="faq-chev" /></summary>
+          <div class="faq-body"><p>{f.a}</p></div>
+        </details>
+      ))}
+    </div>
+
+    <div class="detail-cta">
+      <Button href={linkTestDrive(site, car.nama)} variant="whatsapp" size="lg" iconLeft="whatsapp" target="_blank">Test Drive {car.namaPendek}</Button>
+      <Button href={linkPenawaran(site, car.nama)} variant="accent" size="lg" iconLeft="whatsapp" target="_blank">Minta Penawaran</Button>
+    </div>
+  </div>
+</section>
+
+<style>
+  .detail-alt { background: var(--color-surface-2); }
+
+  .gallery-grid {
+    display: grid;
+    gap: var(--space-sm);
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media (min-width: 48rem) { .gallery-grid { grid-template-columns: repeat(3, 1fr); } }
+  .gallery-grid :global(.gallery-hero) { grid-column: 1 / -1; }
+
+  .price-table, .spec-grid, .feature-list, .faq { margin-top: var(--space-lg); }
+
+  .price-table { width: 100%; border-collapse: collapse; }
+  .price-table th, .price-table td {
+    text-align: left; padding: var(--space-sm) var(--space-2xs);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .price-table th { font-size: var(--fs-caption); text-transform: uppercase; letter-spacing: var(--ls-wide); color: var(--color-text-muted); }
+  .price-table td:last-child { text-align: right; font-weight: var(--fw-semibold); }
+  .tag-rec {
+    margin-left: var(--space-2xs);
+    padding: 0.1em 0.5em;
+    background: var(--color-accent-soft);
+    color: var(--color-accent-ink);
+    border-radius: var(--radius-pill);
+    font-size: var(--fs-caption);
+    font-weight: var(--fw-semibold);
+  }
+
+  .spec-grid { display: grid; gap: var(--space-md); grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr)); }
+  .spec-item {
+    padding: var(--space-md);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+  }
+  .spec-item dt {
+    display: flex; align-items: center; gap: var(--space-2xs);
+    font-size: var(--fs-caption); text-transform: uppercase; letter-spacing: var(--ls-wide);
+    color: var(--color-text-muted);
+  }
+  .spec-item dt :global(.icon) { color: var(--color-accent-ink); }
+  .spec-item dd { margin-top: var(--space-2xs); font-size: var(--fs-h6); font-weight: var(--fw-semibold); }
+
+  .feature-list { display: grid; gap: var(--space-sm); grid-template-columns: 1fr; }
+  @media (min-width: 40rem) { .feature-list { grid-template-columns: 1fr 1fr; } }
+  .feature-list li { display: flex; align-items: flex-start; gap: var(--space-2xs); }
+  .feature-list :global(.icon) { color: var(--color-accent-ink); margin-top: 0.15em; }
+
+  .detail-calc { margin-top: var(--space-lg); }
+
+  .faq { display: grid; gap: var(--space-2xs); }
+  .faq-item { border-bottom: 1px solid var(--color-border); }
+  .faq-item summary {
+    display: flex; align-items: center; justify-content: space-between; gap: var(--space-sm);
+    padding: var(--space-md) 0;
+    cursor: pointer; list-style: none;
+    font-family: var(--font-display);
+    font-weight: var(--fw-semibold);
+    font-size: var(--fs-h6);
+  }
+  .faq-item summary::-webkit-details-marker { display: none; }
+  .faq-chev { color: var(--color-text-muted); transition: transform var(--dur) var(--ease); flex: none; }
+  .faq-item[open] .faq-chev { transform: rotate(180deg); }
+  .faq-body { padding-bottom: var(--space-md); color: var(--color-text-muted); }
+
+  .detail-cta { display: flex; flex-wrap: wrap; gap: var(--space-sm); margin-top: var(--space-xl); }
+</style>

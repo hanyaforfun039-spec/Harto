@@ -1,0 +1,187 @@
+---
+/* /tentang (Web2 hybrid "Harto") — narasi konsultan hybrid + TrustHybrid
+   (kutipan editorial + strip konsultan) + info layanan gaya "data sheet".
+   Beda layout dari Faiz (TrustSection avatar + grid kartu ikon). */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import TrustHybrid from '../components/TrustHybrid.astro';
+import StickyWhatsAppBar from '../components/StickyWhatsAppBar.astro';
+import Footer from '../components/Footer.astro';
+import Icon from '../components/Icon.astro';
+import Button from '../components/Button.astro';
+import { site } from '../lib/site';
+import { linkPenawaran, linkTestDrive } from '../lib/whatsapp';
+import { getCarBySlug } from '../lib/cars';
+
+const featured = getCarBySlug(site.featuredSlug);
+const description =
+  `${site.salesName}, ${site.salesTitle} spesialis hybrid & mobil listrik di ${site.address.locality}. ` +
+  `Konsultasi teknologi, estimasi penghematan & test drive JAECOO. ` +
+  `Melayani ${site.address.locality}, Solo & Jawa Tengah via WhatsApp.`;
+const seoTitle = `Tentang ${site.salesName} — Konsultan Hybrid JAECOO ${site.address.locality}`;
+---
+<BaseLayout title="Tentang Kami" seoTitle={seoTitle} description={description}>
+  <Header slot="header" site={site} />
+
+  <!-- Intro -->
+  <section class="section">
+    <div class="container container--narrow">
+      <nav class="crumbs" aria-label="Remah">
+        <a href="/">Beranda</a><span aria-hidden="true">/</span><span aria-current="page">Tentang</span>
+      </nav>
+      <div class="about-intro" data-reveal>
+        <p class="eyebrow">Tentang Kami</p>
+        <h1>{site.salesName} — Konsultan Hybrid &amp; Mobil Listrik JAECOO {site.address.locality}</h1>
+        <p class="lead">{site.positioning}</p>
+        <p>
+          Membeli mobil hybrid atau listrik semestinya berangkat dari paham, bukan ragu. {site.salesName},
+          {site.salesTitle}, membantu Anda memahami cara kerja Super Hybrid System dan penggerak listrik —
+          dari estimasi penghematan, test drive, hingga pengisian daya dan perawatan — dengan layanan personal
+          untuk {site.serviceAreas.join(', ')}. Mengusung semangat “{site.tagline}”, kami menghadirkan
+          teknologi JAECOO secara jernih dan tanpa rumit.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Profil + testimoni (editorial) -->
+  <TrustHybrid site={site} />
+
+  <!-- Info layanan: data sheet (baris berlabel + hairline), bukan kartu ikon -->
+  <section class="section section--alt" id="kontak">
+    <div class="container container--narrow">
+      <div class="info-head" data-reveal>
+        <p class="eyebrow">Kunjungi &amp; Hubungi</p>
+        <h2>Informasi Layanan</h2>
+      </div>
+
+      <dl class="infosheet" data-reveal>
+        <div class="infosheet-row">
+          <dt><Icon name="map-pin" size={16} /> Alamat</dt>
+          <dd>
+            {site.address.street}, {site.address.locality}, {site.address.region} {site.address.postalCode}
+            {site.mapUrl && <> · <a class="info-link" href={site.mapUrl} target="_blank" rel="noopener noreferrer">Buka di Maps</a></>}
+          </dd>
+        </div>
+        <div class="infosheet-row">
+          <dt><Icon name="clock" size={16} /> Jam Layanan</dt>
+          <dd>
+            <ul role="list" class="info-hours">
+              {site.openingHours.map((h) => (
+                <li><span>{h.hari}</span><span class="tnum">{h.buka}–{h.tutup}</span></li>
+              ))}
+            </ul>
+          </dd>
+        </div>
+        <div class="infosheet-row">
+          <dt><Icon name="phone" size={16} /> Kontak</dt>
+          <dd>
+            <a href={`tel:+${site.whatsapp}`} class="tnum">{site.phoneDisplay}</a>
+            {site.email && <> · <a href={`mailto:${site.email}`}>{site.email}</a></>}
+          </dd>
+        </div>
+        <div class="infosheet-row">
+          <dt><Icon name="check" size={16} /> Area Layanan</dt>
+          <dd>{site.serviceAreas.join(', ')} &amp; sekitarnya</dd>
+        </div>
+      </dl>
+
+      <div class="map-embed" data-reveal>
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.401737235811!2d110.38903647454146!3d-6.96184546816202!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e70f500523d9d1d%3A0x58749a72235a7df7!2sJAECOO%20SEMARANG!5e0!3m2!1sid!2sid!4v1782096879081!5m2!1sid!2sid"
+          title="Lokasi dealer JAECOO Semarang di Google Maps"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          allowfullscreen
+        ></iframe>
+      </div>
+
+      {site.social?.instagram && (
+        <div class="about-social" data-reveal>
+          <span class="about-social-label">Ikuti &amp; DM langsung</span>
+          <a class="social-btn" href={site.social.instagram} target="_blank" rel="noopener noreferrer">
+            <Icon name="instagram" size={20} /> <span>Instagram</span>
+          </a>
+        </div>
+      )}
+
+      <div class="about-cta" data-reveal>
+        <Button href={linkPenawaran(site)} variant="accent" size="lg" iconLeft="whatsapp" target="_blank">Konsultasi hybrid gratis</Button>
+        {featured && (
+          <Button href={linkTestDrive(site, featured.nama)} variant="whatsapp" size="lg" iconLeft="whatsapp" target="_blank">
+            Test Drive {featured.namaPendek}
+          </Button>
+        )}
+      </div>
+    </div>
+  </section>
+
+  <StickyWhatsAppBar slot="footer" site={site} />
+  <Footer slot="footer" site={site} />
+</BaseLayout>
+
+<style>
+  .crumbs {
+    display: flex; flex-wrap: wrap; gap: var(--space-2xs); align-items: center;
+    margin-bottom: var(--space-lg);
+    font-size: var(--fs-body-sm); color: var(--color-text-muted);
+  }
+  .crumbs a:hover { color: var(--color-accent-ink); text-decoration: underline; }
+  .crumbs span[aria-current] { color: var(--color-text); font-weight: var(--fw-medium); }
+  .crumbs span[aria-hidden] { color: var(--color-text-subtle); }
+
+  .about-intro { display: grid; gap: var(--space-sm); }
+  .about-intro h1 { max-width: 22ch; }
+  .about-intro > p:last-child { color: var(--color-text-muted); max-width: 64ch; }
+
+  .section--alt { background: var(--color-surface-2); }
+  .info-head { display: grid; gap: var(--space-2xs); max-width: 56ch; }
+
+  /* Data sheet: label kiri + nilai kanan, dipisah hairline */
+  .infosheet { margin-top: var(--space-xl); display: grid; }
+  .infosheet-row {
+    display: grid;
+    gap: var(--space-2xs) var(--space-xl);
+    padding-block: var(--space-lg);
+    border-top: 1px solid var(--color-border);
+  }
+  .infosheet-row:last-child { border-bottom: 1px solid var(--color-border); }
+  @media (min-width: 44rem) { .infosheet-row { grid-template-columns: 12rem 1fr; align-items: start; } }
+  .infosheet-row dt {
+    display: inline-flex; align-items: center; gap: var(--space-2xs);
+    font-size: var(--fs-caption);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-wide);
+    color: var(--color-text-subtle);
+  }
+  .infosheet-row dt :global(.icon) { color: var(--color-accent-ink); }
+  .infosheet-row dd { color: var(--color-text); font-size: var(--fs-body-sm); }
+  .infosheet-row a { color: var(--color-accent-ink); text-decoration: underline; text-underline-offset: 0.18em; }
+  .info-link { font-weight: var(--fw-semibold); }
+  .info-hours { display: grid; gap: var(--space-2xs); max-width: 22rem; }
+  .info-hours li { display: flex; justify-content: space-between; gap: var(--space-md); color: var(--color-text-muted); }
+
+  .map-embed {
+    margin-top: var(--space-2xl);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+  }
+  .map-embed iframe { display: block; width: 100%; height: clamp(18rem, 40vw, 26rem); border: 0; }
+
+  .about-social { margin-top: var(--space-2xl); display: grid; gap: var(--space-sm); justify-items: start; }
+  .about-social-label { font-size: var(--fs-body-sm); color: var(--color-text-muted); }
+  .social-btn {
+    display: inline-flex; align-items: center; gap: var(--space-2xs);
+    min-height: 3rem; padding-inline: var(--space-lg);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-md);
+    color: var(--color-text); font-weight: var(--fw-semibold); font-size: var(--fs-body-sm);
+    transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+  }
+  .social-btn:hover { border-color: var(--color-accent); box-shadow: var(--shadow-sm); }
+  .social-btn :global(.icon) { color: var(--color-accent-ink); }
+
+  .about-cta { display: flex; flex-wrap: wrap; gap: var(--space-sm); margin-top: var(--space-2xl); }
+</style>

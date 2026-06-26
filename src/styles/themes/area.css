@@ -1,0 +1,12 @@
+/* Tema: AREA (Ungaran-Kendal-Demak) · accent TEAL horizon
+   (mewakili wilayah luas / pesisir, tetap satu keluarga dengan hijau base)
+   Kontras WCAG:
+     on-accent #FFFFFF di atas #2E7D8A  ~ 4.8:1  (AA teks OK)
+     accent-ink #235E68 di atas --paper  ~ 6.6:1  (AA teks OK) */
+[data-theme='area'] {
+  --color-accent:        #2E7D8A;
+  --color-accent-strong: #235E68;
+  --color-accent-ink:    #235E68;
+  --color-accent-soft:   #DCEAEC;
+  --color-on-accent:     var(--white);
+}

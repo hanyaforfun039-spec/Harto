@@ -1,0 +1,204 @@
+/* =============================================================================
+   jaecoo-base · TOKENS
+   Satu sumber kebenaran untuk warna, tipografi, ruang, dan motion.
+   ATURAN: komponen HANYA memakai var(--token), tidak pernah nilai mentah.
+   -----------------------------------------------------------------------------
+   Tema accent di-set per-site lewat [data-theme="..."] (lihat styles/themes/*).
+   :root memuat default (tema premium/brass) sebagai fallback bila tanpa tema.
+   ============================================================================ */
+
+:root {
+  /* ===========================================================================
+     1. WARNA · PRIMITIF (satu DNA — GELAP MONOKROM)
+     Identitas JAECOO: near-black sejuk + charcoal (undertone midnight-navy),
+     dengan metalik silver/platinum sebagai satu-satunya aksen.
+     =========================================================================== */
+  /* Near-black sejuk → charcoal (undertone midnight-navy) */
+  --nb-950: #06090D; /* paling dalam — section gelap / footer */
+  --nb-900: #0C1117; /* ★ bg utama situs */
+  --nb-800: #161C24; /* surface / kartu */
+  --nb-700: #1E2630; /* surface-2 / elevasi */
+  --nb-600: #28313B; /* border halus */
+  --nb-500: #3A434E; /* border kuat */
+
+  /* Steel / abu sejuk (teks & metalik premium) */
+  --steel-400: #828C9A; /* teks caption (lolos AA di bg gelap) */
+  --steel-300: #A7B0BC; /* teks sekunder */
+  --steel-200: #C7CDD6; /* metal — garis & detail premium */
+  --steel-100: #E6EAEF; /* platinum terang — interaktif utama */
+
+  /* Off-white (teks di atas gelap + section terang opsional) */
+  --paper:   #F4F6F4; /* off-white netral */
+  --paper-2: #E9ECEA;
+  --white:   #FFFFFF;
+
+  /* Near-black untuk teks/ikon di atas accent silver */
+  --ink-900: #0B0F14;
+
+  /* Kompat: warna ikon placeholder foto (mid-steel, terlihat di surface gelap) */
+  --n-300: #5C6672;
+
+  /* ===========================================================================
+     2. WARNA · SEMANTIK (dipakai komponen)
+     =========================================================================== */
+  --color-bg:           var(--nb-900);
+  --color-surface:      var(--nb-800);
+  --color-surface-2:    var(--nb-700);
+  --color-bg-inverse:   var(--nb-950); /* section gelap — lebih dalam dari bg */
+  --color-bg-inverse-2: #04060A;
+
+  --color-text:               var(--paper);
+  --color-text-muted:         var(--steel-300);
+  --color-text-subtle:        var(--steel-400);
+  --color-text-inverse:       var(--paper);
+  --color-text-inverse-muted: rgba(244, 246, 244, 0.72);
+
+  --color-border:         var(--nb-600);
+  --color-border-strong:  var(--nb-500);
+  --color-border-inverse: rgba(244, 246, 244, 0.16);
+
+  --color-brand:        var(--steel-100); /* platinum — btn primer & link aktif */
+  --color-brand-strong: var(--white);
+  --color-on-brand:     var(--ink-900);
+
+  /* Status (dipakai hemat) */
+  --color-success: #1F8A53;
+  --color-danger:  #B23A2E;
+
+  /* ===========================================================================
+     3. WARNA · WHATSAPP (brand resmi)
+     --wa-green  : warna logo resmi.
+     --wa-action : lebih gelap utk tombol agar teks putih lolos WCAG AA (>=4.5).
+     =========================================================================== */
+  --wa-green:         #25D366; /* fill logo */
+  --wa-action:        #1FA855; /* bg tombol (teks putih lolos AA) */
+  --wa-action-strong: #178B45;
+  --color-on-wa:      var(--white);
+
+  /* ===========================================================================
+     4. WARNA · ACCENT (KONTRAK TEMA — default = premium/silver-metalik)
+     5 token yang di-override tiap tema di styles/themes/*:
+       --color-accent        isi (fill) cerah
+       --color-accent-strong varian hover/pressed lebih gelap
+       --color-accent-ink    varian teks-di-atas-terang (lolos AA di --paper)
+       --color-accent-soft   tint bg lembut
+       --color-on-accent     teks/ikon di atas accent fill (lolos AA)
+     =========================================================================== */
+  --color-accent:        #C7CDD6; /* silver fill — CTA premier (hemat) */
+  --color-accent-strong: #DBE0E6; /* hover: silver lebih terang */
+  --color-accent-ink:    #C9CFD8; /* metal sbg teks/ikon di atas gelap (AA) */
+  --color-accent-soft:   #232C37; /* tint baja gelap — chip/lingkaran/angka samar */
+  --color-on-accent:     var(--ink-900);
+
+  /* ===========================================================================
+     5. TIPOGRAFI
+     Display: Manrope (sans geometris bersih, rasa Apple/SF — simple tapi mewah).
+     Body:    Inter (sangat terbaca di layar HP).
+     Keduanya sans -> distingsi heading vs body lewat berat + ukuran (gaya Apple).
+     =========================================================================== */
+  --font-display: 'Manrope', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-body:    'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  /* Mono (Web2 "Harto" eco-tech): angka "terukur" — stack sistem, tanpa beban font */
+  --font-mono:    ui-monospace, 'SF Mono', 'Cascadia Code', 'Segoe UI Mono', Menlo, Consolas, monospace;
+
+  /* Type scale — fluid clamp(min, pref, max), mobile-first. */
+  --fs-display: clamp(2.75rem, 1.90rem + 4.2vw, 5rem);     /* 44 -> 80  hero */
+  --fs-h1:      clamp(2.25rem, 1.65rem + 3.0vw, 4rem);     /* 36 -> 64 */
+  --fs-h2:      clamp(1.75rem, 1.35rem + 2.0vw, 2.75rem);  /* 28 -> 44 */
+  --fs-h3:      clamp(1.375rem, 1.15rem + 1.1vw, 2rem);    /* 22 -> 32 */
+  --fs-h4:      clamp(1.1875rem, 1.05rem + 0.7vw, 1.5rem); /* 19 -> 24 */
+  --fs-h5:      clamp(1.0625rem, 1.00rem + 0.35vw, 1.25rem); /* 17 -> 20 */
+  --fs-h6:      1.0625rem;                                  /* 17 */
+  --fs-lead:    clamp(1.125rem, 1.02rem + 0.5vw, 1.375rem); /* 18 -> 22 */
+  --fs-body:    1.0625rem;                                  /* 17 — nyaman di HP */
+  --fs-body-sm: 0.9375rem;                                  /* 15 */
+  --fs-caption: 0.8125rem;                                  /* 13 */
+  --fs-price:   clamp(1.75rem, 1.40rem + 1.6vw, 2.5rem);    /* 28 -> 40 — angka harga */
+
+  --lh-display: 1.05;
+  --lh-heading: 1.15;
+  --lh-snug:    1.30;
+  --lh-body:    1.65;
+  --lh-relaxed: 1.75;
+
+  --ls-tight:   -0.02em; /* display/headline */
+  --ls-snug:    -0.01em;
+  --ls-normal:  0;
+  --ls-wide:    0.04em;
+  --ls-eyebrow: 0.14em;  /* label/eyebrow uppercase */
+
+  --fw-regular:  400;
+  --fw-medium:   500;
+  --fw-semibold: 600;
+  --fw-bold:     700;
+
+  /* ===========================================================================
+     6. RUANG (skala 4px; whitespace = fitur utama)
+     =========================================================================== */
+  --space-3xs: 0.25rem; /* 4  */
+  --space-2xs: 0.5rem;  /* 8  */
+  --space-xs:  0.75rem; /* 12 */
+  --space-sm:  1rem;    /* 16 */
+  --space-md:  1.5rem;  /* 24 */
+  --space-lg:  2rem;    /* 32 */
+  --space-xl:  3rem;    /* 48 */
+  --space-2xl: 4rem;    /* 64 */
+  --space-3xl: 6rem;    /* 96 */
+  --space-4xl: 8rem;    /* 128 */
+  --space-5xl: 10rem;   /* 160 */
+
+  /* Padding vertikal section: >=56px mobile, >=96px desktop (prinsip whitespace) */
+  --section-py:    clamp(3.5rem, 7vw, 7.5rem); /* 56 -> 120 */
+  --section-py-lg: clamp(4.5rem, 9vw, 10rem);  /* 72 -> 160 — nafas ekstra */
+
+  /* ===========================================================================
+     7. LAYOUT
+     =========================================================================== */
+  --container:        75rem;   /* 1200 — konten utama */
+  --container-wide:   82.5rem; /* 1320 */
+  --container-narrow: 45rem;   /* 720  — prosa/teks panjang */
+  --gutter: clamp(1.25rem, 5vw, 4rem); /* 20 -> 64 */
+
+  --header-h:    4rem;    /* 64 mobile  */
+  --header-h-lg: 4.5rem;  /* 72 desktop */
+  --stickybar-h: 4.25rem; /* 68 — tinggi WA bar mobile (utk padding-bottom body) */
+
+  /* ===========================================================================
+     8. RADIUS · SHADOW
+     =========================================================================== */
+  --radius-xs:   0.375rem; /* 6  */
+  --radius-sm:   0.5rem;   /* 8  */
+  --radius-md:   0.75rem;  /* 12 */
+  --radius-lg:   1rem;     /* 16 — kartu */
+  --radius-xl:   1.5rem;   /* 24 */
+  --radius-pill: 999px;
+
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.30);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.36), 0 1px 2px rgba(0, 0, 0, 0.30);
+  --shadow-md: 0 8px 20px -10px rgba(0, 0, 0, 0.50);
+  --shadow-lg: 0 20px 44px -18px rgba(0, 0, 0, 0.58);
+  --shadow-xl: 0 34px 66px -26px rgba(0, 0, 0, 0.64);
+
+  /* ===========================================================================
+     9. MOTION (halus, 150-250ms, CSS-only)
+     =========================================================================== */
+  --dur-fast: 150ms;
+  --dur:      200ms;
+  --dur-slow: 250ms;
+  --ease-out: cubic-bezier(0.22, 0.7, 0.3, 1);
+  --ease:     cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ===========================================================================
+     10. Z-INDEX · FOCUS · TOUCH
+     =========================================================================== */
+  --z-base:    1;
+  --z-sticky:  90;
+  --z-header:  100;
+  --z-overlay: 200;
+  --z-modal:   300;
+  --z-toast:   400;
+
+  --color-focus: var(--steel-300);
+
+  --tap-min: 2.75rem; /* 44px — target sentuh minimum (a11y) */
+}

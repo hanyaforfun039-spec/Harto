@@ -1,0 +1,130 @@
+---
+/* TrustSection — kartu profil sales (avatar inisial, nama, kredensial chips,
+   kontak) + testimoni pelanggan. */
+import Icon from './Icon.astro';
+import type { SiteConfig } from '../lib/types';
+
+interface Props { site: SiteConfig }
+const { site } = Astro.props;
+const initials = site.salesName
+  .split(' ')
+  .map((w) => w[0])
+  .slice(0, 2)
+  .join('')
+  .toUpperCase();
+---
+<section class="trust section" id="trust">
+  <div class="container">
+    <div class="trust-grid">
+      <aside class="sales-card" data-reveal>
+        <div class="sales-avatar" aria-hidden="true">{initials}</div>
+        <h3 class="sales-name">{site.salesName}</h3>
+        <p class="sales-title">{site.salesTitle}</p>
+        <ul class="chips" role="list">
+          {site.salesCredentials.map((c) => (
+            <li class="chip"><Icon name="check" size={15} /> {c}</li>
+          ))}
+        </ul>
+        <dl class="sales-contact">
+          <div><dt><Icon name="phone" size={16} label="Telepon" /></dt><dd class="tnum">{site.phoneDisplay}</dd></div>
+          <div><dt><Icon name="map-pin" size={16} label="Area" /></dt><dd>{site.serviceAreas.join(', ')}</dd></div>
+        </dl>
+      </aside>
+
+      <div class="testi">
+        <p class="eyebrow">Apa kata pelanggan</p>
+        <h2>Dipercaya pembeli di {site.address.region}</h2>
+        <div class="testi-grid">
+          {site.testimoni.map((t, i) => (
+            <figure class="testi-card" data-reveal data-reveal-delay={String((i % 3) + 1)}>
+              <blockquote>{t.teks}</blockquote>
+              <figcaption><strong>{t.nama}</strong> · {t.kota} — {t.mobil}</figcaption>
+            </figure>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .trust-grid { display: grid; gap: var(--space-xl); }
+  @media (min-width: 56rem) {
+    .trust-grid { grid-template-columns: 20rem 1fr; gap: var(--space-2xl); align-items: start; }
+  }
+
+  .sales-card {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-2xs);
+    padding: var(--space-lg);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-sm);
+  }
+  .sales-avatar {
+    display: grid;
+    place-items: center;
+    width: 4.5rem;
+    height: 4.5rem;
+    border-radius: 50%;
+    background: var(--color-accent-soft);
+    color: var(--color-accent-ink);
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    font-size: var(--fs-h4);
+    margin-bottom: var(--space-2xs);
+  }
+  .sales-name { font-size: var(--fs-h4); }
+  .sales-title { color: var(--color-text-muted); font-size: var(--fs-body-sm); }
+  .chips { display: flex; flex-wrap: wrap; gap: var(--space-2xs); margin-top: var(--space-sm); }
+  .chip {
+    display: inline-flex; align-items: center; gap: var(--space-3xs);
+    padding: var(--space-3xs) var(--space-xs);
+    background: var(--color-surface-2);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-pill);
+    font-size: var(--fs-caption);
+    color: var(--color-text);
+  }
+  .chip :global(.icon) { color: var(--color-accent-ink); }
+  .sales-contact { display: grid; gap: var(--space-2xs); margin-top: var(--space-md); width: 100%; }
+  .sales-contact > div { display: flex; align-items: center; gap: var(--space-2xs); font-size: var(--fs-body-sm); color: var(--color-text-muted); }
+  .sales-contact :global(.icon) { color: var(--color-accent-ink); }
+
+  .testi { display: grid; gap: var(--space-sm); }
+  .testi-grid {
+    display: grid;
+    gap: var(--space-md);
+    margin-top: var(--space-md);
+  }
+  @media (min-width: 40rem) { .testi-grid { grid-template-columns: 1fr 1fr; } }
+  .testi-card {
+    display: grid;
+    gap: var(--space-sm);
+    padding: var(--space-lg);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xs);
+  }
+  .testi-card blockquote {
+    position: relative;
+    font-size: var(--fs-body);
+    color: var(--color-text);
+    padding-top: var(--space-md);
+  }
+  .testi-card blockquote::before {
+    content: '\201C';
+    position: absolute;
+    top: -0.4em;
+    left: -0.1em;
+    font-family: var(--font-display);
+    font-size: 3rem;
+    line-height: 1;
+    color: var(--color-accent);
+    opacity: 0.5;
+  }
+  .testi-card figcaption { font-size: var(--fs-body-sm); color: var(--color-text-muted); }
+</style>

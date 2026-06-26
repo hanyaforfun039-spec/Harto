@@ -1,0 +1,119 @@
+{
+  "id": "hybrid",
+  "theme": "hybrid",
+  "brand": "JAECOO Hybrid Semarang",
+  "dealerName": "Dealer Resmi JAECOO Semarang",
+  "salesName": "Harto",
+  "salesTitle": "Sales Consultant JAECOO",
+  "salesCredentials": [
+    "Sales Consultant Resmi",
+    "Spesialis Hybrid & Mobil Listrik",
+    "Melayani Semarang & Jawa Tengah"
+  ],
+  "whatsapp": "6287830360876",
+  "phoneDisplay": "0878-3036-0876",
+  "email": "Jaecoopurianjasmorosmg@gmail.com",
+  "address": {
+    "region": "Jawa Tengah",
+    "street": "Jl. Madukoro Raya No. 45, Tawangsari, Kec. Semarang Barat",
+    "country": "ID",
+    "locality": "Semarang",
+    "postalCode": "50144"
+  },
+  "geo": {
+    "lat": -6.9618455,
+    "lng": 110.3890365
+  },
+  "serviceAreas": [
+    "Semarang",
+    "Ungaran",
+    "Salatiga",
+    "Kendal",
+    "Demak",
+    "Surakarta"
+  ],
+  "openingHours": [
+    {
+      "buka": "08:30",
+      "hari": "Senin - Sabtu",
+      "tutup": "17:00"
+    },
+    {
+      "buka": "09:00",
+      "hari": "Minggu",
+      "tutup": "15:00"
+    }
+  ],
+  "mapUrl": "https://www.google.com/maps/search/?api=1&query=JAECOO+SEMARANG",
+  "tagline": "Irit harian, tenang jarak jauh.",
+  "subheadline": "Mesin bensin efisiensi tinggi berpadu motor listrik: irit seperti mobil listrik untuk harian, tenang tanpa cemas untuk jarak jauh. Dealer resmi JAECOO Semarang.",
+  "positioning": "Spesialis JAECOO hybrid & mobil listrik di Semarang — J7 SHS (PHEV) dan J5 EV. Efisiensi, teknologi, dan kenyamanan tanpa kompromi.",
+  "heroVariant": "car-first",
+  "heroCarSlug": "j7-shs",
+  "heroHeadline": "Mobil Hybrid & Listrik JAECOO di Semarang — Efisiensi Tanpa Kompromi",
+  "heroStat": {
+    "value": "1.200",
+    "unit": "km",
+    "label": "Jangkauan total sekali isi penuh (SHS)",
+    "note": "Estimasi gabungan bensin + listrik; berdasarkan data pabrikan/kondisi pengujian, pemakaian nyata dapat berbeda. [Isi angka resmi]."
+  },
+  "lineup": [
+    "j7-shs",
+    "j5",
+    "j8-shs-ardis",
+    "j7",
+    "j8-ardis"
+  ],
+  "featuredSlug": "j7-shs",
+  "kredit": {
+    "dpDefaultPct": 20,
+    "tenorDefaultYears": 5,
+    "bungaFlatPctPerYear": 3.8
+  },
+  "efisiensi": {
+    "bbmDefault": 13000,
+    "kmDefault": 1500,
+    "baselineDefaultKmpl": 9,
+    "baselinePresets": [
+      { "label": "SUV bensin biasa", "kmpl": 9 },
+      { "label": "MPV bensin", "kmpl": 11 },
+      { "label": "Sedan bensin", "kmpl": 13 }
+    ],
+    "model": {
+      "j7-shs": { "kmpl": 30, "rangeKm": 1200 },
+      "j5": { "kmpl": 45, "rangeKm": 500 },
+      "j8-shs-ardis": { "kmpl": 26, "rangeKm": 1100 },
+      "j7": { "kmpl": 14, "rangeKm": 800 },
+      "j8-ardis": { "kmpl": 11, "rangeKm": 750 }
+    }
+  },
+  "promo": {
+    "sub": "Paket pengisian daya & bonus aksesori untuk pembelian J7 SHS.",
+    "aktif": true,
+    "deadline": "2026-06-30",
+    "headline": "Promo Hybrid Hemat Bulan Ini"
+  },
+  "testimoni": [
+    {
+      "kota": "Semarang",
+      "nama": "Bapak Adi",
+      "teks": "Konsumsi bahan bakar turun drastis untuk komuter harian. Penjelasannya sangat membantu.",
+      "mobil": "J7 SHS"
+    },
+    {
+      "kota": "Salatiga",
+      "nama": "Ibu Lina",
+      "teks": "Dibimbing soal cara isi daya dan perawatan hybrid. Pelayanan ramah dan sabar.",
+      "mobil": "J7 SHS"
+    }
+  ],
+  "seo": {
+    "locale": "id_ID",
+    "ogImage": "https://yvbpnlbwaundqhyrvdwg.supabase.co/storage/v1/object/public/Faiz/J7-shs-banner.webp",
+    "titleSuffix": "JAECOO Hybrid Semarang",
+    "defaultDescription": "Mobil hybrid & listrik JAECOO di Semarang — J7 SHS (PHEV) & J5 EV. Efisiensi terdepan, teknologi Super Hybrid. Test drive & konsultasi via WhatsApp. Melayani Semarang–Solo & Jawa Tengah."
+  },
+  "social": {
+    "instagram": "https://instagram.com/jaecoo_purianjasmoro_smg"
+  }
+}

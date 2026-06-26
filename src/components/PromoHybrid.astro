@@ -1,0 +1,85 @@
+---
+/* PromoHybrid — promo Web2: panel TERANG dengan tab teal + "gauge waktu" sisa
+   program (static, dihitung saat build). Beda dari band gelap + countdown (Faiz). */
+import Button from './Button.astro';
+import type { SiteConfig } from '../lib/types';
+import { linkPenawaran } from '../lib/whatsapp';
+
+interface Props { site: SiteConfig }
+const { site } = Astro.props;
+const promo = site.promo;
+
+const now = new Date();
+const dl = promo.deadline ? new Date(promo.deadline) : null;
+const deadlineText = dl
+  ? new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }).format(dl)
+  : '';
+const daysLeft = dl ? Math.max(0, Math.ceil((dl.getTime() - now.getTime()) / 86400000)) : null;
+// Gauge: progres bulan berjalan menuju akhir bulan (visual "waktu hampir habis").
+const mStart = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
+const mEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0).getTime();
+const fillPct = Math.min(100, Math.max(6, Math.round(((now.getTime() - mStart) / (mEnd - mStart)) * 100)));
+---
+{promo.aktif && (
+  <section class="section promohybrid" id="promo">
+    <div class="container">
+      <div class="ph-panel" data-reveal>
+        <div class="ph-main">
+          <p class="eyebrow">Program Bulan Ini</p>
+          <h2 class="ph-headline">{promo.headline}</h2>
+          <p class="lead">{promo.sub}</p>
+          <Button href={linkPenawaran(site)} variant="accent" size="lg" iconLeft="whatsapp" target="_blank">Konsultasi &amp; klaim program</Button>
+        </div>
+
+        {dl && (
+          <div class="ph-meta">
+            <p class="ph-meta-label">Berlaku sampai</p>
+            <p class="ph-deadline tnum">{deadlineText}</p>
+            <div class="ph-gauge" aria-hidden="true"><span class="ph-gauge-fill" style={`width:${fillPct}%`}></span></div>
+            {daysLeft !== null && (
+              <p class="ph-remain"><span class="tnum">{daysLeft}</span> hari lagi</p>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  </section>
+)}
+
+<style>
+  .ph-panel {
+    display: grid;
+    gap: var(--space-xl);
+    padding: var(--space-2xl);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-left: 3px solid var(--color-accent); /* tab teal */
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-sm);
+  }
+  @media (min-width: 56rem) {
+    .ph-panel { grid-template-columns: 1.7fr 1fr; align-items: center; gap: var(--space-3xl); }
+  }
+  .ph-main { display: grid; gap: var(--space-sm); justify-items: start; }
+  .ph-headline { font-size: var(--fs-h2); }
+
+  .ph-meta {
+    display: grid;
+    gap: var(--space-2xs);
+    padding-left: var(--space-xl);
+    border-left: 1px solid var(--color-border);
+  }
+  @media (max-width: 55.99rem) { .ph-meta { padding-left: 0; border-left: 0; border-top: 1px solid var(--color-border); padding-top: var(--space-lg); } }
+  .ph-meta-label { font-size: var(--fs-caption); text-transform: uppercase; letter-spacing: var(--ls-eyebrow); color: var(--color-text-subtle); }
+  .ph-deadline { font-family: var(--font-display); font-size: var(--fs-h4); font-weight: var(--fw-semibold); color: var(--color-text); }
+  .ph-gauge {
+    position: relative;
+    height: 0.4rem;
+    margin-top: var(--space-2xs);
+    border-radius: var(--radius-pill);
+    background: var(--color-surface-2);
+    overflow: hidden;
+  }
+  .ph-gauge-fill { position: absolute; inset: 0 auto 0 0; background: var(--color-accent); border-radius: inherit; }
+  .ph-remain { font-size: var(--fs-body-sm); color: var(--color-accent-ink); font-weight: var(--fw-semibold); }
+</style>

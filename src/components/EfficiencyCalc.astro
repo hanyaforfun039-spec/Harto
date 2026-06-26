@@ -1,0 +1,232 @@
+---
+/* EfficiencyCalc — KALKULATOR EFISIENSI Web2 "Harto" (tool hero, BUKAN kredit).
+   Input: model JAECOO, jarak/bln, harga BBM, mobil lama (preset + ketik sendiri).
+   Output (data-viz bar/meter): jangkauan, biaya BBM JAECOO vs lama, hemat/bln &
+   /thn, biaya/km. CTA: kirim hasil ke WhatsApp.
+   Progressive enhancement: angka default ter-render tanpa JS; efisiensi.ts
+   menghidupkan interaktivitas. Logika di lib/efisiensi.ts (satu sumber). */
+import Icon from './Icon.astro';
+import type { SiteConfig } from '../lib/types';
+import { getLineup, getCarBySlug } from '../lib/cars';
+import { estimasiEfisiensiDefault, efisiensiModel } from '../lib/efisiensi';
+import { formatRupiah, formatRupiahShort } from '../lib/format';
+import { pesanEfisiensi, waLink } from '../lib/whatsapp';
+
+interface Props { site: SiteConfig; preselectSlug?: string; heading?: string }
+const { site, preselectSlug, heading = 'Hitung hemat Anda' } = Astro.props;
+
+const eff = site.efisiensi;
+const lineup = getLineup(site).filter((c) => eff?.model[c.slug]);
+const startSlug = preselectSlug && eff?.model[preselectSlug] ? preselectSlug : lineup[0]?.slug;
+const startCar = getCarBySlug(startSlug ?? '') ?? lineup[0];
+
+const r = estimasiEfisiensiDefault(site, startSlug);
+const maxRange = Math.max(...Object.values(eff?.model ?? {}).map((m) => m.rangeKm), 1);
+const pct = (n: number, d: number) => (d > 0 ? Math.min(100, Math.round((n / d) * 100)) : 0);
+
+const costMax = Math.max(r.biayaLamaPerBulan, r.biayaJaecooPerBulan, 1);
+const waHref = waLink(site.whatsapp, pesanEfisiensi(site, startCar.nama, r));
+---
+<div
+  class="eff"
+  data-efisiensi
+  data-wa={site.whatsapp}
+  data-sales={site.salesName}
+  data-range-max={String(maxRange)}
+>
+  <p class="eff-heading">{heading}</p>
+
+  <div class="eff-inputs">
+    <div class="eff-field eff-field--model">
+      <label for="eff-model">Model JAECOO</label>
+      <div class="select-wrap">
+        <select id="eff-model" class="eff-model" data-eff-model>
+          {lineup.map((c) => {
+            const m = efisiensiModel(site, c.slug)!;
+            return (
+              <option value={c.slug} data-kmpl={String(m.kmpl)} data-range={String(m.rangeKm)} data-nama={c.nama} selected={c.slug === startSlug}>
+                {c.namaPendek}
+              </option>
+            );
+          })}
+        </select>
+      </div>
+    </div>
+
+    <div class="eff-field">
+      <label for="eff-bbm">Harga BBM (Rp/L)</label>
+      <input id="eff-bbm" class="eff-bbm" data-eff-bbm type="number" inputmode="numeric" min="5000" max="30000" step="100" value={String(r.bbmPerLiter)} />
+    </div>
+
+    <div class="eff-field eff-field--km">
+      <label for="eff-km">Jarak tempuh per bulan <output class="eff-km-out tnum" data-eff-km-out>{r.kmPerMonth.toLocaleString('id-ID')}</output> km</label>
+      <input id="eff-km" class="eff-km" data-eff-km type="range" min="300" max="4000" step="100" value={String(r.kmPerMonth)} />
+      <div class="eff-range-ends" aria-hidden="true"><span>300</span><span>4.000 km</span></div>
+    </div>
+
+    <div class="eff-field">
+      <label for="eff-baseline">Mobil lama (konsumsi)</label>
+      <div class="select-wrap">
+        <select id="eff-baseline" class="eff-baseline" data-eff-baseline>
+          {(eff?.baselinePresets ?? []).map((b) => (
+            <option value={String(b.kmpl)} data-kmpl={String(b.kmpl)} selected={b.kmpl === r.baselineKmpl}>{b.label} (~{b.kmpl} km/L)</option>
+          ))}
+        </select>
+      </div>
+      <input id="eff-baseline-custom" class="eff-baseline-custom" data-eff-baseline-custom type="number" inputmode="numeric" min="3" max="40" step="1" placeholder="atau ketik km/L mobil Anda" aria-label="Ketik konsumsi mobil Anda (km per liter)" />
+    </div>
+  </div>
+
+  <div class="eff-out">
+    <!-- Jangkauan (angka pahlawan) + meter -->
+    <div class="eff-range-row">
+      <div class="eff-range-head">
+        <span class="eff-out-label">Jangkauan sekali isi penuh</span>
+        <span class="eff-range-val"><span class="tnum" data-eff-range>{r.rangeKm.toLocaleString('id-ID')}</span> km</span>
+      </div>
+      <div class="eff-meter" role="img" aria-label={`Jangkauan ${r.rangeKm} km`}>
+        <span class="eff-meter-fill" data-eff-range-bar style={`width:${pct(r.rangeKm, maxRange)}%`}></span>
+      </div>
+    </div>
+
+    <!-- Perbandingan biaya BBM/bln: JAECOO vs mobil lama -->
+    <div class="eff-compare">
+      <span class="eff-out-label">Biaya BBM per bulan</span>
+      <div class="eff-bar-row">
+        <span class="eff-bar-name">JAECOO {startCar.namaPendek}</span>
+        <span class="eff-bar-track"><span class="eff-bar-fill eff-bar-fill--good" data-eff-bar-jaecoo style={`width:${pct(r.biayaJaecooPerBulan, costMax)}%`}></span></span>
+        <span class="eff-bar-num tnum" data-eff-cost-jaecoo>{formatRupiahShort(r.biayaJaecooPerBulan)}</span>
+      </div>
+      <div class="eff-bar-row">
+        <span class="eff-bar-name">Mobil lama</span>
+        <span class="eff-bar-track"><span class="eff-bar-fill eff-bar-fill--base" data-eff-bar-lama style={`width:${pct(r.biayaLamaPerBulan, costMax)}%`}></span></span>
+        <span class="eff-bar-num tnum" data-eff-cost-lama>{formatRupiahShort(r.biayaLamaPerBulan)}</span>
+      </div>
+    </div>
+
+    <!-- Penghematan (hasil utama) -->
+    <div class="eff-save">
+      <div class="eff-save-main">
+        <span class="eff-out-label">Hemat</span>
+        <span class="eff-save-num tnum" data-eff-hemat-bln>{formatRupiah(r.hematPerBulan)}</span>
+        <span class="eff-save-unit">/ bulan</span>
+      </div>
+      <dl class="eff-save-sub">
+        <div><dt>Per tahun</dt><dd class="tnum" data-eff-hemat-thn>{formatRupiah(r.hematPerTahun)}</dd></div>
+        <div><dt>Biaya BBM JAECOO</dt><dd class="tnum" data-eff-perkm>{formatRupiah(r.biayaPerKmJaecoo)}/km</dd></div>
+      </dl>
+    </div>
+  </div>
+
+  <a class="eff-wa" data-eff-wa href={waHref} target="_blank" rel="noopener noreferrer">
+    <Icon name="whatsapp" size={20} />
+    <span>Kirim hasil hemat ini ke WhatsApp</span>
+  </a>
+  <p class="eff-note">Estimasi; konsumsi efektif JAECOO disetarakan ke biaya BBM. Pemakaian nyata bergantung rute, muatan, dan gaya berkendara. [Angka resmi diisi].</p>
+</div>
+
+<script>
+  import '../scripts/efisiensi.ts';
+</script>
+
+<style>
+  /* Panel instrumen TERANG: radius lembut, hairline + shadow halus (dashboard) */
+  .eff {
+    display: grid;
+    gap: var(--space-lg);
+    padding: var(--space-lg);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+  }
+  @media (min-width: 40rem) { .eff { padding: var(--space-xl); } }
+  .eff-heading {
+    font-family: var(--font-display);
+    font-size: var(--fs-h5);
+    font-weight: var(--fw-bold);
+    letter-spacing: var(--ls-snug);
+  }
+
+  /* Inputs grid */
+  .eff-inputs { display: grid; gap: var(--space-md); }
+  @media (min-width: 34rem) {
+    .eff-inputs { grid-template-columns: 1fr 1fr; }
+    .eff-field--km { grid-column: 1 / -1; }
+  }
+  .eff-field { display: grid; gap: var(--space-2xs); align-content: start; }
+  .eff-field label { font-size: var(--fs-body-sm); font-weight: var(--fw-medium); color: var(--color-text-muted); }
+  .eff-km-out { font-family: var(--font-mono, var(--font-display)); font-weight: var(--fw-bold); color: var(--color-text); font-variant-numeric: tabular-nums; }
+
+  .eff input[type='number'], .eff select {
+    width: 100%;
+    min-height: var(--tap-min);
+    padding: var(--space-2xs) var(--space-sm);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-md);
+    font-size: var(--fs-body);
+    color: var(--color-text);
+    font-variant-numeric: tabular-nums;
+  }
+  .eff input:focus-visible, .eff select:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 1px; border-color: var(--color-accent); }
+  .eff-baseline-custom { margin-top: var(--space-2xs); }
+  .select-wrap { position: relative; }
+  .select-wrap select { appearance: none; padding-right: var(--space-xl); cursor: pointer; }
+  .select-wrap::after {
+    content: ''; position: absolute; right: var(--space-sm); top: 50%;
+    width: 0.5rem; height: 0.5rem;
+    border-right: 2px solid var(--color-text-muted); border-bottom: 2px solid var(--color-text-muted);
+    transform: translateY(-65%) rotate(45deg); pointer-events: none;
+  }
+  .eff input[type='range'] { padding: 0; min-height: auto; accent-color: var(--color-accent); width: 100%; }
+  .eff-range-ends { display: flex; justify-content: space-between; font-size: var(--fs-caption); color: var(--color-text-subtle); }
+
+  /* Outputs */
+  .eff-out { display: grid; gap: var(--space-lg); padding-top: var(--space-lg); border-top: 1px solid var(--color-border); }
+  .eff-out-label { font-size: var(--fs-caption); letter-spacing: var(--ls-wide); text-transform: uppercase; color: var(--color-text-subtle); }
+
+  /* Meter jangkauan */
+  .eff-range-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-sm); }
+  .eff-range-val { font-family: var(--font-display); font-weight: var(--fw-bold); color: var(--color-text); }
+  .eff-range-val .tnum { font-size: var(--fs-h2); color: var(--color-accent-ink); }
+  .eff-meter { margin-top: var(--space-2xs); height: 0.5rem; border-radius: var(--radius-pill); background: var(--color-surface-2); overflow: hidden; }
+  .eff-meter-fill { display: block; height: 100%; border-radius: var(--radius-pill); background: var(--color-accent); transition: width var(--dur-slow) var(--ease-out); }
+
+  /* Bar perbandingan biaya */
+  .eff-compare { display: grid; gap: var(--space-2xs); }
+  .eff-bar-row { display: grid; grid-template-columns: 7.5rem 1fr auto; gap: var(--space-sm); align-items: center; }
+  .eff-bar-name { font-size: var(--fs-body-sm); color: var(--color-text-muted); }
+  .eff-bar-track { height: 0.75rem; border-radius: var(--radius-pill); background: var(--color-surface-2); overflow: hidden; }
+  .eff-bar-fill { display: block; height: 100%; border-radius: var(--radius-pill); transition: width var(--dur-slow) var(--ease-out); }
+  .eff-bar-fill--good { background: var(--color-accent); }
+  .eff-bar-fill--base { background: var(--color-border-strong); }
+  .eff-bar-num { font-family: var(--font-mono); font-weight: var(--fw-semibold); font-variant-numeric: tabular-nums; color: var(--color-text); min-width: 4.5rem; text-align: right; font-size: var(--fs-body-sm); }
+
+  /* Penghematan */
+  .eff-save {
+    display: grid; gap: var(--space-md);
+    padding: var(--space-lg);
+    background: var(--color-accent-soft);
+    border-radius: var(--radius-md);
+  }
+  @media (min-width: 34rem) { .eff-save { grid-template-columns: auto 1fr; align-items: center; gap: var(--space-xl); } }
+  .eff-save-main { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-2xs); }
+  .eff-save-main .eff-out-label { flex-basis: 100%; color: var(--color-accent-ink); font-weight: var(--fw-semibold); }
+  .eff-save-num { font-family: var(--font-display); font-size: var(--fs-price); font-weight: var(--fw-bold); line-height: 1; color: var(--color-accent-ink); }
+  .eff-save-unit { font-size: var(--fs-h6); color: var(--color-accent-ink); }
+  .eff-save-sub { display: grid; gap: var(--space-2xs); }
+  .eff-save-sub > div { display: flex; justify-content: space-between; gap: var(--space-md); border-bottom: 1px solid color-mix(in srgb, var(--color-accent-ink) 22%, transparent); padding-bottom: var(--space-3xs); }
+  .eff-save-sub dt { font-size: var(--fs-body-sm); color: var(--color-text-muted); }
+  .eff-save-sub dd { font-family: var(--font-mono); font-weight: var(--fw-semibold); font-variant-numeric: tabular-nums; color: var(--color-text); }
+
+  .eff-wa {
+    display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2xs);
+    min-height: 3.25rem; padding-inline: var(--space-lg);
+    border-radius: var(--radius-md);
+    background: var(--wa-action); color: var(--color-on-wa);
+    font-weight: var(--fw-semibold); font-size: var(--fs-body);
+  }
+  .eff-wa:hover { background: var(--wa-action-strong); }
+  .eff-note { font-size: var(--fs-caption); color: var(--color-text-subtle); }
+</style>

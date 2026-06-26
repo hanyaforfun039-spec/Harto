@@ -1,0 +1,211 @@
+---
+/* Halaman detail mobil — /mobil/[slug] (Tahap 4).
+   Static route untuk tiap mobil di cars.json. Header detail + CarDetailSections.
+   JSON-LD: Product (offers) + FAQPage + BreadcrumbList. */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Button from '../../components/Button.astro';
+import StickyWhatsAppBar from '../../components/StickyWhatsAppBar.astro';
+import Footer from '../../components/Footer.astro';
+import CarDetailHybrid from '../../components/CarDetailHybrid.astro';
+import { getAllCars, hargaMulai } from '../../lib/cars';
+import { site } from '../../lib/site';
+import { formatRupiahShort } from '../../lib/format';
+import { efisiensiModel, estimasiEfisiensiDefault } from '../../lib/efisiensi';
+import { efisiensiFaq } from '../../lib/harto-faq';
+import { linkTestDrive, linkPenawaran } from '../../lib/whatsapp';
+import { productSchema, faqPageSchema, breadcrumbSchema } from '../../lib/schema';
+import type { Car } from '../../lib/types';
+
+export async function getStaticPaths() {
+  return getAllCars().map((car) => ({ params: { slug: car.slug }, props: { car } }));
+}
+
+interface Props { car: Car }
+const { car } = Astro.props;
+
+const powertrainLabel: Record<Car['powertrain'], string> = {
+  ice: 'Bensin',
+  phev: 'Hybrid Plug-in',
+  ev: 'Listrik',
+};
+/* Kualifikasi SEO per powertrain (intent hybrid/listrik/efisiensi). */
+const ptShort: Record<Car['powertrain'], string> = {
+  ice: 'SUV Bensin Turbo',
+  phev: 'SUV Hybrid (PHEV)',
+  ev: 'SUV Listrik (EV)',
+};
+const ptTitle: Record<Car['powertrain'], string> = {
+  ice: 'SUV Turbo Efisien',
+  phev: 'SUV Hybrid PHEV',
+  ev: 'SUV Listrik',
+};
+
+const harga = hargaMulai(car);
+const waTd = linkTestDrive(site, car.nama);
+const waPenawaran = linkPenawaran(site, car.nama);
+const kota = site.address.locality;
+
+/* Readout efisiensi per-model (angle Harto): jangkauan, konsumsi efektif, dan
+   estimasi hemat/tahun vs baseline default — tarik dari lib/efisiensi config. */
+const effModel = efisiensiModel(site, car.slug);
+const eff = effModel ? estimasiEfisiensiDefault(site, car.slug) : null;
+
+/* FAQ efisiensi Harto DILAPIS di atas car.faq (cars.json utuh) — tampilan & schema. */
+const faqAll = [...efisiensiFaq(car, site), ...car.faq];
+
+/* additionalProperty Product: jenis bahan bakar + jarak tempuh (EV/PHEV). */
+const fuelLabel = car.powertrain === 'ev' ? 'Listrik (EV)' : car.powertrain === 'phev' ? 'Hybrid Plug-in (PHEV)' : 'Bensin Turbo';
+const additionalProperty = [
+  { name: 'Jenis bahan bakar', value: fuelLabel },
+  ...(effModel ? [{ name: 'Jarak tempuh', value: `±${effModel.rangeKm.toLocaleString('id-ID')} km sekali isi` }] : []),
+];
+
+const siteUrl = Astro.site ?? new URL('https://jaecoo-semarang.example');
+const pageUrl = new URL(Astro.url.pathname, siteUrl).href;
+
+const jsonLd = [
+  productSchema(car, site, pageUrl, siteUrl.href, additionalProperty),
+  faqPageSchema(faqAll),
+  breadcrumbSchema([
+    { name: 'Beranda', url: new URL('/', siteUrl).href },
+    { name: 'Model', url: new URL('/#lineup', siteUrl).href },
+    { name: car.namaPendek, url: pageUrl },
+  ]),
+];
+
+/* Meta: model + lokasi + angka efisiensi + ajakan test drive (intent efisiensi). */
+const effBit = eff
+  ? car.powertrain === 'ev'
+    ? `Jarak tempuh ±${effModel!.rangeKm.toLocaleString('id-ID')} km, biaya listrik jauh di bawah bensin. `
+    : car.powertrain === 'phev'
+      ? `Konsumsi efektif ±${effModel!.kmpl} km/L, hemat s/d ${formatRupiahShort(eff.hematPerBulan)}/bln vs SUV bensin. `
+      : `Mesin turbo efisien, konsumsi ±${effModel!.kmpl} km/L. `
+  : '';
+const description =
+  `JAECOO ${car.namaPendek} di ${kota} — ${ptShort[car.powertrain].toLowerCase()}. ${effBit}` +
+  `Harga OTR mulai ${formatRupiahShort(harga)}. Test drive & konsultasi via WhatsApp ${site.salesName}.`;
+
+const seoTitle = `JAECOO ${car.namaPendek} ${kota} — ${ptTitle[car.powertrain]} & Harga`;
+---
+<BaseLayout title={car.nama} seoTitle={seoTitle} description={description} jsonLd={jsonLd}>
+  <Header slot="header" site={site} />
+
+  <!-- Header detail -->
+  <section class="section detail-head">
+    <div class="container">
+      <nav class="crumbs" aria-label="Remah">
+        <a href="/">Beranda</a>
+        <span aria-hidden="true">/</span>
+        <a href="/#lineup">Model</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">{car.namaPendek}</span>
+      </nav>
+
+      <div class="dh" data-reveal>
+        <p class="eyebrow">{car.kategori} · {powertrainLabel[car.powertrain]}</p>
+        <h1>{car.nama} {kota} — {ptShort[car.powertrain]}</h1>
+        <p class="lead">{car.tagline}</p>
+
+        <dl class="dh-figures">
+          <div class="dh-fig dh-fig--price">
+            <dt>Harga OTR {site.address.locality} mulai</dt>
+            <dd class="price">{formatRupiahShort(harga)}</dd>
+          </div>
+          {eff && (
+            <>
+              <div class="dh-fig dh-fig--eff">
+                <dt>Jangkauan sekali isi</dt>
+                <dd class="tnum">{eff.rangeKm.toLocaleString('id-ID')} km</dd>
+              </div>
+              <div class="dh-fig dh-fig--eff">
+                <dt>Konsumsi efektif</dt>
+                <dd class="tnum">{eff.modelKmpl} km/L</dd>
+              </div>
+              <div class="dh-fig dh-fig--eff dh-fig--save">
+                <dt>Estimasi hemat / tahun</dt>
+                <dd class="tnum">{formatRupiahShort(eff.hematPerTahun)}</dd>
+              </div>
+            </>
+          )}
+        </dl>
+        <span class="dh-gauge" aria-hidden="true"></span>
+        {eff && site.efisiensi && (
+          <p class="dh-eff-note">
+            Estimasi hemat vs SUV bensin ±{site.efisiensi.baselineDefaultKmpl} km/L pada
+            {' '}{site.efisiensi.kmDefault.toLocaleString('id-ID')} km/bln, BBM Rp {site.efisiensi.bbmDefault.toLocaleString('id-ID')}/L.
+            Hitung sesuai pemakaian Anda di <a href="/#hitung-hemat">kalkulator efisiensi</a>. [Angka resmi diisi].
+          </p>
+        )}
+
+        <div class="dh-cta">
+          <Button href={waTd} variant="whatsapp" size="lg" iconLeft="whatsapp" target="_blank">Test Drive {car.namaPendek}</Button>
+          <Button href={waPenawaran} variant="accent" size="lg" iconLeft="whatsapp" target="_blank">Minta Penawaran</Button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <CarDetailHybrid car={car} site={site} faq={faqAll} />
+
+  <StickyWhatsAppBar slot="footer" site={site} car={car} />
+  <Footer slot="footer" site={site} />
+</BaseLayout>
+
+<style>
+  .detail-head { padding-bottom: var(--space-2xl); }
+
+  .crumbs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs);
+    align-items: center;
+    font-size: var(--fs-body-sm);
+    color: var(--color-text-muted);
+  }
+  .crumbs a:hover { color: var(--color-accent-ink); text-decoration: underline; }
+  .crumbs span[aria-current] { color: var(--color-text); font-weight: var(--fw-medium); }
+  .crumbs span[aria-hidden] { color: var(--color-text-subtle); }
+
+  /* Header detail editorial + bar data (bukan kotak harga ala Faiz) */
+  .dh { display: grid; gap: var(--space-sm); margin-top: var(--space-lg); }
+  .dh h1 { max-width: 20ch; }
+  .dh .lead { max-width: 54ch; }
+
+  .dh-figures {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-lg);
+    margin-top: var(--space-md);
+    padding-top: var(--space-lg);
+    border-top: 1px solid var(--color-border);
+  }
+  .dh-fig { display: grid; gap: var(--space-3xs); }
+  @media (min-width: 44rem) {
+    .dh-fig + .dh-fig { border-left: 1px solid var(--color-border); padding-left: var(--space-lg); }
+  }
+  .dh-fig dt {
+    font-size: var(--fs-caption);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-wide);
+    color: var(--color-text-subtle);
+  }
+  .dh-fig dd { font-family: var(--font-display); font-size: var(--fs-h4); font-weight: var(--fw-semibold); color: var(--color-text); }
+  .dh-fig--price dd { font-size: var(--fs-price); line-height: 1; color: var(--color-accent-ink); }
+  /* readout efisiensi = angka monospace (eco-tech "terukur") */
+  .dh-fig--eff dd { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+  .dh-fig--save dd { color: var(--color-accent-ink); }
+  .dh-eff-note { margin-top: var(--space-md); font-size: var(--fs-caption); color: var(--color-text-subtle); max-width: 60ch; }
+  .dh-eff-note a { color: var(--color-accent-ink); text-decoration: underline; text-underline-offset: 0.18em; }
+
+  .dh-gauge { position: relative; display: block; height: 0.6rem; max-width: 28rem; margin-top: var(--space-md); }
+  .dh-gauge::before {
+    content: ''; position: absolute; inset: 0 0 auto 0; height: 0.45rem;
+    background-image: repeating-linear-gradient(90deg, var(--color-border-strong) 0 1px, transparent 1px 10px);
+  }
+  .dh-gauge::after {
+    content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 2px;
+    background: linear-gradient(90deg, var(--color-accent) 0 55%, var(--color-border) 55% 100%);
+  }
+  .dh-cta { display: flex; flex-wrap: wrap; gap: var(--space-sm); margin-top: var(--space-xl); }
+</style>

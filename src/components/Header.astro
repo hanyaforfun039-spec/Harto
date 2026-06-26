@@ -1,0 +1,172 @@
+---
+/* Header — TOOLBAR Web2 "Harto" (eco-tech TERANG). Dibedakan dari Faiz (nav +
+   pill kanan) & Putri (masthead uppercase ledger): garis aksen teal tipis di
+   atas, nav dgn underline-tab teal saat aktif/hover, CTA utama = "Hitung Hemat"
+   (tombol near-black soft-radius), strip BBM kecil sebagai aksen instrumen.
+   Mobile: hamburger <details>/<summary> => BERFUNGSI TANPA JS. */
+import Button from './Button.astro';
+import Icon from './Icon.astro';
+import BrandWordmark from './BrandWordmark.astro';
+import type { SiteConfig } from '../lib/types';
+import { linkPenawaran } from '../lib/whatsapp';
+
+interface Props { site: SiteConfig }
+const { site } = Astro.props;
+const wa = linkPenawaran(site);
+
+/* IA Harto (efisiensi-led) — kredit BUKAN item nav (hanya di /mobil/[slug]). */
+const nav = [
+  { label: 'Hitung Hemat', href: '/#hitung-hemat' },
+  { label: 'Teknologi SHS', href: '/teknologi' },
+  { label: 'Model', href: '/#lineup' },
+  { label: 'Tentang', href: '/tentang' },
+];
+
+const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
+function isActive(href: string): boolean {
+  const base = href.split('#')[0].replace(/\/+$/, '') || '/';
+  if (base === '/') return false; // anchor beranda tak ditandai
+  return path === base || path.startsWith(base + '/');
+}
+---
+<header class="site-header" data-header>
+  <span class="header-accent" aria-hidden="true"></span>
+  <div class="container site-header-inner">
+    <a class="brand" href="/" aria-label={`${site.brand}, beranda`}>
+      <BrandWordmark class="brand-logo" />
+      <span class="brand-sub">Hybrid · {site.address.locality}</span>
+    </a>
+
+    <nav class="nav-desktop" aria-label="Navigasi utama">
+      <ul role="list">
+        {nav.map((n) => (
+          <li><a href={n.href} aria-current={isActive(n.href) ? 'page' : undefined}>{n.label}</a></li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="header-cta-desktop">
+      <Button href="/#hitung-hemat" variant="primary" size="sm" icon="arrow-right">Hitung Hemat</Button>
+    </div>
+
+    <details class="mnav" data-mobile-nav>
+      <summary class="nav-toggle" aria-label="Buka menu">
+        <Icon name="menu" class="i-open" />
+        <Icon name="close" class="i-close" />
+      </summary>
+      <div class="mnav-panel">
+        <nav aria-label="Navigasi seluler">
+          <ul role="list">
+            {nav.map((n) => (
+              <li><a href={n.href} aria-current={isActive(n.href) ? 'page' : undefined}>{n.label}</a></li>
+            ))}
+          </ul>
+        </nav>
+        <Button href="/#hitung-hemat" variant="primary" icon="arrow-right" block>Hitung Hemat</Button>
+        <Button href={wa} variant="accent" iconLeft="whatsapp" target="_blank" block>Chat WhatsApp</Button>
+      </div>
+    </details>
+  </div>
+</header>
+
+<script>
+  import '../scripts/menu.ts';
+</script>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-header);
+    background: color-mix(in srgb, var(--color-bg) 88%, transparent);
+    backdrop-filter: saturate(140%) blur(10px);
+    -webkit-backdrop-filter: saturate(140%) blur(10px);
+    border-bottom: 1px solid var(--color-border);
+    transition: box-shadow var(--dur) var(--ease);
+  }
+  .site-header.is-scrolled { box-shadow: var(--shadow-sm); }
+  /* garis aksen teal tipis paling atas (instrumen) */
+  .header-accent { display: block; height: 2px; background: var(--color-accent); }
+
+  .site-header-inner {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    min-height: var(--header-h);
+  }
+  @media (min-width: 64rem) { .site-header-inner { min-height: var(--header-h-lg); } }
+
+  .brand { display: flex; align-items: center; gap: var(--space-xs); margin-right: auto; }
+  .brand-logo { display: block; height: 1rem; width: auto; color: var(--color-text); }
+  @media (min-width: 64rem) { .brand-logo { height: 1.15rem; } }
+  .brand-sub {
+    font-size: var(--fs-caption);
+    letter-spacing: var(--ls-wide);
+    text-transform: uppercase;
+    color: var(--color-accent-ink);
+    padding-left: var(--space-xs);
+    border-left: 1px solid var(--color-border-strong);
+  }
+  @media (max-width: 30rem) { .brand-sub { display: none; } }
+
+  /* Nav = tab underline teal (instrumen), bukan link polos / uppercase ledger */
+  .nav-desktop { display: none; }
+  .nav-desktop ul { display: flex; gap: var(--space-lg); }
+  .nav-desktop a {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    font-size: var(--fs-body-sm);
+    font-weight: var(--fw-medium);
+    color: var(--color-text-muted);
+    padding-block: var(--space-sm);
+    transition: color var(--dur) var(--ease);
+  }
+  .nav-desktop a::after {
+    content: '';
+    position: absolute; left: 0; right: 0; bottom: -1px; height: 2px;
+    background: var(--color-accent);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform var(--dur) var(--ease-out);
+  }
+  .nav-desktop a:hover { color: var(--color-text); }
+  .nav-desktop a:hover::after,
+  .nav-desktop a[aria-current]::after { transform: scaleX(1); }
+  .nav-desktop a[aria-current] { color: var(--color-text); }
+  .header-cta-desktop { display: none; }
+
+  @media (min-width: 64rem) {
+    .nav-desktop, .header-cta-desktop { display: block; }
+    .mnav { display: none; }
+  }
+
+  /* Mobile nav */
+  .nav-toggle {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: var(--tap-min); height: var(--tap-min);
+    border-radius: var(--radius-md);
+    color: var(--color-text); cursor: pointer; list-style: none;
+  }
+  .nav-toggle::-webkit-details-marker { display: none; }
+  .i-close { display: none; }
+  .mnav[open] .i-open { display: none; }
+  .mnav[open] .i-close { display: inline-block; }
+
+  .mnav-panel {
+    position: absolute; left: 0; right: 0; top: 100%;
+    padding: var(--space-md) var(--gutter) var(--space-lg);
+    background: var(--color-bg);
+    border-bottom: 1px solid var(--color-border);
+    box-shadow: var(--shadow-lg);
+    display: grid; gap: var(--space-sm);
+  }
+  .mnav-panel ul { display: grid; gap: var(--space-3xs); margin-bottom: var(--space-2xs); }
+  .mnav-panel a {
+    display: block;
+    padding: var(--space-sm) var(--space-2xs);
+    font-size: var(--fs-h6);
+    font-weight: var(--fw-medium);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .mnav-panel a[aria-current] { color: var(--color-accent-ink); }
+</style>

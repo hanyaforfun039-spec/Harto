@@ -1,0 +1,179 @@
+---
+/* Hero — 3 varian via site.heroVariant:
+   - calculator-first : headline + kalkulator kredit langsung terlihat
+   - car-first        : foto mobil dominan + harga "mulai dari" + 2 CTA
+   - premium-fullbleed: foto full-bleed, teks minimal, nuansa gelap, whitespace ekstrem
+   Foto hero = priority (LCP). */
+import Button from './Button.astro';
+import CarImage from './CarImage.astro';
+import CreditCalculator from './CreditCalculator.astro';
+import type { SiteConfig } from '../lib/types';
+import { getCarBySlug, getLineup, hargaMulai } from '../lib/cars';
+import { formatRupiahShort } from '../lib/format';
+import { linkPenawaran } from '../lib/whatsapp';
+
+interface CtaDef {
+  label: string;
+  href: string;
+  variant?: 'primary' | 'accent' | 'outline' | 'whatsapp' | 'ghost';
+  iconLeft?: string;
+  target?: string;
+}
+interface Props { site: SiteConfig; primaryCta?: CtaDef; secondaryCta?: CtaDef }
+const { site, primaryCta, secondaryCta } = Astro.props;
+
+const car = getCarBySlug(site.heroCarSlug) ?? getLineup(site)[0];
+const lineup = getLineup(site);
+const harga = hargaMulai(car);
+const detail = `/mobil/${car.slug}`;
+const wa = linkPenawaran(site);
+const variant = site.heroVariant;
+const heroH1 = site.heroHeadline ?? site.tagline;
+
+// CTA hero bisa dioverride per halaman; default = Minta Penawaran + Lihat model.
+const pCta: CtaDef = primaryCta ?? { label: 'Minta Penawaran', href: wa, variant: 'accent', iconLeft: 'whatsapp', target: '_blank' };
+const sCta: CtaDef = secondaryCta ?? { label: `Lihat ${car.namaPendek}`, href: detail, variant: 'outline' };
+---
+{variant === 'premium-fullbleed' && (
+  <section class="hero hero--fb section--dark" data-surface="dark">
+    <div class="hero-fb-media">
+      <CarImage src={car.foto.hero.src} alt={car.foto.hero.alt} label={car.namaPendek} priority ratio="16 / 10" class="hero-fb-img" />
+      <div class="hero-fb-scrim"></div>
+    </div>
+    <div class="container hero-fb-copy" data-reveal>
+      <p class="eyebrow">{site.tagline}</p>
+      <h1>{site.dealerName}</h1>
+      <p class="lead">{site.subheadline}</p>
+      <div class="hero-cta">
+        <Button href={wa} variant="accent" size="lg" iconLeft="whatsapp" target="_blank">Minta Penawaran</Button>
+        <Button href={detail} variant="outline" size="lg">Jelajahi {car.namaPendek}</Button>
+      </div>
+    </div>
+  </section>
+)}
+
+{variant === 'car-first' && (
+  <section class="hero hero--car">
+    <div class="container hero-grid">
+      <div class="hero-copy" data-reveal>
+        <p class="eyebrow">{site.brand}</p>
+        <h1>{heroH1}</h1>
+        <p class="lead">{site.subheadline}</p>
+        {site.heroStat ? (
+          <div class="hero-stat">
+            <p class="hero-stat-num">
+              <span class="hero-stat-value tnum">{site.heroStat.value}</span>
+              <span class="hero-stat-unit">{site.heroStat.unit}</span>
+            </p>
+            <span class="hero-gauge" aria-hidden="true"></span>
+            <p class="hero-stat-label">{site.heroStat.label}</p>
+            {site.heroStat.note && <p class="hero-stat-note">{site.heroStat.note}</p>}
+          </div>
+        ) : (
+          <p class="hero-price">Mulai dari <span class="price">{formatRupiahShort(harga)}</span></p>
+        )}
+        <div class="hero-cta">
+          <Button href={pCta.href} variant={pCta.variant ?? 'accent'} size="lg" iconLeft={pCta.iconLeft} target={pCta.target}>{pCta.label}</Button>
+          <Button href={sCta.href} variant={sCta.variant ?? 'outline'} size="lg" iconLeft={sCta.iconLeft} target={sCta.target}>{sCta.label}</Button>
+        </div>
+      </div>
+      <div class="hero-media" data-reveal data-reveal-delay="1">
+        <CarImage src={car.foto.hero.src} alt={car.foto.hero.alt} label={car.namaPendek} priority ratio="16 / 11" sizes="(max-width: 64rem) 100vw, 600px" />
+      </div>
+    </div>
+  </section>
+)}
+
+{variant === 'calculator-first' && (
+  <section class="hero hero--calc">
+    <div class="container hero-grid">
+      <div class="hero-copy" data-reveal>
+        <p class="eyebrow">{site.brand}</p>
+        <h1>{site.tagline}</h1>
+        <p class="lead">{site.subheadline}</p>
+        <ul class="hero-points" role="list">
+          {site.salesCredentials.map((c) => <li>{c}</li>)}
+        </ul>
+      </div>
+      <div class="hero-calc" data-reveal data-reveal-delay="1">
+        <CreditCalculator cars={lineup} site={site} preselectSlug={site.heroCarSlug} heading="Hitung cicilanmu" />
+      </div>
+    </div>
+  </section>
+)}
+
+<style>
+  .hero { position: relative; }
+
+  .hero-grid { display: grid; gap: var(--space-xl); padding-block: var(--section-py); }
+  @media (min-width: 64rem) {
+    .hero-grid { grid-template-columns: 1fr 1fr; align-items: center; gap: var(--space-3xl); }
+    .hero--calc .hero-grid { grid-template-columns: 1fr 1.1fr; }
+  }
+  .hero-copy { display: grid; gap: var(--space-md); }
+  .hero-copy h1 { max-width: 16ch; }
+  .hero-price { font-size: var(--fs-body); color: var(--color-text-muted); }
+  .hero-price .price { font-size: var(--fs-h3); color: var(--color-text); margin-left: var(--space-2xs); }
+
+  /* Angka pamungkas hero (efisiensi) di atas "engineering gauge" */
+  .hero-stat { display: grid; gap: var(--space-3xs); }
+  .hero-stat-num { display: flex; align-items: baseline; gap: var(--space-2xs); }
+  .hero-stat-value {
+    font-family: var(--font-display);
+    font-size: var(--fs-display);
+    font-weight: var(--fw-bold);
+    line-height: 1;
+    letter-spacing: var(--ls-tight);
+    color: var(--color-accent-ink);
+  }
+  .hero-stat-unit {
+    font-family: var(--font-display);
+    font-size: var(--fs-h3);
+    font-weight: var(--fw-semibold);
+    color: var(--color-text-subtle);
+  }
+  .hero-gauge {
+    position: relative;
+    display: block;
+    height: 1.25rem;
+    max-width: 22rem;
+    margin-block: var(--space-2xs) var(--space-3xs);
+  }
+  .hero-gauge::before { /* tick metalik (readout instrumen) */
+    content: ''; position: absolute; inset: 0 0 auto 0; height: 0.7rem;
+    background-image: repeating-linear-gradient(90deg, var(--color-border-strong) 0 1px, transparent 1px 11px);
+  }
+  .hero-gauge::after { /* baseline: terisi accent sebagian */
+    content: ''; position: absolute; left: 0; right: 0; bottom: 0.25rem; height: 2px;
+    background: linear-gradient(90deg, var(--color-accent) 0 64%, var(--color-border) 64% 100%);
+  }
+  .hero-stat-label {
+    font-size: var(--fs-body-sm);
+    font-weight: var(--fw-semibold);
+    letter-spacing: var(--ls-wide);
+    text-transform: uppercase;
+    color: var(--color-text-subtle);
+  }
+  .hero-stat-note { font-size: var(--fs-caption); color: var(--color-text-subtle); max-width: 38ch; }
+
+  .hero-cta { display: flex; flex-wrap: wrap; gap: var(--space-sm); margin-top: var(--space-2xs); }
+  .hero-points { display: grid; gap: var(--space-2xs); }
+  .hero-points li { position: relative; padding-left: var(--space-md); color: var(--color-text-muted); }
+  .hero-points li::before {
+    content: ''; position: absolute; left: 0; top: 0.62em;
+    width: 0.5rem; height: 0.5rem; border-radius: 50%; background: var(--color-accent);
+  }
+
+  /* Full-bleed */
+  .hero--fb { position: relative; min-height: min(86svh, 720px); display: flex; align-items: flex-end; overflow: hidden; }
+  .hero-fb-media { position: absolute; inset: 0; }
+  .hero-fb-media :global(.hero-fb-img) { width: 100%; height: 100%; border-radius: 0; }
+  .hero-fb-scrim {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(to top, rgba(6, 9, 13, 0.92) 0%, rgba(6, 9, 13, 0.40) 45%, rgba(6, 9, 13, 0.12) 100%);
+  }
+  .hero-fb-copy { position: relative; padding-block: var(--space-3xl); display: grid; gap: var(--space-md); }
+  .hero-fb-copy h1 { max-width: 18ch; font-size: var(--fs-display); }
+  .hero-fb-copy .lead { max-width: 46ch; }
+</style>

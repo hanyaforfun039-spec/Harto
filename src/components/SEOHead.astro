@@ -1,0 +1,59 @@
+---
+/* SEOHead — title, meta, canonical, Open Graph, Twitter card, JSON-LD.
+   Dipakai oleh BaseLayout. Semua nilai sudah final (absolut) saat sampai sini. */
+interface Props {
+  title: string;
+  description: string;
+  canonical: string;
+  ogImage: string; // absolut
+  ogType?: string;
+  siteName: string;
+  locale?: string;
+  noindex?: boolean;
+  jsonLd?: object[];
+}
+
+const {
+  title,
+  description,
+  canonical,
+  ogImage,
+  ogType = 'website',
+  siteName,
+  locale = 'id_ID',
+  noindex = false,
+  jsonLd = [],
+} = Astro.props;
+---
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+{
+  noindex ? (
+    <meta name="robots" content="noindex, nofollow" />
+  ) : (
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+  )
+}
+
+<!-- Open Graph -->
+<meta property="og:type" content={ogType} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:site_name" content={siteName} />
+<meta property="og:locale" content={locale} />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
+
+<!-- JSON-LD structured data -->
+{
+  jsonLd.map((obj) => (
+    <script type="application/ld+json" set:html={JSON.stringify(obj)} />
+  ))
+}

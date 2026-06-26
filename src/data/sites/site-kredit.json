@@ -1,0 +1,95 @@
+{
+  "id": "kredit",
+  "theme": "kredit",
+  "brand": "Kredit JAECOO Semarang",
+  "dealerName": "Dealer Resmi JAECOO Semarang",
+  "salesName": "Rizal",
+  "salesTitle": "Sales Consultant JAECOO",
+  "salesCredentials": [
+    "Sales Consultant Resmi",
+    "Spesialis Kredit & DP Ringan",
+    "Bantu Proses Leasing"
+  ],
+  "whatsapp": "628120000003",
+  "phoneDisplay": "0812-0000-0003",
+  "email": "rizal@example.com",
+  "address": {
+    "region": "Jawa Tengah",
+    "street": "Jl. Pemuda No. 000",
+    "country": "ID",
+    "locality": "Semarang",
+    "postalCode": "50132"
+  },
+  "geo": {
+    "lat": -6.9839,
+    "lng": 110.4093
+  },
+  "serviceAreas": [
+    "Semarang",
+    "Ungaran",
+    "Demak",
+    "Kendal",
+    "Kudus"
+  ],
+  "openingHours": [
+    {
+      "buka": "08:30",
+      "hari": "Senin - Sabtu",
+      "tutup": "17:00"
+    },
+    {
+      "buka": "09:00",
+      "hari": "Minggu",
+      "tutup": "15:00"
+    }
+  ],
+  "mapUrl": "https://maps.google.com/?q=JAECOO+Semarang",
+  "tagline": "Punya JAECOO, DP-nya ringan.",
+  "subheadline": "Simulasi cicilan transparan, bantu pengajuan kredit sampai approve. Mulai dari JAECOO J5.",
+  "positioning": "Spesialis kredit JAECOO di Semarang. DP ringan, tenor fleksibel, simulasi jelas, proses dibantu sampai selesai.",
+  "heroVariant": "calculator-first",
+  "heroCarSlug": "j7",
+  "lineup": [
+    "j5",
+    "j7",
+    "j7-shs",
+    "j8-ardis",
+    "j8-shs-ardis"
+  ],
+  "featuredSlug": "j7",
+  "kredit": {
+    "dpDefaultPct": 15,
+    "tenorDefaultYears": 6,
+    "bungaFlatPctPerYear": 3.5
+  },
+  "promo": {
+    "sub": "Cicilan terjangkau dengan tenor sampai 7 tahun. Konsultasi gratis.",
+    "aktif": true,
+    "deadline": "2026-06-30",
+    "headline": "Program DP Ringan Bulan Ini"
+  },
+  "testimoni": [
+    {
+      "kota": "Demak",
+      "nama": "Bapak Yusuf",
+      "teks": "DP-nya ringan dan simulasinya jelas dari awal. Proses kredit dibantu sampai approve.",
+      "mobil": "J7"
+    },
+    {
+      "kota": "Semarang",
+      "nama": "Ibu Wati",
+      "teks": "Awalnya ragu soal cicilan, tapi dijelaskan rinci tanpa biaya tersembunyi. Puas.",
+      "mobil": "J5"
+    }
+  ],
+  "seo": {
+    "locale": "id_ID",
+    "ogImage": "/img/og/kredit.jpg",
+    "titleSuffix": "Kredit JAECOO Semarang",
+    "defaultDescription": "Kredit JAECOO Semarang dengan DP ringan dan tenor fleksibel. Simulasi cicilan transparan, proses dibantu sampai approve. Konsultasi via WhatsApp."
+  },
+  "social": {
+    "tiktok": "https://tiktok.com/",
+    "instagram": "https://instagram.com/"
+  }
+}

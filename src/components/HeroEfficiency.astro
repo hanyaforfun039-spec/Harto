@@ -1,0 +1,58 @@
+---
+/* HeroEfficiency — HERO Web2 "Harto": kalkulator EFISIENSI sebagai tool utama
+   (bukan kredit, bukan lineup). Copy + foto perjalanan di atas, panel kalkulator
+   instrumen di bawah (anchor #hitung-hemat). Tema terang. */
+import CarImage from './CarImage.astro';
+import EfficiencyCalc from './EfficiencyCalc.astro';
+import Icon from './Icon.astro';
+import type { SiteConfig } from '../lib/types';
+import { getCarBySlug, getLineup } from '../lib/cars';
+
+interface Props { site: SiteConfig }
+const { site } = Astro.props;
+const car = getCarBySlug(site.heroCarSlug) ?? getLineup(site)[0];
+const heroH1 = site.heroHeadline ?? site.tagline;
+---
+<section class="heff" aria-labelledby="heff-h">
+  <div class="container heff-top">
+    <div class="heff-copy" data-reveal>
+      <p class="eyebrow">{site.brand} · Efisiensi</p>
+      <h1 id="heff-h">{heroH1}</h1>
+      <p class="lead">{site.subheadline}</p>
+      <p class="heff-trust">
+        <Icon name="check" size={18} /> Dealer resmi JAECOO Semarang · teknologi Super Hybrid System
+      </p>
+    </div>
+    <div class="heff-media" data-reveal data-reveal-delay="1">
+      <CarImage src={car.foto.hero.src} alt={car.foto.hero.alt} label={car.namaPendek} priority ratio="16 / 11" sizes="(max-width: 64rem) 100vw, 560px" class="heff-img" />
+    </div>
+  </div>
+
+  <div class="container heff-calc" id="hitung-hemat" data-reveal>
+    <EfficiencyCalc site={site} preselectSlug={site.heroCarSlug} />
+  </div>
+</section>
+
+<style>
+  .heff { padding-block: var(--section-py) var(--section-py); }
+  .heff-top { display: grid; gap: var(--space-xl); }
+  @media (min-width: 64rem) {
+    .heff-top { grid-template-columns: 1fr 0.85fr; align-items: center; gap: var(--space-3xl); }
+  }
+  .heff-copy { display: grid; gap: var(--space-md); }
+  .heff-copy h1 { max-width: 18ch; }
+  .heff-copy .lead { max-width: 50ch; }
+  .heff-trust {
+    display: inline-flex; align-items: center; gap: var(--space-2xs);
+    font-size: var(--fs-body-sm); color: var(--color-text-muted);
+  }
+  .heff-trust :global(.icon) { color: var(--color-accent-ink); }
+
+  .heff-media :global(.heff-img) { border-radius: var(--radius-lg); box-shadow: var(--shadow-md); }
+
+  /* Panel kalkulator: tarik ke atas sedikit agar "duduk" di hero (overlap halus) */
+  .heff-calc { margin-top: var(--space-2xl); }
+  @media (min-width: 48rem) {
+    .heff-calc :global(.eff) { max-width: 52rem; margin-inline: auto; }
+  }
+</style>

@@ -1,0 +1,63 @@
+---
+/* StickyWhatsAppBar — Web2 "Harto": KAPSUL mengambang ringkas di tengah-bawah
+   (segmented: "Hitung Hemat" + WhatsApp). Dibedakan dari Faiz (pill kanan-bawah
+   / bar penuh mobile) & Putri (bar docked gelap penuh-lebar): kapsul terang,
+   rounded, soft shadow, tidak penuh-lebar. Ikon = SVG brand, bukan emoji. */
+import Icon from './Icon.astro';
+import type { Car, SiteConfig } from '../lib/types';
+import { linkPenawaran } from '../lib/whatsapp';
+
+interface Props { site: SiteConfig; car?: Car }
+const { site } = Astro.props;
+const waChat = linkPenawaran(site);
+---
+<div class="dock" data-dock>
+  <a class="dock-act dock-hemat" href="/#hitung-hemat">
+    <Icon name="fuel" size={18} />
+    <span>Hitung Hemat</span>
+  </a>
+  <span class="dock-div" aria-hidden="true"></span>
+  <a class="dock-act dock-wa" href={waChat} target="_blank" rel="noopener noreferrer">
+    <Icon name="whatsapp" size={18} />
+    <span>WhatsApp</span>
+  </a>
+</div>
+
+<style is:global>
+  /* Ruang agar kapsul tidak menutupi konten (semua ukuran). */
+  body { padding-bottom: calc(4.75rem + env(safe-area-inset-bottom, 0px)); }
+</style>
+
+<style>
+  .dock {
+    position: fixed;
+    z-index: var(--z-sticky);
+    left: 50%;
+    bottom: calc(var(--space-md) + env(safe-area-inset-bottom, 0px));
+    transform: translateX(-50%);
+    display: inline-flex;
+    align-items: stretch;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-pill);
+    box-shadow: var(--shadow-lg);
+    padding: var(--space-3xs);
+    max-width: calc(100vw - 2 * var(--gutter));
+  }
+  .dock-act {
+    display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2xs);
+    min-height: 2.75rem;
+    padding-inline: var(--space-md);
+    border-radius: var(--radius-pill);
+    font-size: var(--fs-body-sm);
+    font-weight: var(--fw-semibold);
+    white-space: nowrap;
+    transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+  }
+  .dock-hemat { color: var(--color-text); }
+  .dock-hemat :global(.icon) { color: var(--color-accent-ink); }
+  .dock-hemat:hover { background: var(--color-surface-2); }
+  .dock-div { width: 1px; background: var(--color-border); margin-block: var(--space-2xs); }
+  .dock-wa { background: var(--wa-action); color: var(--color-on-wa); }
+  .dock-wa:hover { background: var(--wa-action-strong); }
+</style>

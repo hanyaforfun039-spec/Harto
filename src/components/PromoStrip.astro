@@ -1,0 +1,74 @@
+---
+/* PromoStrip — headline promo + countdown ke deadline (akhir bulan).
+   Tanpa JS: menampilkan tanggal berakhir (statis). Dengan JS: sisa waktu live. */
+import Button from './Button.astro';
+import type { SiteConfig } from '../lib/types';
+import { linkPenawaran } from '../lib/whatsapp';
+
+interface Props { site: SiteConfig }
+const { site } = Astro.props;
+const promo = site.promo;
+const deadlineText = promo.deadline
+  ? new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(promo.deadline))
+  : '';
+---
+{promo.aktif && (
+  <section class="promo section section--dark" data-surface="dark" id="promo">
+    <div class="container promo-inner" data-reveal>
+      <div class="promo-copy">
+        <p class="eyebrow">Promo Bulan Ini</p>
+        <h2>{promo.headline}</h2>
+        <p class="lead">{promo.sub}</p>
+      </div>
+      <div class="promo-aside">
+        {promo.deadline && (
+          <div class="promo-countdown" data-countdown data-deadline={promo.deadline}>
+            <p class="promo-count-label">Berakhir</p>
+            <p class="promo-count-static">{deadlineText}</p>
+          </div>
+        )}
+        <Button href={linkPenawaran(site)} variant="accent" size="lg" iconLeft="whatsapp" target="_blank">Klaim Promo</Button>
+      </div>
+    </div>
+    <script>
+      import '../scripts/countdown.ts';
+    </script>
+  </section>
+)}
+
+<style>
+  .promo-inner {
+    display: grid;
+    gap: var(--space-xl);
+    align-items: center;
+  }
+  @media (min-width: 56rem) {
+    .promo-inner { grid-template-columns: 1.5fr 1fr; }
+  }
+  .promo-copy { display: grid; gap: var(--space-sm); }
+  .promo-aside {
+    display: grid;
+    gap: var(--space-md);
+    justify-items: start;
+  }
+  @media (min-width: 56rem) { .promo-aside { justify-items: end; text-align: right; } }
+  .promo-countdown {
+    padding: var(--space-md) var(--space-lg);
+    background: color-mix(in srgb, var(--paper) 8%, transparent);
+    border: 1px solid var(--color-border-inverse);
+    border-radius: var(--radius-lg);
+  }
+  .promo-count-label {
+    font-size: var(--fs-caption);
+    letter-spacing: var(--ls-eyebrow);
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+  .promo-count-static {
+    font-family: var(--font-display);
+    font-size: var(--fs-h4);
+    font-weight: var(--fw-semibold);
+    font-variant-numeric: tabular-nums;
+    color: var(--color-text-inverse);
+  }
+</style>

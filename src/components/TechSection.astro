@@ -1,0 +1,74 @@
+---
+/* TechSection — section GELAP edukatif (near-black, teks off-white, aksen teal).
+   Generic: dipakai untuk penjelasan teknologi (SHS/EV). Ikon SVG, nol emoji.
+   Ritme terang↔gelap menjaga DNA JAECOO di tema terang. */
+import Icon from './Icon.astro';
+import Button from './Button.astro';
+
+interface Poin {
+  icon: string;
+  judul: string;
+  teks: string;
+}
+interface Props {
+  eyebrow?: string;
+  heading: string;
+  lead?: string;
+  poin: Poin[];
+  ctaHref?: string;
+  ctaLabel?: string;
+}
+const { eyebrow, heading, lead, poin, ctaHref, ctaLabel } = Astro.props;
+---
+<section class="section section--lg section--dark" data-surface="dark" aria-labelledby="tech-h">
+  <div class="container">
+    <div class="tech-head" data-reveal>
+      {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+      <h2 id="tech-h">{heading}</h2>
+      {lead && <p class="lead">{lead}</p>}
+    </div>
+
+    <div class="tech-grid">
+      {poin.map((p, i) => (
+        <article class="tech-item" data-reveal data-reveal-delay={String((i % 4) + 1)}>
+          <span class="tech-ico"><Icon name={p.icon} size={24} /></span>
+          <h3 class="tech-judul">{p.judul}</h3>
+          <p class="tech-teks">{p.teks}</p>
+        </article>
+      ))}
+    </div>
+
+    {ctaHref && ctaLabel && (
+      <div class="tech-cta" data-reveal>
+        <Button href={ctaHref} variant="outline" size="lg" icon="arrow-right">{ctaLabel}</Button>
+      </div>
+    )}
+  </div>
+</section>
+
+<style>
+  .tech-head { display: grid; gap: var(--space-sm); max-width: 60ch; }
+  .tech-grid {
+    display: grid;
+    gap: var(--space-xl);
+    margin-top: var(--space-2xl);
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 40rem) { .tech-grid { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 64rem) { .tech-grid { grid-template-columns: repeat(4, 1fr); } }
+
+  .tech-item { display: grid; gap: var(--space-2xs); align-content: start; }
+  .tech-ico {
+    display: grid; place-items: center;
+    width: 3rem; height: 3rem;
+    border-radius: var(--radius-md);
+    color: var(--color-accent);
+    background: var(--color-accent-soft);
+    border: 1px solid var(--color-border-inverse);
+    margin-bottom: var(--space-2xs);
+  }
+  .tech-judul { font-size: var(--fs-h5); color: var(--color-text-inverse); }
+  .tech-teks { color: var(--color-text-inverse-muted); font-size: var(--fs-body-sm); }
+
+  .tech-cta { margin-top: var(--space-2xl); }
+</style>

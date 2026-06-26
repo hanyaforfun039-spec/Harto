@@ -1,0 +1,59 @@
+/* =============================================================================
+   Tema: HYBRID (efisiensi / PHEV+EV) — Web2 "Harto"
+   TEMA TERANG / PUTIH premium (DNA JAECOO: near-black + metalik di atas putih).
+   -----------------------------------------------------------------------------
+   PENTING: hanya override DI DALAM [data-theme='hybrid'] → :root (gelap) utuh,
+   jadi Faiz/premium & tema lain TETAP GELAP. Token *-inverse TIDAK di-override
+   → otomatis jadi bahan section gelap (ritme terang↔gelap).
+   Kontras WCAG (di atas putih #FFF):
+     accent #0E7D57 ↔ putih  ~5.0:1 (teks/fill AA OK)
+     accent-ink #0B6E4D ↔ #FFF ~5.3:1 (teks AA OK)
+     text #0B0F14 ↔ #FFF ~19:1 ; text-muted #475059 ↔ #FFF ~8:1
+   ============================================================================ */
+[data-theme='hybrid'] {
+  /* ACCENT — electric-teal teknologi (dipakai SANGAT hemat) */
+  --color-accent:        #0E7D57; /* fill: badge, btn accent (teks putih AA) */
+  --color-accent-strong: #0A6446;
+  --color-accent-ink:    #0B6E4D; /* teks/angka/link di atas putih (AA) */
+  --color-accent-soft:   #E3F4EC; /* tint chip/badge/highlight */
+  --color-on-accent:     #FFFFFF;
+
+  /* SURFACE — putih premium */
+  --color-bg:            #FFFFFF;
+  --color-surface:       #F4F6F8;
+  --color-surface-2:     #EDEFF2;
+  --color-border:        #DCE0E5;
+  --color-border-strong: #C5CBD2;
+
+  /* TEKS — near-black kebiruan */
+  --color-text:        #0B0F14;
+  --color-text-muted:  #475059;
+  --color-text-subtle: #7A828B;
+
+  /* BRAND — CTA primer = near-black di atas putih (premium, hemat accent) */
+  --color-brand:        #0B0F14;
+  --color-brand-strong: #000000;
+  --color-on-brand:     #FFFFFF;
+
+  /* Ikon placeholder foto: silver agar terlihat di surface terang */
+  --n-300: #AEB6BF;
+
+  /* Focus ring teal */
+  --color-focus: #0E7D57;
+
+  /* Shadow dilembutkan untuk latar putih (near-black alpha rendah, bukan hitam pekat) */
+  --shadow-xs: 0 1px 2px rgba(11, 15, 20, 0.06);
+  --shadow-sm: 0 1px 3px rgba(11, 15, 20, 0.08), 0 1px 2px rgba(11, 15, 20, 0.05);
+  --shadow-md: 0 10px 24px -12px rgba(11, 15, 20, 0.16);
+  --shadow-lg: 0 22px 48px -20px rgba(11, 15, 20, 0.20);
+  --shadow-xl: 0 34px 66px -26px rgba(11, 15, 20, 0.22);
+}
+
+/* Pada SECTION GELAP di tema hybrid (hero tech, dll): accent dibuat lebih TERANG
+   agar eyebrow/angka teal kontras & lolos AA di atas near-black. */
+[data-theme='hybrid'] [data-surface='dark'],
+[data-theme='hybrid'] .section--dark {
+  --color-accent:      #2FD08F; /* electric-teal terang (AA di near-black) */
+  --color-accent-ink:  #2FD08F;
+  --color-accent-soft: rgba(47, 208, 143, 0.14);
+}

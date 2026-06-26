@@ -1,0 +1,130 @@
+---
+/* /promo (Web2 hybrid "Harto") — PromoHybrid (panel terang) + daftar manfaat
+   ber-tick editorial + LineupSpec. Beda layout dari Faiz (band gelap + kartu). */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import PromoHybrid from '../components/PromoHybrid.astro';
+import LineupSpec from '../components/LineupSpec.astro';
+import TestDriveForm from '../components/TestDriveForm.astro';
+import StickyWhatsAppBar from '../components/StickyWhatsAppBar.astro';
+import Footer from '../components/Footer.astro';
+import Icon from '../components/Icon.astro';
+import Button from '../components/Button.astro';
+import { site } from '../lib/site';
+import { getLineup } from '../lib/cars';
+import { linkPenawaran } from '../lib/whatsapp';
+
+const lineup = getLineup(site);
+const promo = site.promo;
+
+const manfaat = [
+  { judul: 'Program hybrid terbaik bulan ini', teks: 'Penawaran OTR plus paket pengisian daya dan bonus aksesori untuk unit hybrid & listrik.' },
+  { judul: 'Hemat sejak hari pertama', teks: `Hitung estimasi penghematan energi sesuai pemakaian Anda bersama ${site.salesName}, bukan sekadar janji.` },
+  { judul: 'Konsultasi teknologi, bukan obral', teks: 'Tanya cara kerja SHS, pengisian EV, garansi baterai, dan perawatan — dijelaskan tuntas.' },
+  { judul: 'Layanan lintas kota', teks: `Test drive & serah terima menjangkau ${site.serviceAreas.join(', ')}.` },
+];
+
+const bulanTahun = new Intl.DateTimeFormat('id-ID', { month: 'long', year: 'numeric' }).format(new Date());
+const seoTitle = `Promo Mobil Hybrid JAECOO ${site.address.locality} — J7 SHS & J5 EV`;
+const description =
+  `Promo mobil hybrid & listrik JAECOO di ${site.address.locality} ${bulanTahun}: ${promo.aktif ? promo.headline + '. ' : ''}` +
+  `Paket pengisian daya, estimasi penghematan, dan test drive. Konsultasi via WhatsApp ${site.salesName}.`;
+---
+<BaseLayout title="Promo & Penawaran" seoTitle={seoTitle} description={description}>
+  <Header slot="header" site={site} />
+
+  <!-- Intro -->
+  <section class="section promo-intro">
+    <div class="container">
+      <nav class="crumbs" aria-label="Remah">
+        <a href="/">Beranda</a><span aria-hidden="true">/</span><span aria-current="page">Promo</span>
+      </nav>
+      <div class="ph-head" data-reveal>
+        <p class="eyebrow">Promo &amp; Program</p>
+        <h1>Promo Mobil Hybrid JAECOO {site.address.locality} Bulan Ini</h1>
+        <p class="lead">Manfaatkan program efisiensi bulan ini sebelum berakhir — semua dibantu langsung oleh {site.salesName}.</p>
+      </div>
+    </div>
+  </section>
+
+  {promo.aktif ? (
+    <PromoHybrid site={site} />
+  ) : (
+    <section class="section">
+      <div class="container" data-reveal>
+        <div class="promo-empty">
+          <p class="eyebrow">Program Bulan Ini</p>
+          <h2>Hubungi {site.salesName} untuk penawaran terkini</h2>
+          <p class="lead">Program dapat berubah tiap bulan — tanyakan langsung yang sedang berjalan.</p>
+          <Button href={linkPenawaran(site)} variant="accent" size="lg" iconLeft="whatsapp" target="_blank">Tanya Program</Button>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Manfaat: daftar ber-tick editorial (bukan grid kartu) -->
+  <section class="section">
+    <div class="container">
+      <div class="ph-head" data-reveal>
+        <p class="eyebrow">Kenapa Lewat Kami</p>
+        <h2>Yang Anda dapat saat membeli lewat {site.salesName}</h2>
+      </div>
+      <ul class="manfaat" role="list">
+        {manfaat.map((m, i) => (
+          <li class="manfaat-row" data-reveal data-reveal-delay={String((i % 2) + 1)}>
+            <span class="manfaat-ico" aria-hidden="true"><Icon name="check" size={18} /></span>
+            <div class="manfaat-body">
+              <h3 class="manfaat-judul">{m.judul}</h3>
+              <p class="manfaat-teks">{m.teks}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <LineupSpec cars={lineup} site={site} />
+
+  <TestDriveForm cars={lineup} site={site} preselectSlug={site.featuredSlug} />
+
+  <StickyWhatsAppBar slot="footer" site={site} />
+  <Footer slot="footer" site={site} />
+</BaseLayout>
+
+<style>
+  .ph-head { display: grid; gap: var(--space-2xs); max-width: 60ch; }
+
+  .crumbs {
+    display: flex; flex-wrap: wrap; gap: var(--space-2xs); align-items: center;
+    margin-bottom: var(--space-lg);
+    font-size: var(--fs-body-sm); color: var(--color-text-muted);
+  }
+  .crumbs a:hover { color: var(--color-accent-ink); text-decoration: underline; }
+  .crumbs span[aria-current] { color: var(--color-text); font-weight: var(--fw-medium); }
+  .crumbs span[aria-hidden] { color: var(--color-text-subtle); }
+
+  .promo-empty { display: grid; gap: var(--space-sm); justify-items: start; max-width: 56ch; }
+
+  /* Manfaat: baris ber-tick + hairline (editorial, bukan kartu) */
+  .manfaat {
+    margin-top: var(--space-2xl);
+    display: grid;
+    gap: 0;
+  }
+  @media (min-width: 52rem) { .manfaat { grid-template-columns: 1fr 1fr; column-gap: var(--space-3xl); } }
+  .manfaat-row {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--space-md);
+    padding-block: var(--space-lg);
+    border-top: 1px solid var(--color-border);
+  }
+  .manfaat-ico {
+    display: grid; place-items: center;
+    width: 2rem; height: 2rem; border-radius: 50%;
+    background: var(--color-accent-soft); color: var(--color-accent-ink);
+    margin-top: 0.1em;
+  }
+  .manfaat-judul { font-size: var(--fs-h5); }
+  .manfaat-teks { color: var(--color-text-muted); font-size: var(--fs-body-sm); margin-top: var(--space-3xs); }
+</style>

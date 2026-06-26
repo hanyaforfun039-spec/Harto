@@ -1,0 +1,122 @@
+---
+/* Footer — Web2 "Harto" TERANG (instrumen/dashboard). Dibedakan dari Faiz
+   (footer gelap 4-kolom) & Putri (ledger gelap + wordmark raksasa):
+   masthead terang + CTA, lalu 3 "tile" instrumen (Kontak/Jam/Area) ber-hairline
+   soft-radius, lalu baris bawah. */
+import Icon from './Icon.astro';
+import Button from './Button.astro';
+import BrandWordmark from './BrandWordmark.astro';
+import type { SiteConfig } from '../lib/types';
+import { linkPenawaran } from '../lib/whatsapp';
+
+interface Props { site: SiteConfig }
+const { site } = Astro.props;
+const year = new Date().getFullYear();
+const wa = linkPenawaran(site);
+const igHandle = site.social?.instagram?.replace(/\/+$/, '').split('/').pop();
+---
+<footer class="site-footer">
+  <div class="container">
+    <div class="foot-top">
+      <div class="foot-brand">
+        <BrandWordmark class="foot-logo" alt={`${site.dealerName} — JAECOO`} />
+        <p class="foot-positioning">{site.positioning}</p>
+      </div>
+      <div class="foot-cta">
+        <Button href="/#hitung-hemat" variant="primary" icon="arrow-right">Hitung hemat Anda</Button>
+        <Button href={wa} variant="accent" iconLeft="whatsapp" target="_blank">Chat {site.salesName}</Button>
+      </div>
+    </div>
+
+    <div class="foot-tiles">
+      <section class="foot-tile" aria-label="Kontak">
+        <h2>Kontak</h2>
+        <ul role="list">
+          <li><Icon name="whatsapp" size={16} /> <a href={`tel:+${site.whatsapp}`} class="tnum">{site.phoneDisplay}</a></li>
+          {site.email && <li><Icon name="mail" size={16} /> <a href={`mailto:${site.email}`}>{site.email}</a></li>}
+          {site.social?.instagram && <li><Icon name="instagram" size={16} /> <a href={site.social.instagram} target="_blank" rel="noopener noreferrer">@{igHandle}</a></li>}
+          <li><Icon name="map-pin" size={16} /> <span>{site.address.street}, {site.address.locality}</span></li>
+        </ul>
+      </section>
+
+      <section class="foot-tile" aria-label="Jam layanan">
+        <h2>Jam Layanan</h2>
+        <ul role="list">
+          {site.openingHours.map((h) => (
+            <li><span class="foot-day">{h.hari}</span> <b class="tnum">{h.buka}–{h.tutup}</b></li>
+          ))}
+        </ul>
+      </section>
+
+      <section class="foot-tile" aria-label="Area layanan">
+        <h2>Area Layanan</h2>
+        <p>{site.serviceAreas.join(' · ')}</p>
+      </section>
+    </div>
+
+    <div class="foot-bottom">
+      <p>© {year} {site.dealerName} · {site.salesName}, {site.salesTitle}</p>
+      <p class="foot-disclaimer">
+        Estimasi efisiensi &amp; penghematan bersifat perkiraan; pemakaian nyata bergantung rute dan gaya berkendara.
+        Harga OTR {site.address.locality} dapat berubah sewaktu-waktu. Simulasi kredit non-mengikat; angka final mengikuti pihak leasing.
+      </p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    padding-block: var(--section-py) var(--space-xl);
+    background: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .foot-top {
+    display: grid;
+    gap: var(--space-xl);
+    align-items: end;
+    padding-bottom: var(--space-xl);
+  }
+  @media (min-width: 56rem) {
+    .foot-top { grid-template-columns: 1.5fr 1fr; gap: var(--space-3xl); }
+    .foot-cta { justify-self: end; }
+  }
+  .foot-brand { --wm-h: clamp(1.5rem, 1.1rem + 2vw, 2.25rem); }
+  .foot-positioning { margin-top: var(--space-md); color: var(--color-text-muted); max-width: 42ch; font-size: var(--fs-body); }
+  .foot-cta { display: flex; flex-wrap: wrap; gap: var(--space-sm); align-content: end; }
+
+  /* Tiles instrumen */
+  .foot-tiles { display: grid; gap: var(--space-md); }
+  @media (min-width: 44rem) { .foot-tiles { grid-template-columns: repeat(3, 1fr); gap: var(--space-lg); } }
+  .foot-tile {
+    padding: var(--space-lg);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+  }
+  .foot-tile h2 {
+    font-family: var(--font-body);
+    font-size: var(--fs-caption);
+    font-weight: var(--fw-semibold);
+    letter-spacing: var(--ls-eyebrow);
+    text-transform: uppercase;
+    color: var(--color-accent-ink);
+    margin-bottom: var(--space-sm);
+  }
+  .foot-tile ul { display: grid; gap: var(--space-2xs); }
+  .foot-tile li { display: flex; align-items: center; gap: var(--space-2xs); color: var(--color-text-muted); font-size: var(--fs-body-sm); }
+  .foot-tile :global(.icon) { color: var(--color-accent-ink); flex: none; }
+  .foot-tile a:hover { color: var(--color-text); text-decoration: underline; text-underline-offset: 0.18em; }
+  .foot-tile p { color: var(--color-text-muted); font-size: var(--fs-body-sm); }
+  .foot-day { min-width: 7.5rem; display: inline-block; }
+  .foot-tile b { color: var(--color-text); font-weight: var(--fw-semibold); }
+
+  .foot-bottom {
+    margin-top: var(--space-xl);
+    padding-top: var(--space-lg);
+    border-top: 1px solid var(--color-border);
+    display: grid;
+    gap: var(--space-2xs);
+  }
+  .foot-bottom p { color: var(--color-text-subtle); font-size: var(--fs-caption); max-width: 90ch; }
+</style>

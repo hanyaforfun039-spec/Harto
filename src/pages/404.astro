@@ -1,0 +1,42 @@
+---
+/* Halaman 404 — not found (Tahap 4). Clean, jalan keluar jelas, noindex. */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Button from '../components/Button.astro';
+import { site } from '../lib/site';
+import { linkPenawaran } from '../lib/whatsapp';
+---
+<BaseLayout title="Halaman Tidak Ditemukan" noindex={true}>
+  <Header slot="header" site={site} />
+
+  <section class="section nf">
+    <div class="container container--narrow nf-inner">
+      <p class="nf-code" aria-hidden="true">404</p>
+      <h1>Halaman tidak ditemukan</h1>
+      <p class="lead">Tautan mungkin sudah berubah atau halaman telah dipindahkan. Mari kembali ke jalur yang benar.</p>
+      <div class="nf-cta">
+        <Button href="/" variant="accent" size="lg">Ke Beranda</Button>
+        <Button href="/#lineup" variant="outline" size="lg">Lihat Model</Button>
+        <Button href={linkPenawaran(site)} variant="whatsapp" size="lg" iconLeft="whatsapp" target="_blank">Chat {site.salesName}</Button>
+      </div>
+    </div>
+  </section>
+
+  <Footer slot="footer" site={site} />
+</BaseLayout>
+
+<style>
+  .nf { display: grid; place-items: center; min-height: 60svh; text-align: center; }
+  .nf-inner { display: grid; gap: var(--space-md); justify-items: center; }
+  .nf-code {
+    font-family: var(--font-display);
+    font-size: clamp(4rem, 18vw, 9rem);
+    font-weight: var(--fw-bold);
+    line-height: 0.9;
+    color: var(--color-accent-soft);
+    letter-spacing: var(--ls-tight);
+  }
+  .nf .lead { max-width: 46ch; }
+  .nf-cta { display: flex; flex-wrap: wrap; gap: var(--space-sm); justify-content: center; margin-top: var(--space-sm); }
+</style>

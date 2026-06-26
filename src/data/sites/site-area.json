@@ -1,0 +1,96 @@
+{
+  "id": "area",
+  "theme": "area",
+  "brand": "JAECOO Ungaran Kendal Demak",
+  "dealerName": "Dealer Resmi JAECOO Semarang",
+  "salesName": "Widya",
+  "salesTitle": "Sales Consultant JAECOO",
+  "salesCredentials": [
+    "Sales Consultant Resmi",
+    "Layanan Area Satelit",
+    "Siap Antar Unit Test Drive"
+  ],
+  "whatsapp": "628120000004",
+  "phoneDisplay": "0812-0000-0004",
+  "email": "widya@example.com",
+  "address": {
+    "region": "Jawa Tengah",
+    "street": "Jl. Pemuda No. 000",
+    "country": "ID",
+    "locality": "Semarang",
+    "postalCode": "50132"
+  },
+  "geo": {
+    "lat": -6.9839,
+    "lng": 110.4093
+  },
+  "serviceAreas": [
+    "Ungaran",
+    "Kendal",
+    "Demak",
+    "Semarang",
+    "Boja",
+    "Mranggen"
+  ],
+  "openingHours": [
+    {
+      "buka": "08:30",
+      "hari": "Senin - Sabtu",
+      "tutup": "17:00"
+    },
+    {
+      "buka": "09:00",
+      "hari": "Minggu",
+      "tutup": "15:00"
+    }
+  ],
+  "mapUrl": "https://maps.google.com/?q=JAECOO+Semarang",
+  "tagline": "JAECOO dekat dengan Anda - Ungaran, Kendal, Demak.",
+  "subheadline": "Layanan khusus area satelit Semarang. Test drive bisa diantar ke lokasi Anda.",
+  "positioning": "Sales JAECOO untuk area Ungaran, Kendal, dan Demak. Layanan dekat, test drive diantar, proses mudah.",
+  "heroVariant": "car-first",
+  "heroCarSlug": "j7",
+  "lineup": [
+    "j7",
+    "j5",
+    "j7-shs",
+    "j8-ardis",
+    "j8-shs-ardis"
+  ],
+  "featuredSlug": "j7",
+  "kredit": {
+    "dpDefaultPct": 20,
+    "tenorDefaultYears": 5,
+    "bungaFlatPctPerYear": 3.8
+  },
+  "promo": {
+    "sub": "Test drive JAECOO diantar ke Ungaran, Kendal, atau Demak. Jadwalkan via WhatsApp.",
+    "aktif": true,
+    "deadline": "2026-06-30",
+    "headline": "Layanan Antar Test Drive Area Satelit"
+  },
+  "testimoni": [
+    {
+      "kota": "Kendal",
+      "nama": "Bapak Tono",
+      "teks": "Test drive diantar sampai rumah, tidak perlu jauh ke kota. Sangat membantu.",
+      "mobil": "J7"
+    },
+    {
+      "kota": "Demak",
+      "nama": "Ibu Rina",
+      "teks": "Pelayanan dekat dan responsif via WhatsApp. Proses pembelian jadi praktis.",
+      "mobil": "J5"
+    }
+  ],
+  "seo": {
+    "locale": "id_ID",
+    "ogImage": "/img/og/area.jpg",
+    "titleSuffix": "JAECOO Ungaran Kendal Demak",
+    "defaultDescription": "Sales JAECOO untuk area Ungaran, Kendal, dan Demak. Test drive diantar ke lokasi Anda. Harga OTR, simulasi kredit, dan konsultasi via WhatsApp."
+  },
+  "social": {
+    "tiktok": "https://tiktok.com/",
+    "instagram": "https://instagram.com/"
+  }
+}

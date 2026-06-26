@@ -1,0 +1,354 @@
+[
+  {
+    "slug": "j5",
+    "nama": "JAECOO J5 EV",
+    "namaPendek": "J5 EV",
+    "kategori": "SUV Listrik Premium",
+    "powertrain": "ev",
+    "tagline": "SUV listrik premium: senyap, bertenaga, dan paling hemat biaya energi untuk keseharian di Semarang.",
+    "varian": [
+      {
+        "nama": "J5 EV Premium",
+        "hargaOtr": 320400000,
+        "highlight": true
+      }
+    ],
+    "specs": [
+      {
+        "icon": "power",
+        "label": "Tenaga",
+        "value": "155 kW (210 PS)"
+      },
+      {
+        "icon": "torque",
+        "label": "Torsi",
+        "value": "288 Nm"
+      },
+      {
+        "icon": "range",
+        "label": "Jarak Tempuh",
+        "value": "461 km (NEDC)"
+      },
+      {
+        "icon": "battery",
+        "label": "Baterai",
+        "value": "60,9 kWh LFP"
+      },
+      {
+        "icon": "fuel",
+        "label": "Pengisian Cepat",
+        "value": "DC 30-80% +/- 27 menit"
+      }
+    ],
+    "fitur": [
+      "Motor listrik PMSM, torsi instan 288 Nm",
+      "Layar utama 13,2 inci FHD + panel instrumen digital 8 inci",
+      "Atap kaca panoramik seluas 1,45 m²",
+      "Kursi depan berventilasi, power tailgate, dan ambient light",
+      "Wireless charger Qi",
+      "17 fitur ADAS (khusus varian Premium)"
+    ],
+    "foto": {
+      "hero": {
+        "alt": "JAECOO J5",
+        "src": "https://yvbpnlbwaundqhyrvdwg.supabase.co/storage/v1/object/public/Faiz/J5-banner.webp"
+      },
+      "galeri": [
+        {
+          "alt": "JAECOO J5 warna Hitam",
+          "src": "https://yvbpnlbwaundqhyrvdwg.supabase.co/storage/v1/object/public/Faiz/J5%20Black.webp"
+        },
+        {
+          "alt": "JAECOO J5 warna Putih",
+          "src": "https://yvbpnlbwaundqhyrvdwg.supabase.co/storage/v1/object/public/Faiz/J5%20White.webp"
+        },
+        {
+          "alt": "JAECOO J5 warna Hijau",
+          "src": "https://yvbpnlbwaundqhyrvdwg.supabase.co/storage/v1/object/public/Faiz/J5%20Green.webp"
+        }
+      ]
+    },
+    "faq": [
+      {
+        "a": "Harga OTR Semarang Rp 320,4 juta untuk J5 EV Premium. Hubungi via WhatsApp untuk penawaran dan ketersediaan stok terbaru.",
+        "q": "Berapa harga OTR JAECOO J5 EV di Semarang?"
+      },
+      {
+        "a": "Hingga 461 km berdasarkan pengetesan NEDC. Jarak nyata bisa berbeda tergantung gaya berkendara dan kondisi jalan.",
+        "q": "Berapa jarak tempuh J5 EV sekali pengisian penuh?"
+      },
+      {
+        "a": "Dengan DC fast charging, pengisian dari 30% ke 80% memerlukan waktu sekitar 27 menit.",
+        "q": "Berapa lama waktu pengisian baterainya?"
+      }
+    ]
+  },
+  {
+    "slug": "j7-shs",
+    "nama": "JAECOO J7 SHS",
+    "namaPendek": "J7 SHS",
+    "kategori": "SUV Hybrid (PHEV)",
+    "powertrain": "phev",
+    "tagline": "Super Hybrid System: irit harian seperti mobil listrik, tenang tanpa cemas untuk jarak jauh.",
+    "varian": [
+      {
+        "nama": "J7 SHS",
+        "hargaOtr": 520400000,
+        "highlight": true
+      }
+    ],
+    "specs": [
+      {
+        "icon": "engine",
+        "label": "Powertrain",
+        "value": "1.5TGDI DHE + 1DHT"
+      },
+      {
+        "icon": "power",
+        "label": "Tenaga",
+        "value": "Mesin 140 hp + motor 201 hp / 310 Nm"
+      },
+      {
+        "icon": "battery",
+        "label": "Baterai",
+        "value": "18,3 kWh LiFePO4 (IP68)"
+      },
+      {
+        "icon": "range",
+        "label": "Jangkauan Total",
+        "value": "+/- 1.200-1.300 km"
+      },
+      {
+        "icon": "fuel",
+        "label": "Mode EV",
+        "value": "Pure EV +/- 90-100 km"
+      }
+    ],
+    "fitur": [
+      "Efisiensi termal mesin 44,5% (kelas terdepan)",
+      "Mode EV & HEV; bisa berjalan penuh listrik untuk harian",
+      "Pengisian AC (Type 2) & DC fast (CCS2, 30-80% +/- 20 menit)",
+      "Baterai LiFePO4 18,3 kWh dengan proteksi IP68",
+      "19 fitur ADAS (Adaptive Cruise Control, Lane Departure Prevention, Blind Spot Detection)",
+      "8 airbags"
+    ],
+    "foto": {
+      "hero": {
+        "alt": "JAECOO J7 SHS",
+        "src": "https://yvbpnlbwaundqhyrvdwg.supabase.co/storage/v1/object/public/Faiz/J7-shs-banner.webp"
+      },
+      "galeri": [
+        {
+          "alt": "JAECOO J7 SHS warna Hitam",
+          "src": "https://yvbpnlbwaundqhyrvdwg.supabase.co/storage/v1/object/public/Faiz/J7-Black.webp"
+        },
+        {
+          "alt": "JAECOO J7 SHS warna Putih",
+          "src": "https://yvbpnlbwaundqhyrvdwg.supabase.co/storage/v1/object/public/Faiz/J7-White.webp"
+        },
+        {
+          "alt": "JAECOO J7 SHS warna Silver",
+          "src": "https://yvbpnlbwaundqhyrvdwg.supabase.co/storage/v1/object/public/Faiz/J7-Silver.webp"
+        },
+        {
+          "alt": "JAECOO J7 SHS warna Stone Grey",
+          "src": "https://yvbpnlbwaundqhyrvdwg.supabase.co/storage/v1/object/public/Faiz/J7-Stonegrey.webp"
+        }
+      ]
+    },
+    "faq": [
+      {
+        "a": "SHS (Super Hybrid System) adalah sistem plug-in hybrid: mesin bensin 1.5TGDI berpadu motor listrik sehingga bisa berjalan penuh listrik untuk pemakaian harian, dengan efisiensi termal mesin mencapai 44,5%.",
+        "q": "Apa itu SHS pada JAECOO J7 SHS?"
+      },
+      {
+        "a": "Mode listrik murni menempuh sekitar 90-100 km. Gabungan bensin dan baterai penuh memberi jangkauan hingga sekitar 1.200-1.300 km.",
+        "q": "Berapa jarak tempuh JAECOO J7 SHS?"
+      },
+      {
+        "a": "Harga OTR Semarang Rp 520,4 juta. Hubungi via WhatsApp untuk penawaran terbaik dan ketersediaan unit.",
+        "q": "Berapa harga OTR-nya di Semarang?"
+      }
+    ]
+  },
+  {
+    "slug": "j8-ardis",
+    "nama": "JAECOO J8 ARDIS",
+    "namaPendek": "J8 ARDIS",
+    "kategori": "Flagship SUV AWD",
+    "powertrain": "ice",
+    "tagline": "Flagship AWD sejati: 2.0 Turbo dengan ARDIS torque vectoring dan suspensi magnetik CDC.",
+    "varian": [
+      {
+        "nama": "J8 ARDIS AWD",
+        "hargaOtr": 710400000,
+        "highlight": true
+      }
+    ],
+    "specs": [
+      {
+        "icon": "engine",
+        "label": "Mesin",
+        "value": "2.0TGDI Bensin"
+      },
+      {
+        "icon": "power",
+        "label": "Tenaga",
+        "value": "248 ps"
+      },
+      {
+        "icon": "torque",
+        "label": "Torsi",
+        "value": "385 Nm"
+      },
+      {
+        "icon": "drivetrain",
+        "label": "Penggerak",
+        "value": "AWD ARDIS"
+      },
+      {
+        "icon": "transmission",
+        "label": "Mode Berkendara",
+        "value": "7 mode (Eco-Offroad)"
+      }
+    ],
+    "fitur": [
+      "ARDIS AWD dengan dynamic torque vectoring hingga 1.800 Nm ke satu roda",
+      "Suspensi magnetik CDC dengan penyesuaian kondisi jalan real-time",
+      "7 mode berkendara via Crystal Drive Mode Selector (Eco, Normal, Sport, Snow, Sand, Mud, Offroad)",
+      "540° Around View Monitor dengan Transparent Bonnet Mode",
+      "19 fitur ADAS",
+      "10 airbags"
+    ],
+    "foto": {
+      "hero": {
+        "alt": "JAECOO J8 ARDIS",
+        "src": "https://yvbpnlbwaundqhyrvdwg.supabase.co/storage/v1/object/public/Faiz/J8-ardis-banner.webp"
+      },
+      "galeri": [
+        {
+          "alt": "JAECOO J8 ARDIS",
+          "src": "https://yvbpnlbwaundqhyrvdwg.supabase.co/storage/v1/object/public/Faiz/j8%20Ardis.webp"
+        },
+        {
+          "alt": "JAECOO J8 ARDIS warna Hitam",
+          "src": "https://yvbpnlbwaundqhyrvdwg.supabase.co/storage/v1/object/public/Faiz/J8%20Black.webp"
+        },
+        {
+          "alt": "JAECOO J8 ARDIS warna Putih",
+          "src": "https://yvbpnlbwaundqhyrvdwg.supabase.co/storage/v1/object/public/Faiz/J8%20White.webp"
+        },
+        {
+          "alt": "JAECOO J8 ARDIS warna Silver",
+          "src": "https://yvbpnlbwaundqhyrvdwg.supabase.co/storage/v1/object/public/Faiz/J8%20Silver.webp"
+        },
+        {
+          "alt": "JAECOO J8 ARDIS warna Hijau",
+          "src": "https://yvbpnlbwaundqhyrvdwg.supabase.co/storage/v1/object/public/Faiz/J8%20Green.webp"
+        }
+      ]
+    },
+    "faq": [
+      {
+        "a": "Harga OTR Semarang Rp 710,4 juta. Untuk penawaran khusus dan ketersediaan warna, hubungi via WhatsApp.",
+        "q": "Berapa harga OTR JAECOO J8 ARDIS di Semarang?"
+      },
+      {
+        "a": "ARDIS (All-Road Drive Intelligent System) adalah penggerak AWD cerdas yang dapat menyalurkan torsi hingga 1.800 Nm ke satu roda (dynamic torque vectoring) untuk traksi optimal di berbagai medan.",
+        "q": "Apa itu sistem ARDIS pada J8?"
+      },
+      {
+        "a": "Tersedia. Simulasikan cicilan sesuai DP dan tenor pilihan Anda, lalu kirim ke WhatsApp untuk proses lebih lanjut.",
+        "q": "Apakah tersedia paket kredit untuk flagship ini?"
+      }
+    ]
+  },
+  {
+    "slug": "j8-shs-ardis",
+    "nama": "JAECOO J8 SHS ARDIS",
+    "namaPendek": "J8 SHS",
+    "kategori": "Flagship SUV Hybrid AWD",
+    "powertrain": "phev",
+    "tagline": "Puncak lineup: plug-in hybrid AWD bertenaga +/- 530 hp, 0-100 km/jam 5,4 detik, jangkauan 1.400 km.",
+    "varian": [
+      {
+        "nama": "J8 SHS ARDIS",
+        "hargaOtr": 838500000,
+        "highlight": true
+      }
+    ],
+    "specs": [
+      {
+        "icon": "engine",
+        "label": "Powertrain",
+        "value": "1.5TGDI + 3DHT"
+      },
+      {
+        "icon": "power",
+        "label": "Tenaga Gabungan",
+        "value": "395 kW (+/- 530 hp) / 650 Nm"
+      },
+      {
+        "icon": "battery",
+        "label": "Baterai",
+        "value": "34,46 kWh (IP68)"
+      },
+      {
+        "icon": "range",
+        "label": "Jangkauan Total",
+        "value": "+/- 1.400 km"
+      },
+      {
+        "icon": "fuel",
+        "label": "Mode EV",
+        "value": "Pure EV hingga 180 km"
+      }
+    ],
+    "fitur": [
+      "Akselerasi 0-100 km/jam dalam 5,4 detik",
+      "Pure EV hingga 180 km; jangkauan total hingga +/- 1.400 km",
+      "ARDIS Intelligent AWD + suspensi magnetik CDC",
+      "Headrest speaker terintegrasi dengan 14-speaker Sony Sound System",
+      "Baterai 34,46 kWh dengan proteksi IP68 dan quadruple-layer safety",
+      "19 fitur ADAS & 10 airbags"
+    ],
+    "foto": {
+      "hero": {
+        "alt": "JAECOO J8 SHS ARDIS",
+        "src": "https://yvbpnlbwaundqhyrvdwg.supabase.co/storage/v1/object/public/Faiz/J8-shs-banner.webp"
+      },
+      "galeri": [
+        {
+          "alt": "JAECOO J8 SHS ARDIS warna Hitam",
+          "src": "https://yvbpnlbwaundqhyrvdwg.supabase.co/storage/v1/object/public/Faiz/J8%20Black.webp"
+        },
+        {
+          "alt": "JAECOO J8 SHS ARDIS warna Putih",
+          "src": "https://yvbpnlbwaundqhyrvdwg.supabase.co/storage/v1/object/public/Faiz/J8%20White.webp"
+        },
+        {
+          "alt": "JAECOO J8 SHS ARDIS warna Silver",
+          "src": "https://yvbpnlbwaundqhyrvdwg.supabase.co/storage/v1/object/public/Faiz/J8%20Silver.webp"
+        },
+        {
+          "alt": "JAECOO J8 SHS ARDIS warna Hijau",
+          "src": "https://yvbpnlbwaundqhyrvdwg.supabase.co/storage/v1/object/public/Faiz/J8%20Green.webp"
+        }
+      ]
+    },
+    "faq": [
+      {
+        "a": "J8 SHS ARDIS menambahkan powertrain plug-in hybrid AWD: tenaga gabungan +/- 530 hp, akselerasi 0-100 km/jam 5,4 detik, jauh lebih irit, dan dapat berjalan penuh listrik hingga 180 km.",
+        "q": "Apa keunggulan J8 SHS ARDIS dibanding J8 ARDIS biasa?"
+      },
+      {
+        "a": "Harga OTR Semarang Rp 838,5 juta. Hubungi via WhatsApp untuk penawaran terbaik dan ketersediaan unit.",
+        "q": "Berapa harga OTR-nya di Semarang?"
+      },
+      {
+        "a": "Bisa, sesuai ketersediaan unit. Isi formulir test drive dan kami akan mengatur jadwalnya di Semarang dan sekitarnya.",
+        "q": "Apakah bisa test drive flagship ini?"
+      }
+    ]
+  }
+]

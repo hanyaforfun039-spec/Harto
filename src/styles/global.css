@@ -1,0 +1,12 @@
+/* =============================================================================
+   jaecoo-base · GLOBAL (entry stylesheet)
+   Di-import SEKALI di BaseLayout. Urutan penting:
+     tokens -> themes (override accent) -> base (pakai token final).
+   @import ini di-bundle Astro/Vite saat build (BUKAN request runtime).
+   ============================================================================ */
+@import './tokens.css';
+@import './themes/premium.css';
+@import './themes/hybrid.css';
+@import './themes/kredit.css';
+@import './themes/area.css';
+@import './base.css';

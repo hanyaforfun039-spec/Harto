@@ -1,0 +1,11 @@
+/* Tema: KREDIT (DP ringan) · accent COPPER hangat (approachable tapi premium)
+   Kontras WCAG:
+     on-accent #FFFFFF di atas #A85433  ~ 5.3:1  (AA teks OK)
+     accent-ink #8A4322 di atas --paper  ~ 5.9:1  (AA teks OK) */
+[data-theme='kredit'] {
+  --color-accent:        #A85433;
+  --color-accent-strong: #8C4528;
+  --color-accent-ink:    #8A4322;
+  --color-accent-soft:   #F1E1D6;
+  --color-on-accent:     var(--white);
+}

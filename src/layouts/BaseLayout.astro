@@ -1,0 +1,95 @@
+---
+/* =============================================================================
+   BaseLayout — kerangka tiap halaman.
+   - Memuat global.css (tokens + themes + base) sekali.
+   - Set data-theme dari site config aktif.
+   - Render SEOHead (meta, OG, JSON-LD AutoDealer + schema khusus halaman).
+   - Skip-link, preload font, skrip .js (anti-FOUC reveal) + IntersectionObserver.
+   - Slot: header / (default = main) / footer.
+   ============================================================================ */
+import '../styles/global.css';
+import SEOHead from '../components/SEOHead.astro';
+import AnnouncementBar from '../components/AnnouncementBar.astro';
+import { site } from '../lib/site';
+import { autoDealerSchema } from '../lib/schema';
+
+interface Props {
+  title: string;
+  seoTitle?: string; // override <title> penuh (mis. judul SEO ber-kata kunci). Default: `${title} | ${titleSuffix}`.
+  description?: string;
+  ogImage?: string;
+  ogType?: 'website' | 'article';
+  noindex?: boolean;
+  jsonLd?: object[];
+  bodyClass?: string;
+}
+
+const {
+  title,
+  seoTitle,
+  description = site.seo.defaultDescription,
+  ogImage = site.seo.ogImage,
+  ogType = 'website',
+  noindex = false,
+  jsonLd = [],
+  bodyClass = '',
+} = Astro.props;
+
+const siteUrl = Astro.site ?? new URL('https://jaecoo-semarang.example');
+const canonical = new URL(Astro.url.pathname, siteUrl).href;
+const ogImageAbs = new URL(ogImage, siteUrl).href;
+const fullTitle = seoTitle ?? `${title} | ${site.seo.titleSuffix}`;
+
+// AutoDealer di tiap halaman + schema khusus halaman (Product, FAQPage, dst).
+const schemas = [autoDealerSchema(site, siteUrl.href), ...jsonLd];
+const THEME_COLOR = '#0C1117';
+---
+<!doctype html>
+<html lang="id" data-theme={site.theme} data-site={site.id}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content={THEME_COLOR} />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+
+    <!-- Font self-hosted: preload yang utama agar LCP cepat -->
+    <link rel="preload" href="/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin />
+
+    <SEOHead
+      title={fullTitle}
+      description={description}
+      canonical={canonical}
+      ogImage={ogImageAbs}
+      ogType={ogType}
+      siteName={site.brand}
+      locale={site.seo.locale}
+      noindex={noindex}
+      jsonLd={schemas}
+    />
+
+    <!-- Tandai JS aktif sebelum paint (scroll-reveal hanya bersembunyi bila .js) -->
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+  </head>
+  <body class={bodyClass}>
+    <a class="skip-link" href="#konten">Lewati ke konten</a>
+
+    <AnnouncementBar />
+
+    <slot name="header" />
+
+    <main id="konten">
+      <slot />
+    </main>
+
+    <slot name="footer" />
+
+    <script>
+      import '../scripts/reveal.ts';
+    </script>
+  </body>
+</html>
