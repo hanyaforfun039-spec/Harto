@@ -1,0 +1,138 @@
+---
+/* HeroCarousel — hero "katalog" Harto: foto mobil FULL-BLEED sebagai background,
+   teks + CTA di tengah, 4 model bergeser (otomatis + manual via panah/titik).
+   Tanpa JS: slide tetap bisa di-swipe (scroll-snap). carousel.ts = enhancement. */
+import Button from './Button.astro';
+import CarImage from './CarImage.astro';
+import Icon from './Icon.astro';
+import type { SiteConfig } from '../lib/types';
+import { getLineup } from '../lib/cars';
+import { linkTestDrive } from '../lib/whatsapp';
+
+interface Props { site: SiteConfig }
+const { site } = Astro.props;
+const cars = getLineup(site);
+---
+<section class="hcar section--dark" data-surface="dark" data-hcar aria-roledescription="carousel" aria-label="Model JAECOO">
+  <h1 class="visually-hidden">Dealer Resmi JAECOO {site.address.locality} — pilih model Anda</h1>
+
+  <div class="hcar-track" data-hcar-track>
+    {cars.map((car, i) => (
+      <article class="hcar-slide" aria-roledescription="slide" aria-label={`${i + 1} dari ${cars.length}: ${car.nama}`}>
+        <div class="hcar-bg" aria-hidden="true">
+          <CarImage src={car.foto.hero.src} alt={car.foto.hero.alt} label={car.namaPendek} priority={i === 0} ratio="16 / 9" sizes="100vw" class="hcar-img" />
+          <span class="hcar-scrim"></span>
+        </div>
+        <div class="container hcar-inner">
+          <span class="hcar-rule"></span>
+          <p class="hcar-kat">{car.kategori}</p>
+          <h2 class="hcar-name">{car.nama}</h2>
+          <p class="hcar-tagline">{car.tagline}</p>
+          <div class="hcar-cta">
+            <Button href={`/mobil/${car.slug}`} variant="accent" size="lg">Lihat {car.namaPendek}</Button>
+            <Button href={linkTestDrive(site, car.nama)} variant="outline" size="lg" iconLeft="whatsapp" target="_blank">Test Drive</Button>
+          </div>
+        </div>
+      </article>
+    ))}
+  </div>
+
+  <button type="button" class="hcar-nav hcar-prev" data-hcar-prev aria-label="Model sebelumnya"><Icon name="arrow-left" size={22} /></button>
+  <button type="button" class="hcar-nav hcar-next" data-hcar-next aria-label="Model berikutnya"><Icon name="arrow-right" size={22} /></button>
+
+  <div class="hcar-dots" role="tablist" aria-label="Pilih model">
+    {cars.map((car, i) => (
+      <button type="button" class="hcar-dot" data-hcar-dot={String(i)} role="tab" aria-label={car.namaPendek} aria-selected={i === 0 ? 'true' : 'false'}></button>
+    ))}
+  </div>
+</section>
+
+<script>
+  import '../scripts/carousel.ts';
+</script>
+
+<style>
+  .hcar { position: relative; overflow: hidden; }
+
+  .hcar-track {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .hcar-track::-webkit-scrollbar { display: none; }
+
+  .hcar-slide {
+    position: relative;
+    flex: 0 0 100%;
+    min-width: 100%;
+    scroll-snap-align: start;
+    display: flex;
+    align-items: center;
+    min-height: min(90svh, 780px);
+    overflow: hidden;
+  }
+
+  /* Foto full-bleed + scrim untuk keterbacaan teks */
+  .hcar-bg { position: absolute; inset: 0; }
+  .hcar-bg :global(.hcar-img) { width: 100%; height: 100%; object-fit: cover; border-radius: 0; }
+  .hcar-scrim {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(180deg, rgba(6, 9, 13, 0.62) 0%, rgba(6, 9, 13, 0.30) 42%, rgba(6, 9, 13, 0.68) 100%),
+      radial-gradient(120% 90% at 50% 50%, rgba(6, 9, 13, 0) 40%, rgba(6, 9, 13, 0.4) 100%);
+  }
+
+  /* Konten tengah (teks terang di atas foto) */
+  .hcar-inner {
+    position: relative; z-index: 1;
+    display: grid; justify-items: center; text-align: center; gap: var(--space-md);
+    padding-block: var(--space-3xl);
+  }
+  .hcar-rule { width: 2.5rem; height: 2px; background: var(--color-accent); }
+  .hcar-kat {
+    font-size: var(--fs-caption); letter-spacing: var(--ls-eyebrow);
+    text-transform: uppercase; color: rgba(244, 246, 244, 0.78);
+  }
+  .hcar-name {
+    font-family: var(--font-display);
+    font-weight: var(--fw-medium);
+    font-size: clamp(2.5rem, 1.6rem + 4.5vw, 5rem);
+    line-height: 1.04;
+    letter-spacing: 0.02em;
+    color: var(--paper);
+    max-width: 18ch;
+  }
+  .hcar-tagline { color: rgba(244, 246, 244, 0.86); max-width: 52ch; font-size: var(--fs-lead); }
+  .hcar-cta { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-sm); margin-top: var(--space-sm); }
+
+  /* Panah (desktop) */
+  .hcar-nav, .hcar-dots { display: none; }
+  :global(.js) .hcar-nav {
+    position: absolute; top: 50%; transform: translateY(-50%); z-index: 3;
+    display: grid; place-items: center;
+    width: 3rem; height: 3rem; border-radius: 50%;
+    background: rgba(244, 246, 244, 0.14); color: var(--paper);
+    border: 1px solid rgba(244, 246, 244, 0.4); cursor: pointer;
+    backdrop-filter: blur(4px);
+    transition: background var(--dur) var(--ease), border-color var(--dur) var(--ease);
+  }
+  :global(.js) .hcar-nav:hover { background: rgba(244, 246, 244, 0.26); border-color: var(--paper); }
+  .hcar-prev { left: var(--space-lg); }
+  .hcar-next { right: var(--space-lg); }
+  @media (max-width: 47.99rem) { :global(.js) .hcar-nav { display: none; } }
+
+  /* Titik indikator (di atas foto, bawah-tengah) */
+  :global(.js) .hcar-dots {
+    position: absolute; left: 0; right: 0; bottom: var(--space-xl); z-index: 3;
+    display: flex; justify-content: center; gap: var(--space-2xs);
+  }
+  .hcar-dot {
+    width: 0.6rem; height: 0.6rem; border-radius: 50%;
+    background: rgba(244, 246, 244, 0.4); border: 0; cursor: pointer; padding: 0;
+    transition: background var(--dur) var(--ease), width var(--dur) var(--ease), transform var(--dur) var(--ease);
+  }
+  .hcar-dot.is-active { background: var(--paper); width: 1.6rem; border-radius: var(--radius-pill); }
+</style>

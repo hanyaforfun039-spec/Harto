@@ -3,7 +3,7 @@
    merata). Tanpa angle hybrid/efisiensi & tanpa kalkulator. Tema terang. */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
-import Hero from '../components/Hero.astro';
+import HeroCarousel from '../components/HeroCarousel.astro';
 import LineupSpec from '../components/LineupSpec.astro';
 import PromoHybrid from '../components/PromoHybrid.astro';
 import TrustHybrid from '../components/TrustHybrid.astro';
@@ -13,12 +13,10 @@ import StickyWhatsAppBar from '../components/StickyWhatsAppBar.astro';
 import Footer from '../components/Footer.astro';
 import Icon from '../components/Icon.astro';
 import { site } from '../lib/site';
-import { getLineup, getCarBySlug } from '../lib/cars';
-import { linkTestDrive } from '../lib/whatsapp';
+import { getLineup } from '../lib/cars';
 import { organizationSchema, webSiteSchema, faqPageSchema } from '../lib/schema';
 
 const lineup = getLineup(site);
-const heroCar = getCarBySlug(site.heroCarSlug) ?? lineup[0];
 const kota = site.address.locality;
 
 const siteUrl = Astro.site ?? new URL('https://jaecoo-semarang.example');
@@ -61,11 +59,7 @@ const homeDescription =
 >
   <Header slot="header" site={site} />
 
-  <Hero
-    site={site}
-    primaryCta={{ label: 'Jadwalkan Test Drive', href: linkTestDrive(site, heroCar.nama), variant: 'whatsapp', iconLeft: 'whatsapp', target: '_blank' }}
-    secondaryCta={{ label: 'Lihat Semua Model', href: '/#lineup', variant: 'outline' }}
-  />
+  <HeroCarousel site={site} />
 
   <LineupSpec cars={lineup} site={site} />
 

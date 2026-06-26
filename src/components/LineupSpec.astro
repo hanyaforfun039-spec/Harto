@@ -14,6 +14,12 @@ const { cars, site } = Astro.props;
 
 const tagOf = (c: Car) =>
   c.powertrain === 'phev' ? 'Hybrid · PHEV' : c.powertrain === 'ev' ? 'Listrik · EV' : 'Bensin';
+
+/* Override foto khusus section "Pilih JAECOO Anda" (banner di bucket Harto). */
+const fotoOverride: Record<string, string> = {
+  'j5': 'https://fxjspvdkeybabxotniov.supabase.co/storage/v1/object/public/Harto/j5%20banner3.webp',
+  'j7-shs': 'https://fxjspvdkeybabxotniov.supabase.co/storage/v1/object/public/Harto/J7%20banner3%20(1).webp',
+};
 ---
 <section class="section section--lg lineupspec" id="lineup" aria-labelledby="ls-h">
   <div class="container">
@@ -29,7 +35,7 @@ const tagOf = (c: Car) =>
         return (
           <li class="ls-row" data-reveal>
             <a class="ls-media" href={detail} tabindex="-1" aria-hidden="true">
-              <CarImage src={car.foto.hero.src} alt={car.foto.hero.alt} label={car.namaPendek} priority={i === 0} ratio="16 / 10" />
+              <CarImage src={fotoOverride[car.slug] ?? car.foto.hero.src} alt={car.foto.hero.alt} label={car.namaPendek} priority={i === 0} ratio="16 / 10" />
             </a>
             <div class="ls-body">
               <p class={`ls-tag ls-tag--${car.powertrain}`}>{tagOf(car)}</p>
