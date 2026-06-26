@@ -8,7 +8,7 @@ interface Props { site: SiteConfig }
 const { site } = Astro.props;
 
 const BUCKET = 'https://fxjspvdkeybabxotniov.supabase.co/storage/v1/object/public/Harto';
-const photos = Array.from({ length: 7 }, (_, i) => ({
+const photos = Array.from({ length: 8 }, (_, i) => ({
   src: `${BUCKET}/SPK${i + 1}.webp`,
   alt: `Serah terima unit JAECOO bersama ${site.salesName} di ${site.address.locality} (${i + 1})`,
 }));
