@@ -6,14 +6,17 @@
 import CarImage from './CarImage.astro';
 import Icon from './Icon.astro';
 import Button from './Button.astro';
-import CreditCalculator from './CreditCalculator.astro';
 import type { Car, CarFaq, SiteConfig } from '../lib/types';
 import { getLineup } from '../lib/cars';
 import { formatRupiah } from '../lib/format';
 import { linkTestDrive, linkPenawaran } from '../lib/whatsapp';
+import { specsOverride, adasGroups, adasCount } from '../lib/harto-detail';
 
 interface Props { car: Car; site: SiteConfig; faq?: CarFaq[] }
 const { car, site, faq } = Astro.props;
+
+const specGroups = specsOverride[car.slug];
+const jumlahAdas = adasCount[car.slug] ?? 19;
 const galeri = [car.foto.hero, ...car.foto.galeri];
 const lineup = getLineup(site);
 const faqList = faq ?? car.faq;
@@ -91,14 +94,32 @@ const t = tech[pt];
 <section class="section">
   <div class="container container--narrow">
     <h2>Spesifikasi {car.namaPendek}</h2>
-    <dl class="cdh-specs">
-      {car.specs.map((s) => (
-        <div class="cdh-spec-row">
-          <dt><Icon name={s.icon} size={18} /> {s.label}</dt>
-          <dd class="tnum">{s.value}</dd>
-        </div>
-      ))}
-    </dl>
+    {specGroups ? (
+      <div class="cdh-spec-groups">
+        {specGroups.map((g) => (
+          <div class="cdh-spec-group">
+            <h3 class="cdh-spec-cat">{g.kategori}</h3>
+            <dl class="cdh-specs">
+              {g.items.map((s) => (
+                <div class="cdh-spec-row">
+                  <dt>{s.label}</dt>
+                  <dd>{s.value}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        ))}
+      </div>
+    ) : (
+      <dl class="cdh-specs">
+        {car.specs.map((s) => (
+          <div class="cdh-spec-row">
+            <dt><Icon name={s.icon} size={18} /> {s.label}</dt>
+            <dd class="tnum">{s.value}</dd>
+          </div>
+        ))}
+      </dl>
+    )}
   </div>
 </section>
 
@@ -120,25 +141,28 @@ const t = tech[pt];
   </div>
 </section>
 
-<!-- Fitur -->
-<section class="section">
-  <div class="container container--narrow">
-    <h2>Fitur Unggulan</h2>
-    <ul class="cdh-fitur" role="list">
-      {car.fitur.map((f) => (
-        <li><span class="cdh-fitur-ico"><Icon name="check" size={16} /></span> <span>{f}</span></li>
-      ))}
-    </ul>
-  </div>
-</section>
-
-<!-- Kalkulator -->
+<!-- ADAS (sama untuk semua model; jumlah beda per model) -->
 <section class="section section--alt">
-  <div class="container">
-    <h2>Simulasi Kredit {car.namaPendek}</h2>
-    <p class="lead">Atur DP dan tenor, lalu kirim simulasinya langsung ke WhatsApp.</p>
-    <div class="cdh-calc">
-      <CreditCalculator cars={lineup} site={site} preselectSlug={car.slug} heading={`Cicilan ${car.namaPendek}`} />
+  <div class="container container--narrow">
+    <h2>Fitur ADAS {car.namaPendek}</h2>
+    <p class="cdh-adas-intro">JAECOO {car.namaPendek} dilengkapi <b>{jumlahAdas} fitur ADAS</b> untuk berkendara lebih aman.</p>
+    <div class="cdh-adas-groups">
+      {adasGroups.map((g) => (
+        <div class="cdh-adas-group">
+          <h3 class="cdh-adas-grup">{g.grup}</h3>
+          <ul class="cdh-adas" role="list">
+            {g.items.map((a) => (
+              <li>
+                <span class="cdh-fitur-ico"><Icon name="check" size={16} /></span>
+                <div class="cdh-adas-text">
+                  <p class="cdh-adas-name"><b>{a.abbr}</b> — {a.nama}</p>
+                  <p class="cdh-adas-ket">{a.ket}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
     </div>
   </div>
 </section>
@@ -225,6 +249,13 @@ const t = tech[pt];
   .cdh-spec-row dt :global(.icon) { color: var(--color-accent-ink); }
   .cdh-spec-row dd { font-family: var(--font-display); font-size: var(--fs-h5); font-weight: var(--fw-semibold); color: var(--color-text); text-align: right; }
 
+  /* Spesifikasi berkelompok (override lengkap) */
+  .cdh-spec-groups { margin-top: var(--space-lg); display: grid; gap: var(--space-xl); }
+  .cdh-spec-cat { font-size: var(--fs-caption); text-transform: uppercase; letter-spacing: var(--ls-eyebrow); color: var(--color-accent-ink); padding-bottom: var(--space-2xs); border-bottom: 2px solid var(--color-accent); }
+  .cdh-spec-group .cdh-specs { margin-top: var(--space-2xs); }
+  .cdh-spec-group .cdh-spec-row dt { text-transform: none; letter-spacing: 0; font-size: var(--fs-body-sm); color: var(--color-text-muted); }
+  .cdh-spec-group .cdh-spec-row dd { font-family: var(--font-body); font-size: var(--fs-body-sm); }
+
   /* Varian table */
   .cdh-price-table { width: 100%; border-collapse: collapse; margin-top: var(--space-lg); }
   .cdh-price-table th, .cdh-price-table td {
@@ -244,6 +275,19 @@ const t = tech[pt];
   @media (min-width: 40rem) { .cdh-fitur { grid-template-columns: 1fr 1fr; gap: var(--space-sm) var(--space-xl); } }
   .cdh-fitur li { display: flex; align-items: flex-start; gap: var(--space-2xs); color: var(--color-text); font-size: var(--fs-body-sm); }
   .cdh-fitur-ico { display: grid; place-items: center; width: 1.5rem; height: 1.5rem; border-radius: 50%; background: var(--color-accent-soft); color: var(--color-accent-ink); flex: none; margin-top: 0.05em; }
+
+  /* ADAS — daftar dengan nama + keterangan singkat */
+  .cdh-adas { margin-top: var(--space-lg); display: grid; gap: var(--space-md); }
+  @media (min-width: 40rem) { .cdh-adas { grid-template-columns: 1fr 1fr; gap: var(--space-md) var(--space-xl); } }
+  .cdh-adas li { display: flex; align-items: flex-start; gap: var(--space-2xs); }
+  .cdh-adas-name { font-weight: var(--fw-semibold); color: var(--color-text); font-size: var(--fs-body-sm); }
+  .cdh-adas-ket { color: var(--color-text-muted); font-size: var(--fs-body-sm); margin-top: 2px; }
+  .cdh-adas-note { margin-top: var(--space-lg); font-size: var(--fs-caption); color: var(--color-text-subtle); }
+  /* ADAS berkelompok */
+  .cdh-adas-intro { margin-top: var(--space-2xs); color: var(--color-text-muted); }
+  .cdh-adas-groups { margin-top: var(--space-lg); display: grid; gap: var(--space-xl); }
+  .cdh-adas-grup { font-size: var(--fs-caption); text-transform: uppercase; letter-spacing: var(--ls-eyebrow); color: var(--color-accent-ink); padding-bottom: var(--space-2xs); border-bottom: 2px solid var(--color-accent); }
+  .cdh-adas-group .cdh-adas { margin-top: var(--space-md); }
 
   .cdh-calc { margin-top: var(--space-lg); }
 

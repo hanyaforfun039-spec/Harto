@@ -5,13 +5,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import HeroCarousel from '../components/HeroCarousel.astro';
 import LineupSpec from '../components/LineupSpec.astro';
-import PromoHybrid from '../components/PromoHybrid.astro';
 import TrustHybrid from '../components/TrustHybrid.astro';
 import DeliveryGallery from '../components/DeliveryGallery.astro';
 import TestDriveForm from '../components/TestDriveForm.astro';
 import StickyWhatsAppBar from '../components/StickyWhatsAppBar.astro';
 import Footer from '../components/Footer.astro';
 import Icon from '../components/Icon.astro';
+import Button from '../components/Button.astro';
 import { site } from '../lib/site';
 import { getLineup } from '../lib/cars';
 import { organizationSchema, webSiteSchema, faqPageSchema } from '../lib/schema';
@@ -63,8 +63,6 @@ const homeDescription =
 
   <LineupSpec cars={lineup} site={site} />
 
-  <PromoHybrid site={site} />
-
   <TrustHybrid site={site} />
 
   <DeliveryGallery site={site} />
@@ -82,6 +80,52 @@ const homeDescription =
         Lihat <a href="/#lineup">lineup lengkap dan harga OTR</a> tiap model — konsultasi, kredit,
         dan test drive lintas kota dibantu {site.salesName} via WhatsApp.
       </p>
+    </div>
+  </section>
+
+  <!-- Lokasi & Kontak: peta + alamat/telp/jam + tombol Maps -->
+  <section class="section lokasi" id="lokasi" aria-labelledby="lokasi-h">
+    <div class="container">
+      <div class="sec-head" data-reveal>
+        <p class="eyebrow">Kunjungi Kami</p>
+        <h2 id="lokasi-h">Lokasi &amp; Kontak</h2>
+      </div>
+      <div class="loc-grid" data-reveal>
+        <div class="loc-map">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.401692232946!2d110.39161139999999!3d-6.9618508!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e70f500523d9d1d%3A0x58749a72235a7df7!2sJAECOO%20SEMARANG!5e0!3m2!1sid!2sid!4v1782531766997!5m2!1sid!2sid"
+            title="Lokasi dealer JAECOO Semarang di Google Maps"
+            loading="lazy"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen
+          ></iframe>
+        </div>
+
+        <div class="loc-info">
+          <dl class="loc-list">
+            <div class="loc-item">
+              <span class="loc-ico"><Icon name="map-pin" size={20} /></span>
+              <div><dt>Alamat</dt><dd>{site.address.street}, {site.address.locality}, {site.address.region} {site.address.postalCode}</dd></div>
+            </div>
+            <div class="loc-item">
+              <span class="loc-ico"><Icon name="phone" size={20} /></span>
+              <div><dt>Telepon</dt><dd><a href={`tel:+${site.whatsapp}`} class="tnum">{site.phoneDisplay}</a></dd></div>
+            </div>
+            <div class="loc-item">
+              <span class="loc-ico"><Icon name="clock" size={20} /></span>
+              <div>
+                <dt>Jam Operasional</dt>
+                {site.openingHours.map((h) => (
+                  <dd class="tnum">{h.hari}, {h.buka}–{h.tutup}</dd>
+                ))}
+              </div>
+            </div>
+          </dl>
+          {site.mapUrl && (
+            <Button href={site.mapUrl} variant="primary" icon="arrow-right" target="_blank">Buka di Google Maps</Button>
+          )}
+        </div>
+      </div>
     </div>
   </section>
 
@@ -115,6 +159,37 @@ const homeDescription =
   .area-copy { margin-top: var(--space-lg); color: var(--color-text-muted); max-width: 68ch; }
   .area-copy a { color: var(--color-accent-ink); font-weight: var(--fw-semibold); text-decoration: underline; text-underline-offset: 0.18em; }
   .area-copy a:hover { color: var(--color-text); }
+
+  /* Lokasi & Kontak */
+  .loc-grid { margin-top: var(--space-xl); display: grid; gap: var(--space-lg); }
+  @media (min-width: 56rem) { .loc-grid { grid-template-columns: 1.25fr 1fr; gap: var(--space-2xl); align-items: stretch; } }
+  .loc-map {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    min-height: 18rem;
+  }
+  .loc-map iframe { display: block; width: 100%; height: 100%; min-height: 20rem; border: 0; }
+  .loc-info {
+    display: grid; align-content: start; gap: var(--space-lg);
+    padding: var(--space-xl);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+  }
+  .loc-list { display: grid; gap: var(--space-lg); }
+  .loc-item { display: flex; align-items: flex-start; gap: var(--space-md); }
+  .loc-ico {
+    flex: none; display: grid; place-items: center;
+    width: 2.75rem; height: 2.75rem; border-radius: var(--radius-md);
+    background: var(--color-accent-soft); color: var(--color-accent-ink);
+    border: 1px solid var(--color-border);
+  }
+  .loc-item dt { font-size: var(--fs-caption); text-transform: uppercase; letter-spacing: var(--ls-wide); color: var(--color-text-subtle); }
+  .loc-item dd { color: var(--color-text); font-size: var(--fs-body-sm); margin-top: 2px; }
+  .loc-item dd a:hover { color: var(--color-accent-ink); }
 
   .faq { display: grid; gap: var(--space-2xs); margin-top: var(--space-lg); }
   .faq-item { border-bottom: 1px solid var(--color-border); }

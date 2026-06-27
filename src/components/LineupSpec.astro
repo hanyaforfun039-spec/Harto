@@ -1,7 +1,6 @@
 ---
-/* LineupSpec — lineup gaya "lembar spesifikasi" (Web2 hybrid). Baris horizontal
-   berselang-seling: foto + tag powertrain + 3 spesifikasi kunci (data-forward).
-   Beda total dari grid kartu (Faiz). Reuse primitif: CarImage, Button, token. */
+/* LineupSpec — "Model JAECOO": rak geser HORIZONTAL berisi kartu model
+   (foto + tag powertrain + nama + harga + CTA). Snap, ringan, gaya katalog. */
 import CarImage from './CarImage.astro';
 import Button from './Button.astro';
 import type { Car, SiteConfig } from '../lib/types';
@@ -15,7 +14,7 @@ const { cars, site } = Astro.props;
 const tagOf = (c: Car) =>
   c.powertrain === 'phev' ? 'Hybrid · PHEV' : c.powertrain === 'ev' ? 'Listrik · EV' : 'Bensin';
 
-/* Override foto khusus section "Pilih JAECOO Anda" (banner di bucket Harto). */
+/* Override foto khusus section ini (banner di bucket Harto). */
 const fotoOverride: Record<string, string> = {
   'j5': 'https://fxjspvdkeybabxotniov.supabase.co/storage/v1/object/public/Harto/j5%20banner3.webp',
   'j7-shs': 'https://fxjspvdkeybabxotniov.supabase.co/storage/v1/object/public/Harto/J7%20banner3%20(1).webp',
@@ -25,38 +24,25 @@ const fotoOverride: Record<string, string> = {
   <div class="container">
     <div class="ls-head" data-reveal>
       <p class="eyebrow">Lineup</p>
-      <h2 id="ls-h">Pilih JAECOO Anda</h2>
-      <p class="lead">{site.positioning}</p>
+      <h2 id="ls-h">Model JAECOO</h2>
+      <p class="lead">Pilih model JAECOO Anda.</p>
     </div>
 
-    <ol class="ls-list" role="list">
+    <ol class="ls-rail" role="list">
       {cars.map((car, i) => {
         const detail = `/mobil/${car.slug}`;
         return (
-          <li class="ls-row" data-reveal>
+          <li class="ls-card" data-reveal>
             <a class="ls-media" href={detail} tabindex="-1" aria-hidden="true">
-              <CarImage src={fotoOverride[car.slug] ?? car.foto.hero.src} alt={car.foto.hero.alt} label={car.namaPendek} priority={i === 0} ratio="16 / 10" />
+              <CarImage src={fotoOverride[car.slug] ?? car.foto.hero.src} alt={car.foto.hero.alt} label={car.namaPendek} priority={i === 0} ratio="16 / 10" sizes="20rem" />
             </a>
             <div class="ls-body">
               <p class={`ls-tag ls-tag--${car.powertrain}`}>{tagOf(car)}</p>
               <h3 class="ls-name"><a href={detail}>{car.nama}</a></h3>
-              <p class="ls-kat">{car.kategori}</p>
-
-              <dl class="ls-specs">
-                {car.specs.slice(0, 3).map((s) => (
-                  <div class="ls-spec">
-                    <dt>{s.label}</dt>
-                    <dd class="tnum">{s.value}</dd>
-                  </div>
-                ))}
-              </dl>
-
-              <div class="ls-foot">
-                <p class="ls-price"><span class="ls-price-lbl">Mulai</span> <span class="price">{formatRupiahShort(hargaMulai(car))}</span></p>
-                <div class="ls-cta">
-                  <Button href={detail} variant="primary" size="sm" icon="arrow-right">Detail</Button>
-                  <Button href={linkTestDrive(site, car.nama)} variant="whatsapp" size="sm" iconLeft="whatsapp" target="_blank">Test Drive</Button>
-                </div>
+              <p class="ls-price"><span class="ls-price-lbl">Mulai</span> <span class="price">{formatRupiahShort(hargaMulai(car))}</span></p>
+              <div class="ls-cta">
+                <Button href={detail} variant="primary" size="sm" icon="arrow-right">Detail</Button>
+                <Button href={linkTestDrive(site, car.nama)} variant="whatsapp" size="sm" iconLeft="whatsapp" target="_blank">Test Drive</Button>
               </div>
             </div>
           </li>
@@ -68,27 +54,42 @@ const fotoOverride: Record<string, string> = {
 
 <style>
   .ls-head { display: grid; gap: var(--space-2xs); max-width: 56ch; }
-  .ls-head .lead { margin-top: var(--space-2xs); }
 
-  .ls-list { margin-top: var(--space-2xl); display: grid; }
-  .ls-row {
+  /* Rak geser horizontal (bleed ke tepi viewport, snap) */
+  .ls-rail {
+    margin-top: var(--space-2xl);
     display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(15.5rem, 20rem);
     gap: var(--space-lg);
-    padding-block: var(--space-2xl);
-    border-top: 1px solid var(--color-border);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-left: var(--gutter);
+    margin-inline: calc(-1 * var(--gutter));
+    padding-inline: var(--gutter);
+    padding-bottom: var(--space-sm);
+    scrollbar-width: none;
   }
-  .ls-row:first-child { border-top: 0; padding-top: 0; }
-  @media (min-width: 56rem) {
-    .ls-row { grid-template-columns: 1.05fr 1fr; gap: var(--space-3xl); align-items: center; }
-    /* selang-seling: foto pindah ke kanan pada baris genap */
-    .ls-row:nth-child(even) .ls-media { order: 2; }
+  .ls-rail::-webkit-scrollbar { display: none; }
+
+  .ls-card {
+    scroll-snap-align: start;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow var(--dur) var(--ease), transform var(--dur) var(--ease-out);
   }
+  .ls-card:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); }
 
-  .ls-media { display: block; overflow: hidden; border-radius: var(--radius-lg); }
-  .ls-media :global(.carimg) { transition: transform var(--dur-slow) var(--ease-out); }
-  .ls-row:hover .ls-media :global(.carimg) { transform: scale(1.02); }
+  .ls-media { display: block; overflow: hidden; }
+  .ls-media :global(.carimg) { border-radius: 0; transition: transform var(--dur-slow) var(--ease-out); }
+  .ls-card:hover .ls-media :global(.carimg) { transform: scale(1.04); }
 
-  .ls-body { display: grid; gap: var(--space-2xs); align-content: center; }
+  .ls-body { display: grid; gap: var(--space-2xs); align-content: start; padding: var(--space-lg); }
   .ls-tag {
     justify-self: start;
     font-size: var(--fs-caption);
@@ -105,40 +106,11 @@ const fotoOverride: Record<string, string> = {
     border-color: var(--color-accent);
     background: var(--color-accent-soft);
   }
-  .ls-name { font-size: var(--fs-h2); margin-top: var(--space-2xs); }
+  .ls-name { font-size: var(--fs-h4); margin-top: var(--space-3xs); }
   .ls-name a { color: inherit; }
   .ls-name a:hover { color: var(--color-accent-ink); }
-  .ls-kat { color: var(--color-text-muted); font-size: var(--fs-body-sm); }
-
-  /* spesifikasi: deret data dengan pemisah hairline (rasa lembar teknik) */
-  .ls-specs {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-md);
-    margin-top: var(--space-md);
-    padding-top: var(--space-md);
-    border-top: 1px solid var(--color-border);
-  }
-  .ls-spec { display: grid; gap: var(--space-3xs); padding-right: var(--space-md); }
-  .ls-spec + .ls-spec { border-left: 1px solid var(--color-border); padding-left: var(--space-md); }
-  .ls-spec dt {
-    font-size: var(--fs-caption);
-    text-transform: uppercase;
-    letter-spacing: var(--ls-wide);
-    color: var(--color-text-subtle);
-  }
-  .ls-spec dd { font-family: var(--font-display); font-size: var(--fs-h5); font-weight: var(--fw-semibold); color: var(--color-text); }
-
-  .ls-foot {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-md);
-    align-items: center;
-    justify-content: space-between;
-    margin-top: var(--space-lg);
-  }
-  .ls-price { display: flex; align-items: baseline; gap: var(--space-2xs); }
+  .ls-price { display: flex; align-items: baseline; gap: var(--space-2xs); margin-top: var(--space-3xs); }
   .ls-price-lbl { font-size: var(--fs-caption); text-transform: uppercase; letter-spacing: var(--ls-wide); color: var(--color-text-subtle); }
-  .ls-price .price { font-size: var(--fs-h3); }
-  .ls-cta { display: flex; gap: var(--space-2xs); }
+  .ls-price .price { font-size: var(--fs-h5); font-weight: var(--fw-bold); }
+  .ls-cta { display: flex; flex-wrap: wrap; gap: var(--space-2xs); margin-top: var(--space-sm); }
 </style>

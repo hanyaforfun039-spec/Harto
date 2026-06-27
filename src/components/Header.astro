@@ -107,7 +107,20 @@ function isActive(href: string): boolean {
     padding-left: var(--space-xs);
     border-left: 1px solid var(--color-border-strong);
   }
-  @media (max-width: 30rem) { .brand-sub { display: none; } }
+  /* MOBILE/TABLET (<64rem): logo JAECOO saja, besar & di TENGAH; hamburger kanan.
+     Logo di-absolute-tengahkan; hamburger tetap di alur (didorong kanan) supaya
+     panel dropdown-nya tidak rusak. */
+  @media (max-width: 63.99rem) {
+    .site-header-inner { position: relative; }
+    .brand {
+      position: absolute; left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+      margin: 0;
+    }
+    .brand-sub { display: none; }
+    .brand-logo { height: 1.75rem; }
+    .mnav { margin-left: auto; }
+  }
 
   /* Nav = tab underline teal (instrumen), bukan link polos / uppercase ledger */
   .nav-desktop { display: none; }

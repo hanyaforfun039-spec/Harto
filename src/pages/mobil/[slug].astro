@@ -8,6 +8,8 @@ import Button from '../../components/Button.astro';
 import StickyWhatsAppBar from '../../components/StickyWhatsAppBar.astro';
 import Footer from '../../components/Footer.astro';
 import CarDetailHybrid from '../../components/CarDetailHybrid.astro';
+import CarImage from '../../components/CarImage.astro';
+import { heroFotoOverride, heroPesan } from '../../lib/harto-detail';
 import { getAllCars, hargaMulai } from '../../lib/cars';
 import { site } from '../../lib/site';
 import { formatRupiahShort } from '../../lib/format';
@@ -40,6 +42,7 @@ const ptTitle: Record<Car['powertrain'], string> = {
 };
 
 const harga = hargaMulai(car);
+const pesan = heroPesan[car.slug] ?? car.tagline;
 const waTd = linkTestDrive(site, car.nama);
 const waPenawaran = linkPenawaran(site, car.nama);
 const kota = site.address.locality;
@@ -70,32 +73,29 @@ const seoTitle = `JAECOO ${car.namaPendek} ${kota} — ${ptTitle[car.powertrain]
 <BaseLayout title={car.nama} seoTitle={seoTitle} description={description} jsonLd={jsonLd}>
   <Header slot="header" site={site} />
 
-  <!-- Header detail -->
-  <section class="section detail-head">
-    <div class="container">
+  <!-- Hero detail: foto mobil full-bleed sebagai background -->
+  <section class="hero-detail section--dark" data-surface="dark">
+    <div class="hero-detail-bg" aria-hidden="true">
+      <CarImage src={heroFotoOverride[car.slug] ?? car.foto.hero.src} alt={car.foto.hero.alt} label={car.namaPendek} priority ratio="16 / 9" sizes="100vw" class="hero-detail-img" />
+      <span class="hero-detail-scrim"></span>
+    </div>
+    <div class="container hero-detail-inner">
       <nav class="crumbs" aria-label="Remah">
         <a href="/">Beranda</a>
-        <span aria-hidden="true">/</span>
+        <span class="crumbs-sep" aria-hidden="true">/</span>
         <a href="/#lineup">Model</a>
-        <span aria-hidden="true">/</span>
+        <span class="crumbs-sep" aria-hidden="true">/</span>
         <span aria-current="page">{car.namaPendek}</span>
       </nav>
 
-      <div class="dh" data-reveal>
-        <p class="eyebrow">{car.kategori} · {powertrainLabel[car.powertrain]}</p>
-        <h1>{car.nama} {kota} — {ptShort[car.powertrain]}</h1>
-        <p class="lead">{car.tagline}</p>
-
-        <dl class="dh-figures">
-          <div class="dh-fig dh-fig--price">
-            <dt>Harga OTR {site.address.locality} mulai</dt>
-            <dd class="price">{formatRupiahShort(harga)}</dd>
-          </div>
-        </dl>
-
-        <div class="dh-cta">
+      <div class="hd-copy" data-reveal>
+        <span class="hd-rule" aria-hidden="true"></span>
+        <h1>{car.nama}</h1>
+        <p class="hd-lead">{pesan}</p>
+        <p class="hd-price">Harga OTR mulai <span class="tnum">{formatRupiahShort(harga)}</span></p>
+        <div class="hd-cta">
           <Button href={waTd} variant="whatsapp" size="lg" iconLeft="whatsapp" target="_blank">Test Drive {car.namaPendek}</Button>
-          <Button href={waPenawaran} variant="accent" size="lg" iconLeft="whatsapp" target="_blank">Minta Penawaran</Button>
+          <Button href={waPenawaran} variant="outline" size="lg" iconLeft="whatsapp" target="_blank">Minta Penawaran</Button>
         </div>
       </div>
     </div>
@@ -108,59 +108,38 @@ const seoTitle = `JAECOO ${car.namaPendek} ${kota} — ${ptTitle[car.powertrain]
 </BaseLayout>
 
 <style>
-  .detail-head { padding-bottom: var(--space-2xl); }
+  /* Tinggi pas SATU LAYAR penuh DI BAWAH navbar (sticky), jadi "full gambar". */
+  .hero-detail { position: relative; display: flex; overflow: hidden; min-height: calc(100svh - var(--header-h)); }
+  @media (min-width: 64rem) { .hero-detail { min-height: calc(100svh - var(--header-h-lg)); } }
+  .hero-detail-bg { position: absolute; inset: 0; }
+  .hero-detail-bg :global(.hero-detail-img) { width: 100%; height: 100%; object-fit: cover; border-radius: 0; }
+  .hero-detail-scrim {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(180deg, rgba(6, 9, 13, 0.55) 0%, rgba(6, 9, 13, 0.28) 38%, rgba(6, 9, 13, 0.78) 100%),
+      radial-gradient(120% 90% at 30% 70%, rgba(6, 9, 13, 0) 45%, rgba(6, 9, 13, 0.35) 100%);
+  }
+
+  .hero-detail-inner {
+    position: relative; z-index: 1; width: 100%;
+    display: flex; flex-direction: column;
+    padding-block: var(--space-lg) var(--space-3xl);
+  }
 
   .crumbs {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2xs);
-    align-items: center;
-    font-size: var(--fs-body-sm);
-    color: var(--color-text-muted);
+    display: flex; flex-wrap: wrap; gap: var(--space-2xs); align-items: center;
+    font-size: var(--fs-body-sm); color: rgba(244, 246, 244, 0.78);
   }
-  .crumbs a:hover { color: var(--color-accent-ink); text-decoration: underline; }
-  .crumbs span[aria-current] { color: var(--color-text); font-weight: var(--fw-medium); }
-  .crumbs span[aria-hidden] { color: var(--color-text-subtle); }
+  .crumbs a:hover { color: var(--paper); text-decoration: underline; text-underline-offset: 0.18em; }
+  .crumbs span[aria-current] { color: var(--paper); font-weight: var(--fw-medium); }
+  .crumbs-sep { color: rgba(244, 246, 244, 0.45); }
 
-  /* Header detail editorial + bar data (bukan kotak harga ala Faiz) */
-  .dh { display: grid; gap: var(--space-sm); margin-top: var(--space-lg); }
-  .dh h1 { max-width: 20ch; }
-  .dh .lead { max-width: 54ch; }
-
-  .dh-figures {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-lg);
-    margin-top: var(--space-md);
-    padding-top: var(--space-lg);
-    border-top: 1px solid var(--color-border);
-  }
-  .dh-fig { display: grid; gap: var(--space-3xs); }
-  @media (min-width: 44rem) {
-    .dh-fig + .dh-fig { border-left: 1px solid var(--color-border); padding-left: var(--space-lg); }
-  }
-  .dh-fig dt {
-    font-size: var(--fs-caption);
-    text-transform: uppercase;
-    letter-spacing: var(--ls-wide);
-    color: var(--color-text-subtle);
-  }
-  .dh-fig dd { font-family: var(--font-display); font-size: var(--fs-h4); font-weight: var(--fw-semibold); color: var(--color-text); }
-  .dh-fig--price dd { font-size: var(--fs-price); line-height: 1; color: var(--color-accent-ink); }
-  /* readout efisiensi = angka monospace (eco-tech "terukur") */
-  .dh-fig--eff dd { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
-  .dh-fig--save dd { color: var(--color-accent-ink); }
-  .dh-eff-note { margin-top: var(--space-md); font-size: var(--fs-caption); color: var(--color-text-subtle); max-width: 60ch; }
-  .dh-eff-note a { color: var(--color-accent-ink); text-decoration: underline; text-underline-offset: 0.18em; }
-
-  .dh-gauge { position: relative; display: block; height: 0.6rem; max-width: 28rem; margin-top: var(--space-md); }
-  .dh-gauge::before {
-    content: ''; position: absolute; inset: 0 0 auto 0; height: 0.45rem;
-    background-image: repeating-linear-gradient(90deg, var(--color-border-strong) 0 1px, transparent 1px 10px);
-  }
-  .dh-gauge::after {
-    content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 2px;
-    background: linear-gradient(90deg, var(--color-accent) 0 55%, var(--color-border) 55% 100%);
-  }
-  .dh-cta { display: flex; flex-wrap: wrap; gap: var(--space-sm); margin-top: var(--space-xl); }
+  .hd-copy { margin-top: auto; display: grid; gap: var(--space-sm); max-width: 42rem; }
+  .hd-rule { width: 2.5rem; height: 2px; background: var(--color-accent); }
+  .hd-kat { font-size: var(--fs-caption); letter-spacing: var(--ls-eyebrow); text-transform: uppercase; color: rgba(244, 246, 244, 0.8); }
+  .hd-copy h1 { color: var(--paper); max-width: 18ch; font-size: clamp(2rem, 1.4rem + 3vw, 3.5rem); line-height: 1.08; }
+  .hd-lead { color: rgba(244, 246, 244, 0.88); max-width: 50ch; font-size: var(--fs-lead); }
+  .hd-price { color: rgba(244, 246, 244, 0.9); font-size: var(--fs-body); margin-top: var(--space-2xs); }
+  .hd-price span { font-family: var(--font-display); font-size: var(--fs-h3); font-weight: var(--fw-bold); color: var(--paper); margin-left: var(--space-2xs); }
+  .hd-cta { display: flex; flex-wrap: wrap; gap: var(--space-sm); margin-top: var(--space-md); }
 </style>

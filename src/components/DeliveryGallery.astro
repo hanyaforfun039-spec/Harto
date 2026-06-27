@@ -17,11 +17,10 @@ const photos = Array.from({ length: 8 }, (_, i) => ({
   <div class="container">
     <div class="dg-head" data-reveal>
       <p class="eyebrow">Bukti Pengiriman</p>
-      <h2 id="dg-h">Sudah banyak yang membawa pulang JAECOO-nya</h2>
-      <p class="lead">Momen pelanggan serah terima unit — didampingi langsung {site.salesName} dari konsultasi sampai kunci di tangan.</p>
+      <h2 id="dg-h">HandOver Dealer JAECOO {site.address.locality}</h2>
     </div>
 
-    <ul class="dg-grid" role="list">
+    <ul class="dg-rail" role="list">
       {photos.map((p, i) => (
         <li class="dg-item" data-reveal data-reveal-delay={String((i % 4) + 1)}>
           <img src={p.src} alt={p.alt} width="3024" height="4032" loading="lazy" decoding="async" />
@@ -34,16 +33,25 @@ const photos = Array.from({ length: 8 }, (_, i) => ({
 <style>
   .dg-head { display: grid; gap: var(--space-2xs); max-width: 56ch; }
 
-  .dg-grid {
+  /* Rak geser horizontal (snap, bleed ke tepi viewport) */
+  .dg-rail {
     margin-top: var(--space-2xl);
     display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(12rem, 15rem);
     gap: var(--space-md);
-    grid-template-columns: repeat(2, 1fr);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-left: var(--gutter);
+    margin-inline: calc(-1 * var(--gutter));
+    padding-inline: var(--gutter);
+    padding-bottom: var(--space-sm);
+    scrollbar-width: none;
   }
-  @media (min-width: 40rem) { .dg-grid { grid-template-columns: repeat(3, 1fr); } }
-  @media (min-width: 64rem) { .dg-grid { grid-template-columns: repeat(4, 1fr); gap: var(--space-lg); } }
+  .dg-rail::-webkit-scrollbar { display: none; }
 
   .dg-item {
+    scroll-snap-align: start;
     overflow: hidden;
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);

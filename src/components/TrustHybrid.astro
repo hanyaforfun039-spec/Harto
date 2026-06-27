@@ -1,57 +1,79 @@
 ---
-/* TrustHybrid — Web2 "Harto" FORMAT KE-3 (beda dari Faiz grid-kartu & Putri
-   pull-quote serif): "trust metrics" instrumen (angka kepercayaan) sebagai
-   elemen utama + kutipan RINGKAS terukur (baris, bukan blockquote display) +
-   satu baris konsultan. Angka [bracket] = placeholder diisi data resmi. */
+/* TrustHybrid — testimoni (kartu rak geser horizontal) + kartu PROFIL KONSULTAN
+   di tengah (foto, nama, jabatan, jam kerja, email, tombol TikTok & IG). */
 import Icon from './Icon.astro';
 import type { SiteConfig } from '../lib/types';
+import { linkPenawaran } from '../lib/whatsapp';
 
 interface Props { site: SiteConfig }
 const { site } = Astro.props;
 
-/* Foto profil konsultan (Supabase Storage bucket "Harto"). */
 const consultantPhoto = 'https://fxjspvdkeybabxotniov.supabase.co/storage/v1/object/public/Harto/Foto%20Harto.webp';
-
-const metrics = [
-  { value: '[4,9]', unit: '/ 5', label: 'Kepuasan layanan' },
-  { value: '[120]', unit: '+', label: 'Pelanggan terbantu' },
-  { value: String(site.serviceAreas.length), unit: 'kota', label: 'Area layanan Jawa Tengah' },
-];
+const wa = linkPenawaran(site);
 ---
 <section class="section section--lg trusthybrid" id="trust" aria-labelledby="th-h">
   <div class="container">
     <div class="th-head" data-reveal>
-      <p class="eyebrow">Bukti &amp; Pengalaman</p>
+      <p class="eyebrow">Apa Kata Pembeli</p>
       <h2 id="th-h">Dipercaya pembeli di {site.address.region}</h2>
     </div>
 
-    <!-- Trust metrics: tile instrumen (angka mono) -->
-    <dl class="th-metrics" data-reveal>
-      {metrics.map((m) => (
-        <div class="th-metric">
-          <dt class="th-metric-label">{m.label}</dt>
-          <dd class="th-metric-val"><span class="th-metric-num tnum">{m.value}</span><span class="th-metric-unit">{m.unit}</span></dd>
-        </div>
-      ))}
-    </dl>
-
-    <!-- Kutipan ringkas (baris terukur, bukan pull-quote) -->
-    <ul class="th-quotes" role="list">
+    <ol class="th-rail" role="list">
       {site.testimoni.map((t, i) => (
-        <li class="th-quote" data-reveal data-reveal-delay={String((i % 2) + 1)}>
-          <p class="th-quote-text">{t.teks}</p>
-          <p class="th-quote-by"><span class="th-name">{t.nama}</span><span class="th-meta tnum">{t.kota} · JAECOO {t.mobil}</span></p>
+        <li class="th-card" data-reveal data-reveal-delay={String((i % 3) + 1)}>
+          <blockquote class="th-quote">{t.teks}</blockquote>
+          <p class="th-by">
+            <span class="th-name">{t.nama}</span>
+            <span class="th-meta tnum">{t.kota} · JAECOO {t.mobil}</span>
+          </p>
         </li>
       ))}
-    </ul>
+    </ol>
 
-    <aside class="th-consultant" data-reveal>
-      <img class="th-c-photo" src={consultantPhoto} alt={`Foto ${site.salesName}, ${site.salesTitle}`} width="1024" height="1536" loading="lazy" decoding="async" />
-      <div class="th-c-id">
-        <span class="th-c-eyebrow">Konsultan Anda</span>
-        <span class="th-c-name">{site.salesName} — {site.salesTitle}</span>
+    <!-- Kartu profil konsultan (center) -->
+    <aside class="th-profile" data-reveal>
+      <img class="th-p-photo" src={consultantPhoto} alt={`Foto ${site.salesName}, ${site.salesTitle}`} width="1024" height="1536" loading="lazy" decoding="async" />
+      <p class="th-p-name">{site.salesName}.</p>
+      <p class="th-p-role">{site.salesTitle} {site.address.locality}</p>
+      <p class="th-p-dealer">{site.brand}</p>
+
+      <div class="th-p-info">
+        <div class="th-p-item">
+          <span class="th-p-ico"><Icon name="clock" size={20} /></span>
+          <div class="th-p-text">
+            <p class="th-p-label">Jam Kerja</p>
+            {site.openingHours.map((h) => (
+              <p class="th-p-val tnum">{h.hari}, {h.buka}–{h.tutup}</p>
+            ))}
+          </div>
+        </div>
+
+        {site.email && (
+          <div class="th-p-item">
+            <span class="th-p-ico"><Icon name="mail" size={20} /></span>
+            <div class="th-p-text">
+              <p class="th-p-label">Alamat Email</p>
+              <a class="th-p-val th-p-link" href={`mailto:${site.email}`}>{site.email}</a>
+            </div>
+          </div>
+        )}
       </div>
-      <span class="th-c-contact"><Icon name="phone" size={15} label="Telepon" /> <span class="tnum">{site.phoneDisplay}</span></span>
+
+      <div class="th-c-social">
+        {site.social?.tiktok && (
+          <a class="th-c-btn th-c-btn--tiktok" href={site.social.tiktok} target="_blank" rel="noopener noreferrer" aria-label={`TikTok ${site.salesName}`}>
+            <Icon name="tiktok" size={20} /> <span>TikTok</span>
+          </a>
+        )}
+        {site.social?.instagram && (
+          <a class="th-c-btn th-c-btn--ig" href={site.social.instagram} target="_blank" rel="noopener noreferrer" aria-label={`Instagram ${site.salesName}`}>
+            <Icon name="instagram" size={20} /> <span>Instagram</span>
+          </a>
+        )}
+      </div>
+      <a class="th-c-wa" href={wa} target="_blank" rel="noopener noreferrer">
+        <Icon name="whatsapp" size={22} /> <span>Chat WhatsApp</span>
+      </a>
     </aside>
   </div>
 </section>
@@ -59,59 +81,109 @@ const metrics = [
 <style>
   .th-head { display: grid; gap: var(--space-2xs); max-width: 56ch; }
 
-  /* Trust metrics — tile instrumen terang, angka monospace */
-  .th-metrics { margin-top: var(--space-2xl); display: grid; gap: var(--space-md); }
-  @media (min-width: 44rem) { .th-metrics { grid-template-columns: repeat(3, 1fr); gap: var(--space-lg); } }
-  .th-metric {
-    display: grid; gap: var(--space-2xs);
+  /* Testimoni — rak geser horizontal (snap, bleed ke tepi) */
+  .th-rail {
+    margin-top: var(--space-2xl);
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(16rem, 23rem);
+    gap: var(--space-lg);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-left: var(--gutter);
+    margin-inline: calc(-1 * var(--gutter));
+    padding-inline: var(--gutter);
+    padding-bottom: var(--space-sm);
+    scrollbar-width: none;
+  }
+  .th-rail::-webkit-scrollbar { display: none; }
+
+  .th-card {
+    scroll-snap-align: start;
+    display: grid;
+    gap: var(--space-md);
     padding: var(--space-lg);
     background: var(--color-surface);
     border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
     border-top: 2px solid var(--color-accent);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
   }
-  .th-metric-val { display: flex; align-items: baseline; gap: var(--space-2xs); }
-  .th-metric-num {
-    font-family: var(--font-mono);
-    font-size: var(--fs-display);
-    font-weight: var(--fw-bold);
-    line-height: 1;
-    letter-spacing: var(--ls-tight);
-    color: var(--color-accent-ink);
-  }
-  .th-metric-unit { font-family: var(--font-mono); font-size: var(--fs-h5); color: var(--color-text-subtle); }
-  .th-metric-label { font-size: var(--fs-body-sm); color: var(--color-text-muted); }
-
-  /* Kutipan ringkas (baris) */
-  .th-quotes { margin-top: var(--space-2xl); display: grid; gap: var(--space-lg); }
-  @media (min-width: 52rem) { .th-quotes { grid-template-columns: 1fr 1fr; gap: var(--space-2xl); } }
-  .th-quote {
-    display: grid; gap: var(--space-sm);
-    padding-left: var(--space-md);
-    border-left: 3px solid var(--color-accent);
-  }
-  .th-quote-text { font-size: var(--fs-lead); line-height: var(--lh-snug); color: var(--color-text); }
-  .th-quote-by { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-2xs) var(--space-sm); }
+  .th-quote { font-size: var(--fs-lead); line-height: var(--lh-snug); color: var(--color-text); }
+  .th-by { display: grid; gap: 2px; }
   .th-name { font-weight: var(--fw-semibold); color: var(--color-text); }
   .th-meta { font-size: var(--fs-caption); letter-spacing: var(--ls-wide); text-transform: uppercase; color: var(--color-text-subtle); }
 
-  /* Konsultan — satu baris ramping */
-  .th-consultant {
-    margin-top: var(--space-2xl);
-    padding-top: var(--space-lg);
-    border-top: 1px solid var(--color-border);
-    display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-sm) var(--space-lg);
-  }
-  .th-c-photo {
-    width: 3.25rem; height: 4.25rem; flex: none;
-    border-radius: var(--radius-md);
-    object-fit: cover; object-position: center 20%;
+  /* Kartu profil konsultan — center (gaya referensi) */
+  .th-profile {
+    margin: var(--space-3xl) auto 0;
+    max-width: 30rem;
+    display: grid;
+    justify-items: center;
+    text-align: center;
+    gap: var(--space-2xs);
+    padding: var(--space-2xl) var(--space-xl);
+    background: var(--color-surface);
     border: 1px solid var(--color-border);
-    box-shadow: var(--shadow-sm);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
   }
-  .th-c-id { display: grid; gap: 2px; }
-  .th-c-eyebrow { font-size: var(--fs-caption); text-transform: uppercase; letter-spacing: var(--ls-eyebrow); color: var(--color-accent-ink); }
-  .th-c-name { font-family: var(--font-display); font-weight: var(--fw-semibold); font-size: var(--fs-h6); color: var(--color-text); }
-  .th-c-contact { display: inline-flex; align-items: center; gap: var(--space-2xs); font-size: var(--fs-body-sm); color: var(--color-text-muted); margin-left: auto; }
-  .th-c-contact :global(.icon) { color: var(--color-accent-ink); }
+  .th-p-photo {
+    width: clamp(11rem, 60vw, 15rem);
+    aspect-ratio: 4 / 5; object-fit: cover; object-position: center 15%;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+    margin-bottom: var(--space-md);
+  }
+  .th-p-name { font-family: var(--font-display); font-size: var(--fs-h2); font-weight: var(--fw-bold); color: var(--color-text); line-height: 1; }
+  .th-p-role { font-size: var(--fs-body); color: var(--color-accent-ink); font-weight: var(--fw-semibold); }
+  .th-p-dealer { font-family: var(--font-display); font-weight: var(--fw-bold); color: var(--color-text); margin-top: var(--space-3xs); }
+
+  .th-p-info { width: 100%; display: grid; gap: var(--space-sm); margin-top: var(--space-lg); }
+  .th-p-item {
+    display: flex; align-items: center; gap: var(--space-md); text-align: left;
+    padding: var(--space-md);
+    background: var(--color-surface-2);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+  }
+  .th-p-ico {
+    flex: none; display: grid; place-items: center;
+    width: 2.75rem; height: 2.75rem; border-radius: var(--radius-md);
+    background: var(--color-accent-soft); color: var(--color-accent-ink);
+    border: 1px solid var(--color-border);
+  }
+  .th-p-text { display: grid; gap: 2px; min-width: 0; }
+  .th-p-label { font-size: var(--fs-caption); font-weight: var(--fw-semibold); color: var(--color-accent-ink); }
+  .th-p-val { font-weight: var(--fw-semibold); color: var(--color-text); font-size: var(--fs-body-sm); }
+  .th-p-link { word-break: break-all; }
+  .th-p-link:hover { color: var(--color-accent-ink); text-decoration: underline; }
+
+  .th-c-social { display: flex; flex-wrap: wrap; gap: var(--space-sm); margin-top: var(--space-lg); width: 100%; }
+  .th-c-btn {
+    flex: 1 1 0; min-width: 8rem;
+    display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2xs);
+    min-height: 3.25rem; padding-inline: var(--space-lg);
+    border: 0; border-radius: var(--radius-md);
+    color: #fff; font-weight: var(--fw-bold); font-size: var(--fs-body);
+    transition: transform var(--dur) var(--ease-out), box-shadow var(--dur) var(--ease), filter var(--dur) var(--ease);
+  }
+  .th-c-btn :global(.icon) { color: #fff; }
+  .th-c-btn:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); filter: brightness(1.05); }
+  /* Warna brand masing-masing */
+  .th-c-btn--tiktok { background: #010101; }
+  .th-c-btn--ig {
+    background: linear-gradient(45deg, #f9ce34 0%, #ee2a7b 45%, #6228d7 100%);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+  }
+  .th-c-wa {
+    display: flex; align-items: center; justify-content: center; gap: var(--space-2xs);
+    width: 100%; min-height: 3.5rem; margin-top: var(--space-sm);
+    border-radius: var(--radius-md);
+    background: var(--wa-action); color: #fff;
+    font-weight: var(--fw-bold); font-size: var(--fs-lead);
+    transition: transform var(--dur) var(--ease-out), box-shadow var(--dur) var(--ease), background var(--dur) var(--ease);
+  }
+  .th-c-wa :global(.icon) { color: #fff; }
+  .th-c-wa:hover { background: var(--wa-action-strong); transform: translateY(-1px); box-shadow: var(--shadow-md); }
 </style>
