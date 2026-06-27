@@ -49,10 +49,8 @@ body {
      CSS-only, ringan; fixed agar terasa seperti backdrop stabil. */
   background-color: var(--color-bg);
   background-image:
-    radial-gradient(120% 80% at 50% -12%, rgba(255, 253, 247, 0.6), transparent 55%),
-    linear-gradient(180deg, transparent 62%, rgba(43, 35, 24, 0.05)),
-    repeating-linear-gradient(0deg, rgba(43, 35, 24, 0.028) 0 1px, transparent 1px 80px),
-    repeating-linear-gradient(90deg, rgba(43, 35, 24, 0.028) 0 1px, transparent 1px 80px);
+    radial-gradient(120% 80% at 50% -12%, rgba(255, 255, 255, 0.5), transparent 55%),
+    linear-gradient(180deg, transparent 62%, rgba(12, 40, 64, 0.1));
   background-attachment: fixed;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -150,7 +148,7 @@ a:not([class]):hover { color: var(--color-brand); }
   font-weight: var(--fw-semibold);
   letter-spacing: var(--ls-eyebrow);
   text-transform: uppercase;
-  color: var(--color-accent-ink);
+  color: #0B2A3D; /* navy gelap → kontras jelas di atas kanvas biru */
 }
 .section--dark .eyebrow { color: var(--color-accent); }
 

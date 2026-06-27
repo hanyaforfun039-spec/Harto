@@ -20,7 +20,7 @@
 
   /* SURFACE — kanvas GREIGE HANGAT (senada JAECOO "Classic", BUKAN putih polos)
      + kartu off-white hangat yang "mengambang". Tekstur halus di base.css. */
-  --color-bg:            #EEEAE3; /* greige/champagne hangat */
+  --color-bg:            #74AED4; /* sky blue (permintaan klien) */
   --color-surface:       #FBFAF6; /* kartu/panel off-white hangat → clean */
   --color-surface-2:     #F3EFE8; /* band alternatif lembut */
   --color-border:        #DED8CE;

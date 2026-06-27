@@ -17,7 +17,7 @@ const photos = Array.from({ length: 8 }, (_, i) => ({
   <div class="container">
     <div class="dg-head" data-reveal>
       <p class="eyebrow">Bukti Pengiriman</p>
-      <h2 id="dg-h">HandOver Dealer JAECOO {site.address.locality}</h2>
+      <h2 id="dg-h">HandOver<br />Dealer Jaecoo {site.address.locality}</h2>
     </div>
 
     <ul class="dg-rail" role="list">
@@ -31,7 +31,7 @@ const photos = Array.from({ length: 8 }, (_, i) => ({
 </section>
 
 <style>
-  .dg-head { display: grid; gap: var(--space-2xs); max-width: 56ch; }
+  .dg-head { display: grid; gap: var(--space-2xs); max-width: 56ch; margin-inline: auto; justify-items: center; text-align: center; }
 
   /* Rak geser horizontal (snap, bleed ke tepi viewport) */
   .dg-rail {
