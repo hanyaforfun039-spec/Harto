@@ -10,6 +10,7 @@
 import '../styles/global.css';
 import SEOHead from '../components/SEOHead.astro';
 import AnnouncementBar from '../components/AnnouncementBar.astro';
+import PromoPopup from '../components/PromoPopup.astro';
 import { site } from '../lib/site';
 import { autoDealerSchema } from '../lib/schema';
 
@@ -51,8 +52,7 @@ const THEME_COLOR = '#0C1117';
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content={THEME_COLOR} />
     <meta name="generator" content={Astro.generator} />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" href="https://fxjspvdkeybabxotniov.supabase.co/storage/v1/object/public/Harto/J7%20Logo.png" type="image/png" />
 
     <!-- Font self-hosted: preload yang utama agar LCP cepat -->
     <link rel="preload" href="/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin />
@@ -87,6 +87,8 @@ const THEME_COLOR = '#0C1117';
     </main>
 
     <slot name="footer" />
+
+    <PromoPopup />
 
     <script>
       import '../scripts/reveal.ts';

@@ -136,4 +136,14 @@ export interface SiteConfig {
   };
 
   social?: { instagram?: string; tiktok?: string; facebook?: string };
+
+  /* Storage aset MILIK SALES INI (bucket Supabase tersendiri di project bersama):
+     foto serah terima (SPK) + foto konsultan. Foto katalog mobil TIDAK di sini
+     (itu dibagi). Bila kosong → komponen pakai default lama (bucket "Harto"). */
+  storage?: {
+    bucket: string;            // nama bucket, mis. "Harto" | "Andre"
+    consultantPhoto?: string;  // nama file foto konsultan, mis. "Foto Harto.webp"
+    deliveryCount?: number;    // jumlah foto SPK berurutan: SPK1..SPK{n}
+    deliveryFiles?: string[];  // ATAU daftar nama file eksplisit (mengalahkan deliveryCount)
+  };
 }

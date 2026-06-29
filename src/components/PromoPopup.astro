@@ -1,0 +1,97 @@
+---
+/* PromoPopup — banner promo (gambar) tampil sekali saat load, bisa ditutup (X /
+   backdrop / Esc) lalu tak muncul lagi (localStorage). Ada tombol WhatsApp
+   (nomor sesuai site aktif). Tanpa JS: tidak tampil (progressive enhancement).
+   Gambar dari Supabase Storage bucket "Fitri" (dipakai bersama 4 situs). */
+import Icon from './Icon.astro';
+import { site } from '../lib/site';
+import { linkPenawaran } from '../lib/whatsapp';
+
+const BANNER = 'https://fxjspvdkeybabxotniov.supabase.co/storage/v1/object/public/Fitri/banner%20baru.jpg';
+const wa = linkPenawaran(site);
+---
+<div id="promo-popup" class="ppop" hidden>
+  <div class="ppop-backdrop" data-ppop-close aria-hidden="true"></div>
+  <div class="ppop-card" role="dialog" aria-modal="true" aria-label={`Promo ${site.brand}`}>
+    <button type="button" class="ppop-close" data-ppop-close aria-label="Tutup promo">
+      <Icon name="close" size={20} />
+    </button>
+    <img class="ppop-img" src={BANNER} alt={`Promo ${site.brand}`} loading="eager" decoding="async" />
+    <a class="ppop-wa" href={wa} target="_blank" rel="noopener noreferrer">
+      <Icon name="whatsapp" size={22} /> <span>Chat WhatsApp</span>
+    </a>
+  </div>
+</div>
+
+<script>
+  const KEY = 'promo-popup-v1-closed';
+  const el = document.getElementById('promo-popup');
+  if (el) {
+    let dismissed = false;
+    try { dismissed = !!localStorage.getItem(KEY); } catch (_) {}
+    if (!dismissed) {
+      el.hidden = false;
+      requestAnimationFrame(() => el.classList.add('is-open'));
+      const close = () => {
+        el.classList.remove('is-open');
+        try { localStorage.setItem(KEY, '1'); } catch (_) {}
+        window.setTimeout(() => { el.hidden = true; }, 220);
+      };
+      el.querySelectorAll('[data-ppop-close]').forEach((b) => b.addEventListener('click', close));
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !el.hidden) close(); });
+    }
+  }
+</script>
+
+<style>
+  .ppop {
+    position: fixed; inset: 0; z-index: 1000;
+    display: grid; place-items: center;
+    padding: var(--space-lg);
+  }
+  .ppop[hidden] { display: none; }
+  .ppop-backdrop {
+    position: absolute; inset: 0;
+    background: rgba(8, 12, 16, 0.62);
+    opacity: 0; transition: opacity var(--dur) var(--ease);
+  }
+  .ppop.is-open .ppop-backdrop { opacity: 1; }
+
+  .ppop-card {
+    position: relative; z-index: 1;
+    width: min(28rem, 100%);
+    background: var(--color-surface);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-xl);
+    overflow: hidden;
+    transform: translateY(12px) scale(0.98); opacity: 0;
+    transition: transform var(--dur) var(--ease-out), opacity var(--dur) var(--ease);
+  }
+  .ppop.is-open .ppop-card { transform: none; opacity: 1; }
+
+  .ppop-img { display: block; width: 100%; height: auto; }
+
+  .ppop-close {
+    position: absolute; top: var(--space-xs); right: var(--space-xs); z-index: 2;
+    display: grid; place-items: center;
+    width: 2.25rem; height: 2.25rem; border-radius: 50%;
+    background: rgba(8, 12, 16, 0.55); color: #fff;
+    cursor: pointer; backdrop-filter: blur(4px);
+    transition: background var(--dur) var(--ease);
+  }
+  .ppop-close:hover { background: rgba(8, 12, 16, 0.78); }
+
+  .ppop-wa {
+    display: flex; align-items: center; justify-content: center; gap: var(--space-2xs);
+    width: 100%; min-height: 3.25rem;
+    background: var(--wa-action, #1FA855); color: #fff;
+    font-weight: var(--fw-bold); font-size: var(--fs-lead);
+    transition: background var(--dur) var(--ease);
+  }
+  .ppop-wa :global(.icon) { color: #fff; }
+  .ppop-wa:hover { background: var(--wa-action-strong, #178043); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ppop-backdrop, .ppop-card { transition: none; }
+  }
+</style>

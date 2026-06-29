@@ -4,11 +4,12 @@
 import Icon from './Icon.astro';
 import type { SiteConfig } from '../lib/types';
 import { linkPenawaran } from '../lib/whatsapp';
+import { consultantPhotoUrl } from '../lib/storage';
 
 interface Props { site: SiteConfig }
 const { site } = Astro.props;
 
-const consultantPhoto = 'https://fxjspvdkeybabxotniov.supabase.co/storage/v1/object/public/Harto/Foto%20Harto.webp';
+const consultantPhoto = consultantPhotoUrl(site);
 const wa = linkPenawaran(site);
 ---
 <section class="section section--lg trusthybrid" id="trust" aria-labelledby="th-h">
@@ -32,7 +33,7 @@ const wa = linkPenawaran(site);
 
     <!-- Kartu profil konsultan (center) -->
     <aside class="th-profile" data-reveal>
-      <img class="th-p-photo" src={consultantPhoto} alt={`Foto ${site.salesName}, ${site.salesTitle}`} width="1024" height="1536" loading="lazy" decoding="async" />
+      {consultantPhoto && <img class="th-p-photo" src={consultantPhoto} alt={`Foto ${site.salesName}, ${site.salesTitle}`} width="1024" height="1536" loading="lazy" decoding="async" />}
       <p class="th-p-name">{site.salesName}.</p>
       <p class="th-p-role">{site.salesTitle} {site.address.locality}</p>
       <p class="th-p-dealer">{site.brand}</p>
@@ -68,6 +69,11 @@ const wa = linkPenawaran(site);
         {site.social?.instagram && (
           <a class="th-c-btn th-c-btn--ig" href={site.social.instagram} target="_blank" rel="noopener noreferrer" aria-label={`Instagram ${site.salesName}`}>
             <Icon name="instagram" size={20} /> <span>Instagram</span>
+          </a>
+        )}
+        {site.social?.facebook && (
+          <a class="th-c-btn th-c-btn--fb" href={site.social.facebook} target="_blank" rel="noopener noreferrer" aria-label={`Facebook ${site.salesName}`}>
+            <Icon name="facebook" size={20} /> <span>Facebook</span>
           </a>
         )}
       </div>
@@ -176,6 +182,7 @@ const wa = linkPenawaran(site);
     background: linear-gradient(45deg, #f9ce34 0%, #ee2a7b 45%, #6228d7 100%);
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
   }
+  .th-c-btn--fb { background: #1877F2; }
   .th-c-wa {
     display: flex; align-items: center; justify-content: center; gap: var(--space-2xs);
     width: 100%; min-height: 3.5rem; margin-top: var(--space-sm);

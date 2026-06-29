@@ -92,5 +92,10 @@
   "social": {
     "instagram": "https://instagram.com/jaecoo_purianjasmoro_smg",
     "tiktok": "https://www.tiktok.com/@harto_jaecopurianjasmoro"
+  },
+  "storage": {
+    "bucket": "Harto",
+    "consultantPhoto": "Foto Harto.webp",
+    "deliveryCount": 8
   }
 }
