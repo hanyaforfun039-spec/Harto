@@ -129,11 +129,11 @@ const t = tech[pt];
     <h2>Varian &amp; Harga OTR</h2>
     <table class="cdh-price-table">
       <thead><tr><th scope="col">Varian</th><th scope="col">Harga OTR</th></tr></thead>
-      <tbody>
+      <tbody data-harga-varian={car.slug}>
         {car.varian.map((v) => (
           <tr>
             <td>{v.nama}{v.highlight && <span class="cdh-tag-rec">Populer</span>}</td>
-            <td class="tnum">{formatRupiah(v.hargaOtr)}</td>
+            <td class="tnum" data-varian-nama={v.nama}>{formatRupiah(v.hargaOtr)}</td>
           </tr>
         ))}
       </tbody>

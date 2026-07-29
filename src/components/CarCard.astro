@@ -33,8 +33,8 @@ const waTd = linkTestDrive(site, car.nama);
 
     <div class="card-price">
       <span class="card-price-label">Mulai dari</span>
-      <span class="price">{formatRupiahShort(harga)}</span>
-      <span class="card-cicilan tnum">Estimasi cicilan {formatRupiah(cicilan)}/bln</span>
+      <span class="price" data-harga-mulai={car.slug} data-harga-fmt="short">{formatRupiahShort(harga)}</span>
+      <span class="card-cicilan tnum">Estimasi cicilan <span data-harga-cicilan={car.slug}>{formatRupiah(cicilan)}</span>/bln</span>
     </div>
 
     <div class="card-cta">

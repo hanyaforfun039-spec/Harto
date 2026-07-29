@@ -70,7 +70,7 @@ const sCta: CtaDef = secondaryCta ?? { label: `Lihat ${car.namaPendek}`, href: d
             {site.heroStat.note && <p class="hero-stat-note">{site.heroStat.note}</p>}
           </div>
         ) : (
-          <p class="hero-price">Mulai dari <span class="price">{formatRupiahShort(harga)}</span></p>
+          <p class="hero-price">Mulai dari <span class="price" data-harga-mulai={car.slug} data-harga-fmt="short">{formatRupiahShort(harga)}</span></p>
         )}
         <div class="hero-cta">
           <Button href={pCta.href} variant={pCta.variant ?? 'accent'} size="lg" iconLeft={pCta.iconLeft} target={pCta.target}>{pCta.label}</Button>

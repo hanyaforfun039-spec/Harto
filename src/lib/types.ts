@@ -5,7 +5,10 @@
 
 export type Powertrain = 'ice' | 'phev' | 'ev';
 export type ThemeId = 'premium' | 'hybrid' | 'kredit' | 'area';
-export type SiteId = ThemeId;
+/* Sejak site config dipecah jadi dealer + sales_profile, id situs = id sales
+   ('harto' | 'andre' | 'fitri'), bukan lagi nama tema. Sengaja string bebas
+   supaya menambah sales baru tidak perlu mengubah tipe. */
+export type SiteId = string;
 export type HeroVariant = 'calculator-first' | 'car-first' | 'premium-fullbleed';
 
 export interface CarVariant {

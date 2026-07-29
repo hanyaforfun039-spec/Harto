@@ -92,7 +92,7 @@ const seoTitle = `JAECOO ${car.namaPendek} ${kota} — ${ptTitle[car.powertrain]
         <span class="hd-rule" aria-hidden="true"></span>
         <h1>{car.nama}</h1>
         <p class="hd-lead">{pesan}</p>
-        <p class="hd-price">Harga OTR mulai <span class="tnum">{formatRupiahShort(harga)}</span></p>
+        <p class="hd-price">Harga OTR mulai <span class="tnum" data-harga-mulai={car.slug} data-harga-fmt="short">{formatRupiahShort(harga)}</span></p>
         <div class="hd-cta">
           <Button href={waTd} variant="whatsapp" size="lg" iconLeft="whatsapp" target="_blank">Test Drive {car.namaPendek}</Button>
           <Button href={waPenawaran} variant="outline" size="lg" iconLeft="whatsapp" target="_blank">Minta Penawaran</Button>

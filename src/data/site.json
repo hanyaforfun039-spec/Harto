@@ -1,5 +1,5 @@
 {
-  "id": "hybrid",
+  "id": "harto",
   "theme": "hybrid",
   "brand": "JAECOO Semarang",
   "dealerName": "Dealer Resmi JAECOO Semarang",
@@ -90,12 +90,12 @@
     "defaultDescription": "Dealer resmi JAECOO Semarang: lineup lengkap J5, J7 SHS, J8 ARDIS & J8 SHS ARDIS. Harga OTR, simulasi kredit & test drive. Melayani Semarang, Solo & Jawa Tengah."
   },
   "social": {
-    "instagram": "https://instagram.com/jaecoo_purianjasmoro_smg",
-    "tiktok": "https://www.tiktok.com/@harto_jaecopurianjasmoro"
+    "tiktok": "https://www.tiktok.com/@harto_jaecopurianjasmoro",
+    "instagram": "https://instagram.com/jaecoo_purianjasmoro_smg"
   },
   "storage": {
     "bucket": "Harto",
-    "consultantPhoto": "Foto Harto.webp",
-    "deliveryCount": 8
+    "deliveryCount": 8,
+    "consultantPhoto": "Foto Harto.webp"
   }
 }

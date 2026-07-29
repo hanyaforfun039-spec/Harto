@@ -1,0 +1,6 @@
+# Berkas hasil generate scripts/sync-*.mjs selalu ditulis dengan LF.
+# Tanpa aturan ini, core.autocrlf=true mengembalikannya sebagai CRLF saat
+# checkout/stash sehingga sync berikutnya menulis ulang dan memunculkan
+# diff palsu ("diperbarui" padahal isinya sama).
+src/data/site.json text eol=lf
+src/data/cars.json text eol=lf

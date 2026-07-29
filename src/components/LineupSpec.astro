@@ -39,7 +39,7 @@ const fotoOverride: Record<string, string> = {
             <div class="ls-body">
               <p class={`ls-tag ls-tag--${car.powertrain}`}>{tagOf(car)}</p>
               <h3 class="ls-name"><a href={detail}>{car.nama}</a></h3>
-              <p class="ls-price"><span class="ls-price-lbl">Mulai</span> <span class="price">{formatRupiahShort(hargaMulai(car))}</span></p>
+              <p class="ls-price"><span class="ls-price-lbl">Mulai</span> <span class="price" data-harga-mulai={car.slug} data-harga-fmt="short">{formatRupiahShort(hargaMulai(car))}</span></p>
               <div class="ls-cta">
                 <Button href={detail} variant="primary" size="sm" icon="arrow-right">Detail</Button>
                 <Button href={linkTestDrive(site, car.nama)} variant="whatsapp" size="sm" iconLeft="whatsapp" target="_blank">Test Drive</Button>
