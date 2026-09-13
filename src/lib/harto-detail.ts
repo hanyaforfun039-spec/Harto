@@ -197,6 +197,7 @@ export const specsOverride: Record<string, SpecGroup[]> = {
 
 /* Pesan singkat per model (hero) — dipakai carousel beranda & hero halaman model. */
 export const heroPesan: Record<string, string> = {
+  'omoda-04-ev': 'Cyber Mecha Design with AI Smart Cockpit',
   'j7-shs': 'Premium SUV with Hybrid Technology',
   j5: 'Urban Compact SUV with Advanced Technology',
   'j8-ardis': 'Powerful & Sophisticated Design',

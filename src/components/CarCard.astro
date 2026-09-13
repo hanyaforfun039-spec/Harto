@@ -4,7 +4,7 @@
 import CarImage from './CarImage.astro';
 import Button from './Button.astro';
 import type { Car, SiteConfig } from '../lib/types';
-import { hargaMulai, cicilanMulai } from '../lib/cars';
+import { hargaMulai, cicilanMulai, punyaHarga, catatanHarga } from '../lib/cars';
 import { formatRupiahShort, formatRupiah } from '../lib/format';
 import { linkTestDrive } from '../lib/whatsapp';
 
@@ -18,7 +18,7 @@ interface Props {
 const { car, site, badge, priority = false, family } = Astro.props;
 const detail = `/mobil/${car.slug}`;
 const harga = hargaMulai(car);
-const cicilan = cicilanMulai(car, site).cicilanPerBulan;
+const cicilan = cicilanMulai(car, site)?.cicilanPerBulan ?? null;
 const waTd = linkTestDrive(site, car.nama);
 ---
 <article class="card" data-reveal data-family={family}>
@@ -31,10 +31,19 @@ const waTd = linkTestDrive(site, car.nama);
     <h3 class="card-title"><a href={detail}>{car.nama}</a></h3>
     <p class="card-tagline">{car.tagline}</p>
 
-    <div class="card-price">
-      <span class="card-price-label">Mulai dari</span>
-      <span class="price" data-harga-mulai={car.slug} data-harga-fmt="short">{formatRupiahShort(harga)}</span>
-      <span class="card-cicilan tnum">Estimasi cicilan <span data-harga-cicilan={car.slug}>{formatRupiah(cicilan)}</span>/bln</span>
+<div class="card-price">
+      {harga !== null ? (
+        <>
+          <span class="card-price-label">Mulai dari</span>
+          <span class="price" data-harga-mulai={car.slug} data-harga-fmt="short">{formatRupiahShort(harga)}</span>
+          {cicilan !== null && (
+            <span class="card-cicilan tnum">Estimasi cicilan <span data-harga-cicilan={car.slug}>{formatRupiah(cicilan)}</span>/bln</span>
+          )}
+        </>
+      ) : (
+        /* Model yang masih pre-book: tampilkan catatannya, bukan angka kosong. */
+        <span class="card-price-soon">{catatanHarga(car)}</span>
+      )}
     </div>
 
     <div class="card-cta">
@@ -56,6 +65,12 @@ const waTd = linkTestDrive(site, car.nama);
     transition: box-shadow var(--dur) var(--ease), transform var(--dur) var(--ease-out);
   }
   .card:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
+
+  .card-price-soon {
+    font-size: var(--fs-sm);
+    color: var(--color-text-muted);
+    line-height: 1.5;
+  }
 
   .card-media {
     position: relative;

@@ -66,7 +66,7 @@ async function get(url, key, path) {
    Urutan kunci sengaja dibuat sama dengan site-*.json lama supaya diff-nya
    enak dibaca saat migrasi. Nilai null/undefined dibuang agar field opsional
    tidak muncul sebagai null di JSON.                                        */
-function toConfig(d, p) {
+function toConfig(d, p, lokal) {
   const out = {
     id: p.id,
     theme: p.theme,
@@ -89,7 +89,11 @@ function toConfig(d, p) {
     heroVariant: d.hero_variant,
     heroCarSlug: d.hero_car_slug,
     heroHeadline: d.hero_headline,
-    lineup: d.lineup,
+    /* lineup SENGAJA diambil dari site.json lokal, bukan Supabase.
+       Daftar mobil kini hardcode di repo (termasuk model yang belum ada di
+       tabel Supabase, mis. OMODA 04). Menariknya dari dealer.lineup akan
+       menghapus model-model itu diam-diam pada build berikutnya. */
+    lineup: lokal?.lineup ?? d.lineup,
     featuredSlug: d.featured_slug,
     kredit: d.kredit,
     promo: d.promo,
@@ -145,7 +149,15 @@ async function main() {
     return;
   }
 
-  const json = JSON.stringify(toConfig(dealer, profile), null, 2) + '\n';
+  /* site.json yang ada dibaca lebih dulu: sebagian field (lihat `lineup`
+     di toConfig) sengaja dipertahankan dari repo, bukan ditimpa Supabase. */
+  let lokal = null;
+  if (existsSync(OUT_FILE)) {
+    try { lokal = JSON.parse(readFileSync(OUT_FILE, 'utf8')); }
+    catch { /* site.json rusak -> abaikan, pakai nilai Supabase */ }
+  }
+
+  const json = JSON.stringify(toConfig(dealer, profile, lokal), null, 2) + '\n';
   const prev = existsSync(OUT_FILE) ? readFileSync(OUT_FILE, 'utf8') : '';
   if (prev === json) {
     console.log(`[sync-site] =  site.json sudah sama ('${siteId}').`);

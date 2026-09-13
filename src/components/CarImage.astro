@@ -32,9 +32,11 @@ const assets = import.meta.glob<{ default: ImageMetadata }>(
   '/src/assets/cars/**/*.{jpg,jpeg,png,webp,avif}',
   { eager: true },
 );
-// URL absolut (mis. Supabase Storage publik) -> <img> apa adanya (tanpa optimasi build).
-// Path relatif -> aset lokal yg di-optimasi <Picture>. Kosong/hilang -> placeholder.
-const isRemote = /^https?:\/\//.test(src);
+// URL absolut (mis. Supabase Storage publik) ATAU path yang diawali "/" (berkas
+// di public/) -> <img> apa adanya, tanpa optimasi build.
+// Path relatif -> aset lokal di src/assets/cars yg di-optimasi <Picture>.
+// Kosong/hilang -> placeholder.
+const isRemote = /^https?:\/\//.test(src) || src.startsWith('/');
 const mod = isRemote ? undefined : assets[`/src/assets/cars/${src}`];
 ---
 {

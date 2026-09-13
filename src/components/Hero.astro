@@ -8,7 +8,7 @@ import Button from './Button.astro';
 import CarImage from './CarImage.astro';
 import CreditCalculator from './CreditCalculator.astro';
 import type { SiteConfig } from '../lib/types';
-import { getCarBySlug, getLineup, hargaMulai } from '../lib/cars';
+import { getCarBySlug, getLineup, getLineupBerharga, hargaMulai, catatanHarga } from '../lib/cars';
 import { formatRupiahShort } from '../lib/format';
 import { linkPenawaran } from '../lib/whatsapp';
 
@@ -24,6 +24,9 @@ const { site, primaryCta, secondaryCta } = Astro.props;
 
 const car = getCarBySlug(site.heroCarSlug) ?? getLineup(site)[0];
 const lineup = getLineup(site);
+/* Kalkulator hanya boleh menerima mobil yang sudah berharga — model pre-book
+   tidak bisa disimulasikan cicilannya. */
+const lineupKredit = getLineupBerharga(site);
 const harga = hargaMulai(car);
 const detail = `/mobil/${car.slug}`;
 const wa = linkPenawaran(site);
@@ -70,7 +73,11 @@ const sCta: CtaDef = secondaryCta ?? { label: `Lihat ${car.namaPendek}`, href: d
             {site.heroStat.note && <p class="hero-stat-note">{site.heroStat.note}</p>}
           </div>
         ) : (
-          <p class="hero-price">Mulai dari <span class="price" data-harga-mulai={car.slug} data-harga-fmt="short">{formatRupiahShort(harga)}</span></p>
+          harga !== null ? (
+            <p class="hero-price">Mulai dari <span class="price" data-harga-mulai={car.slug} data-harga-fmt="short">{formatRupiahShort(harga)}</span></p>
+          ) : (
+            <p class="hero-price hero-price--soon">{catatanHarga(car)}</p>
+          )
         )}
         <div class="hero-cta">
           <Button href={pCta.href} variant={pCta.variant ?? 'accent'} size="lg" iconLeft={pCta.iconLeft} target={pCta.target}>{pCta.label}</Button>
@@ -96,7 +103,7 @@ const sCta: CtaDef = secondaryCta ?? { label: `Lihat ${car.namaPendek}`, href: d
         </ul>
       </div>
       <div class="hero-calc" data-reveal data-reveal-delay="1">
-        <CreditCalculator cars={lineup} site={site} preselectSlug={site.heroCarSlug} heading="Hitung cicilanmu" />
+        <CreditCalculator cars={lineupKredit} site={site} preselectSlug={site.heroCarSlug} heading="Hitung cicilanmu" />
       </div>
     </div>
   </section>
@@ -114,6 +121,8 @@ const sCta: CtaDef = secondaryCta ?? { label: `Lihat ${car.namaPendek}`, href: d
   .hero-copy h1 { max-width: 16ch; }
   .hero-price { font-size: var(--fs-body); color: var(--color-text-muted); }
   .hero-price .price { font-size: var(--fs-h3); color: var(--color-text); margin-left: var(--space-2xs); }
+
+  .hero-price--soon { max-width: 42ch; line-height: 1.55; }
 
   /* Angka pamungkas hero (efisiensi) di atas "engineering gauge" */
   .hero-stat { display: grid; gap: var(--space-3xs); }

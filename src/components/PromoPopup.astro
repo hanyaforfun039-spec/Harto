@@ -1,45 +1,52 @@
 ---
-/* PromoPopup — banner promo (gambar) tampil sekali saat load, bisa ditutup (X /
-   backdrop / Esc) lalu tak muncul lagi (localStorage). Ada tombol WhatsApp
-   (nomor sesuai site aktif). Tanpa JS: tidak tampil (progressive enhancement).
-   Gambar dari Supabase Storage bucket "Fitri" (dipakai bersama 4 situs). */
+/* PromoPopup — poster pricelist OMODA | JAECOO Semarang, tampil saat beranda
+   dibuka. Bisa ditutup (X / backdrop / Esc).
+
+   SENGAJA TANPA localStorage: pop-up ini memuat daftar harga yang berubah
+   tiap bulan, jadi ia harus muncul lagi pada kunjungan berikutnya. Versi
+   sebelumnya menyimpan penanda "sudah ditutup" selamanya, sehingga pengunjung
+   lama tidak pernah melihat harga yang diperbarui.
+
+   Gambarnya berkas lokal di public/, bukan Supabase Storage, supaya
+   mengganti poster cukup lewat repo. */
 import Icon from './Icon.astro';
 import { site } from '../lib/site';
-import { linkPenawaran } from '../lib/whatsapp';
+import { waLink, pesanPenawaran } from '../lib/whatsapp';
 
-const BANNER = 'https://fxjspvdkeybabxotniov.supabase.co/storage/v1/object/public/Fitri/banner%20baru.jpg';
-const wa = linkPenawaran(site);
+const POSTER = '/pricelist-omoda-jaecoo.webp';
+const wa = waLink(
+  site.whatsapp,
+  `${pesanPenawaran(site)}\n\nSaya lihat pricelist terbaru di website.`,
+);
 ---
 <div id="promo-popup" class="ppop" hidden>
   <div class="ppop-backdrop" data-ppop-close aria-hidden="true"></div>
-  <div class="ppop-card" role="dialog" aria-modal="true" aria-label={`Promo ${site.brand}`}>
-    <button type="button" class="ppop-close" data-ppop-close aria-label="Tutup promo">
+  <div class="ppop-card" role="dialog" aria-modal="true" aria-label={`Pricelist ${site.brand}`}>
+    <button type="button" class="ppop-close" data-ppop-close aria-label="Tutup pricelist">
       <Icon name="close" size={20} />
     </button>
-    <img class="ppop-img" src={BANNER} alt={`Promo ${site.brand}`} loading="eager" decoding="async" />
+    <div class="ppop-scroll">
+      <img class="ppop-img" src={POSTER} width="1000" height="1419"
+         alt="Pricelist terbaru OMODA dan JAECOO Semarang: OMODA 04 EV open pre-book, JAECOO J8 SHS, J7 SHS, dan J5 EV."
+         loading="eager" decoding="async" />
+    </div>
     <a class="ppop-wa" href={wa} target="_blank" rel="noopener noreferrer">
-      <Icon name="whatsapp" size={22} /> <span>Chat WhatsApp</span>
+      <Icon name="whatsapp" size={22} /> <span>Tanya harga via WhatsApp</span>
     </a>
   </div>
 </div>
 
 <script>
-  const KEY = 'promo-popup-v1-closed';
   const el = document.getElementById('promo-popup');
   if (el) {
-    let dismissed = false;
-    try { dismissed = !!localStorage.getItem(KEY); } catch (_) {}
-    if (!dismissed) {
-      el.hidden = false;
-      requestAnimationFrame(() => el.classList.add('is-open'));
-      const close = () => {
-        el.classList.remove('is-open');
-        try { localStorage.setItem(KEY, '1'); } catch (_) {}
-        window.setTimeout(() => { el.hidden = true; }, 220);
-      };
-      el.querySelectorAll('[data-ppop-close]').forEach((b) => b.addEventListener('click', close));
-      document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !el.hidden) close(); });
-    }
+    el.hidden = false;
+    requestAnimationFrame(() => el.classList.add('is-open'));
+    const close = () => {
+      el.classList.remove('is-open');
+      window.setTimeout(() => { el.hidden = true; }, 220);
+    };
+    el.querySelectorAll('[data-ppop-close]').forEach((b) => b.addEventListener('click', close));
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !el.hidden) close(); });
   }
 </script>
 
@@ -59,7 +66,10 @@ const wa = linkPenawaran(site);
 
   .ppop-card {
     position: relative; z-index: 1;
-    width: min(28rem, 100%);
+    width: min(26rem, 100%);
+    max-height: 92vh;
+    display: flex;
+    flex-direction: column;
     background: var(--color-surface);
     border-radius: var(--radius-xl);
     box-shadow: var(--shadow-xl);
@@ -69,7 +79,10 @@ const wa = linkPenawaran(site);
   }
   .ppop.is-open .ppop-card { transform: none; opacity: 1; }
 
+  /* Poster potret (1000x1419) gampang melampaui layar ponsel, jadi
+     tingginya dibatasi dan kartunya yang menggulir. */
   .ppop-img { display: block; width: 100%; height: auto; }
+  .ppop-scroll { max-height: min(72vh, 40rem); overflow-y: auto; }
 
   .ppop-close {
     position: absolute; top: var(--space-xs); right: var(--space-xs); z-index: 2;
@@ -83,7 +96,7 @@ const wa = linkPenawaran(site);
 
   .ppop-wa {
     display: flex; align-items: center; justify-content: center; gap: var(--space-2xs);
-    width: 100%; min-height: 3.25rem;
+    width: 100%; min-height: 3.25rem; flex: none;
     background: var(--wa-action, #1FA855); color: #fff;
     font-weight: var(--fw-bold); font-size: var(--fs-lead);
     transition: background var(--dur) var(--ease);

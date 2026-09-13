@@ -4,7 +4,7 @@
 import CarImage from './CarImage.astro';
 import Button from './Button.astro';
 import type { Car, SiteConfig } from '../lib/types';
-import { hargaMulai } from '../lib/cars';
+import { hargaMulai, catatanHarga } from '../lib/cars';
 import { formatRupiahShort } from '../lib/format';
 import { linkTestDrive } from '../lib/whatsapp';
 
@@ -24,8 +24,8 @@ const fotoOverride: Record<string, string> = {
   <div class="container">
     <div class="ls-head" data-reveal>
       <p class="eyebrow">Lineup</p>
-      <h2 id="ls-h">Model JAECOO</h2>
-      <p class="lead">Pilih model JAECOO Anda.</p>
+      <h2 id="ls-h">Model OMODA &amp; JAECOO</h2>
+      <p class="lead">Pilih model Anda.</p>
     </div>
 
     <ol class="ls-rail" role="list">
@@ -39,7 +39,9 @@ const fotoOverride: Record<string, string> = {
             <div class="ls-body">
               <p class={`ls-tag ls-tag--${car.powertrain}`}>{tagOf(car)}</p>
               <h3 class="ls-name"><a href={detail}>{car.nama}</a></h3>
-              <p class="ls-price"><span class="ls-price-lbl">Mulai</span> <span class="price" data-harga-mulai={car.slug} data-harga-fmt="short">{formatRupiahShort(hargaMulai(car))}</span></p>
+              {(() => { const h = hargaMulai(car); return h !== null
+                ? <p class="ls-price"><span class="ls-price-lbl">Mulai</span> <span class="price" data-harga-mulai={car.slug} data-harga-fmt="short">{formatRupiahShort(h)}</span></p>
+                : <p class="ls-price ls-price--soon">{catatanHarga(car)}</p>; })()}
               <div class="ls-cta">
                 <Button href={detail} variant="primary" size="sm" icon="arrow-right">Detail</Button>
                 <Button href={linkTestDrive(site, car.nama)} variant="whatsapp" size="sm" iconLeft="whatsapp" target="_blank">Test Drive</Button>
@@ -112,5 +114,6 @@ const fotoOverride: Record<string, string> = {
   .ls-price { display: flex; align-items: baseline; gap: var(--space-2xs); margin-top: var(--space-3xs); }
   .ls-price-lbl { font-size: var(--fs-caption); text-transform: uppercase; letter-spacing: var(--ls-wide); color: var(--color-text-subtle); }
   .ls-price .price { font-size: var(--fs-h5); font-weight: var(--fw-bold); }
+  .ls-price--soon { display: block; font-size: var(--fs-sm); color: var(--color-text-muted); line-height: 1.5; }
   .ls-cta { display: flex; flex-wrap: wrap; gap: var(--space-2xs); margin-top: var(--space-sm); }
 </style>

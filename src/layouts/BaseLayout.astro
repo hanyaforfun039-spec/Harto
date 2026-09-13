@@ -23,6 +23,10 @@ interface Props {
   noindex?: boolean;
   jsonLd?: object[];
   bodyClass?: string;
+  /** Pop-up promo. Mati secara bawaan dan hanya dinyalakan di beranda —
+      memunculkannya di tiap halaman membuat orang yang menjelajah harus
+      menutupnya berulang kali. */
+  popup?: boolean;
 }
 
 const {
@@ -34,6 +38,7 @@ const {
   noindex = false,
   jsonLd = [],
   bodyClass = '',
+  popup = false,
 } = Astro.props;
 
 const siteUrl = Astro.site ?? new URL('https://jaecoo-semarang.example');
@@ -88,13 +93,18 @@ const THEME_COLOR = '#0C1117';
 
     <slot name="footer" />
 
-    <PromoPopup />
+    {popup && <PromoPopup />}
 
     <script>
       import '../scripts/reveal.ts';
       /* Menyegarkan harga hasil build dgn harga terkini dari Supabase.
          Berhenti sendiri kalau halaman ini tidak menampilkan harga. */
-      import '../scripts/harga.ts';
+      /* Penyegar harga Supabase SENGAJA tidak dimuat: harga mobil kini
+         hardcode di src/data/cars.json. Kalau skrip ini hidup, ia akan
+         menimpa angka hasil build dengan harga lama dari Supabase beberapa
+         detik setelah halaman terbuka. Hidupkan lagi hanya bersamaan dengan
+         mengaktifkan kembali `npm run sync:cars`. */
+      // import '../scripts/harga.ts';
     </script>
   </body>
 </html>

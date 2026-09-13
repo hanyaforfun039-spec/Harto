@@ -44,7 +44,7 @@ const lineup = getLineup(site);
         {car.varian.map((v) => (
           <tr>
             <td>{v.nama}{v.highlight && <span class="tag-rec">Populer</span>}</td>
-            <td class="tnum" data-varian-nama={v.nama}>{formatRupiah(v.hargaOtr)}</td>
+            <td class="tnum" data-varian-nama={v.nama}>{v.hargaOtr === null ? '—' : formatRupiah(v.hargaOtr)}</td>
           </tr>
         ))}
       </tbody>

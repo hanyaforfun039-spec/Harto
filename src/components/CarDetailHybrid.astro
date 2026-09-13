@@ -7,7 +7,7 @@ import CarImage from './CarImage.astro';
 import Icon from './Icon.astro';
 import Button from './Button.astro';
 import type { Car, CarFaq, SiteConfig } from '../lib/types';
-import { getLineup } from '../lib/cars';
+import { getLineup, merek, faqTerisi, catatanHarga } from '../lib/cars';
 import { formatRupiah } from '../lib/format';
 import { linkTestDrive, linkPenawaran } from '../lib/whatsapp';
 import { specsOverride, adasGroups, adasCount } from '../lib/harto-detail';
@@ -16,10 +16,15 @@ interface Props { car: Car; site: SiteConfig; faq?: CarFaq[] }
 const { car, site, faq } = Astro.props;
 
 const specGroups = specsOverride[car.slug];
-const jumlahAdas = adasCount[car.slug] ?? 19;
+/* undefined = daftar ADAS model ini belum diverifikasi -> blok ADAS
+   disembunyikan, bukan diisi angka bawaan. Isinya daftar fitur bernama khas
+   JAECOO; menampilkannya untuk model lain sama saja mengarang spesifikasi. */
+const jumlahAdas = adasCount[car.slug];
 const galeri = [car.foto.hero, ...car.foto.galeri];
 const lineup = getLineup(site);
-const faqList = faq ?? car.faq;
+/* faqTerisi mengganti token {harga} dengan harga terkini dari varian. */
+const faqList = faq ?? faqTerisi(car);
+const brand = merek(car);
 /* Model lain utk internal linking (anchor deskriptif, sinyal SEO). */
 const others = lineup.filter((c) => c.slug !== car.slug);
 
@@ -130,10 +135,12 @@ const t = tech[pt];
     <table class="cdh-price-table">
       <thead><tr><th scope="col">Varian</th><th scope="col">Harga OTR</th></tr></thead>
       <tbody data-harga-varian={car.slug}>
-        {car.varian.map((v) => (
+{car.varian.map((v) => (
           <tr>
             <td>{v.nama}{v.highlight && <span class="cdh-tag-rec">Populer</span>}</td>
-            <td class="tnum" data-varian-nama={v.nama}>{formatRupiah(v.hargaOtr)}</td>
+            <td class="tnum" data-varian-nama={v.nama}>
+              {v.hargaOtr === null ? catatanHarga(car) : formatRupiah(v.hargaOtr)}
+            </td>
           </tr>
         ))}
       </tbody>
@@ -142,10 +149,11 @@ const t = tech[pt];
 </section>
 
 <!-- ADAS (sama untuk semua model; jumlah beda per model) -->
+{jumlahAdas !== undefined && (
 <section class="section section--alt">
   <div class="container container--narrow">
     <h2>Fitur ADAS {car.namaPendek}</h2>
-    <p class="cdh-adas-intro">JAECOO {car.namaPendek} dilengkapi <b>{jumlahAdas} fitur ADAS</b> untuk berkendara lebih aman.</p>
+    <p class="cdh-adas-intro">{brand} {car.namaPendek} dilengkapi <b>{jumlahAdas} fitur ADAS</b> untuk berkendara lebih aman.</p>
     <div class="cdh-adas-groups">
       {adasGroups.map((g) => (
         <div class="cdh-adas-group">
@@ -166,6 +174,7 @@ const t = tech[pt];
     </div>
   </div>
 </section>
+)}
 
 <!-- FAQ -->
 <section class="section">
@@ -190,7 +199,7 @@ const t = tech[pt];
 {others.length > 0 && (
   <section class="section section--alt cdh-others" aria-labelledby="cdh-others-h">
     <div class="container container--narrow">
-      <h2 id="cdh-others-h">Model JAECOO lainnya</h2>
+      <h2 id="cdh-others-h">Model lainnya</h2>
       <ul class="cdh-others-list" role="list">
         {others.map((c) => (
           <li>

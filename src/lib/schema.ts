@@ -5,7 +5,7 @@
    Target valid di Google Rich Results Test.
    ============================================================================ */
 import type { Car, CarFaq, SiteConfig } from './types';
-import { hargaMulai, hargaTertinggi } from './cars';
+import { hargaMulai, hargaTertinggi, merek } from './cars';
 
 function abs(path: string, base: string): string {
   try {
@@ -74,33 +74,45 @@ export function productSchema(
 ) {
   const low = hargaMulai(car);
   const high = hargaTertinggi(car);
+  /* Model yang harganya belum keluar TIDAK boleh mengirim `offers`: Google
+     menandai offers tanpa `price` sebagai error data terstruktur. */
+  const berharga = low !== null && high !== null;
   return {
     '@context': 'https://schema.org',
     '@type': 'Product',
     name: car.nama,
     description: car.tagline,
     category: car.kategori,
-    brand: { '@type': 'Brand', name: 'JAECOO' },
+    brand: { '@type': 'Brand', name: merek(car) },
     image: [
       /^https?:\/\//.test(car.foto.hero.src)
         ? car.foto.hero.src
-        : abs(`/img/cars/${car.foto.hero.src}`, baseUrl),
+        : abs(
+            /* Foto di public/ ditulis dgn "/" di depan; sisanya aset src/. */
+            car.foto.hero.src.startsWith('/') ? car.foto.hero.src : `/img/cars/${car.foto.hero.src}`,
+            baseUrl,
+          ),
     ],
     url: pageUrl,
     additionalProperty:
       additionalProperty && additionalProperty.length
         ? additionalProperty.map((p) => ({ '@type': 'PropertyValue', name: p.name, value: p.value }))
         : undefined,
-    offers: {
-      '@type': 'AggregateOffer',
-      priceCurrency: 'IDR',
-      lowPrice: low,
-      highPrice: high,
-      offerCount: car.varian.length,
-      availability: 'https://schema.org/InStock',
-      areaServed: areaServedList(site),
-      seller: { '@type': 'AutoDealer', name: site.dealerName },
-    },
+    offers: berharga
+      ? {
+          '@type': 'AggregateOffer',
+          priceCurrency: 'IDR',
+          lowPrice: low,
+          highPrice: high,
+          offerCount: car.varian.length,
+          availability:
+            car.status === 'pre-order'
+              ? 'https://schema.org/PreOrder'
+              : 'https://schema.org/InStock',
+          areaServed: areaServedList(site),
+          seller: { '@type': 'AutoDealer', name: site.dealerName },
+        }
+      : undefined,
   };
 }
 

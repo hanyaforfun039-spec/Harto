@@ -13,7 +13,9 @@ export type HeroVariant = 'calculator-first' | 'car-first' | 'premium-fullbleed'
 
 export interface CarVariant {
   nama: string;
-  hargaOtr: number; // angka penuh, mis. 689900000
+  /** null selama harga resmi belum keluar (mis. model yang masih pre-book).
+      Tampilan otomatis memakai `Car.hargaCatatan`, bukan angka kosong. */
+  hargaOtr: number | null; // angka penuh, mis. 689900000
   highlight?: boolean;
 }
 
@@ -41,6 +43,10 @@ export interface Car {
   powertrain: Powertrain;
   tagline: string;
   varian: CarVariant[];
+  /** Ditampilkan menggantikan harga selama `hargaOtr` masih null. */
+  hargaCatatan?: string;
+  /** Hanya diisi untuk model yang belum dijual bebas. */
+  status?: 'pre-order';
   specs: CarSpec[];
   fitur: string[];
   foto: { hero: CarImage; galeri: CarImage[] };

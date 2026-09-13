@@ -4,7 +4,7 @@
    lalu calculator.ts membuat slider & select interaktif + update link WhatsApp. */
 import Button from './Button.astro';
 import type { Car, SiteConfig } from '../lib/types';
-import { hargaMulai } from '../lib/cars';
+import { hargaMulai, punyaHarga } from '../lib/cars';
 import { hitungCicilan } from '../lib/credit';
 import { formatRupiah, formatRupiahShort } from '../lib/format';
 import { pesanSimulasiKredit, waLink } from '../lib/whatsapp';
@@ -17,11 +17,14 @@ interface Props {
 }
 const { cars, site, preselectSlug, heading = 'Simulasi Kredit' } = Astro.props;
 
-const selected = cars.find((c) => c.slug === preselectSlug) ?? cars[0];
+/* Model tanpa harga resmi tidak bisa disimulasikan — disaring di sini juga,
+   bukan hanya di pemanggil, supaya komponen ini aman dipakai di mana pun. */
+const daftar = cars.filter(punyaHarga);
+const selected = daftar.find((c) => c.slug === preselectSlug) ?? daftar[0];
 const dp = site.kredit.dpDefaultPct;
 const tenor = site.kredit.tenorDefaultYears;
 const bunga = site.kredit.bungaFlatPctPerYear;
-const otr = hargaMulai(selected);
+const otr = hargaMulai(selected) ?? 0;
 const r = hitungCicilan({ otr, dpPct: dp, tenorYears: tenor, bungaFlatPctPerYear: bunga });
 const waDefault = waLink(site.whatsapp, pesanSimulasiKredit(site, selected.nama, r));
 ---
@@ -39,9 +42,9 @@ const waDefault = waLink(site.whatsapp, pesanSimulasiKredit(site, selected.nama,
       <label for="calc-model">Pilih model</label>
       <div class="select-wrap">
         <select id="calc-model" class="calc-model">
-          {cars.map((c) => (
-            <option value={c.slug} data-otr={hargaMulai(c)} data-nama={c.nama} selected={c.slug === selected.slug}>
-              {c.nama} — mulai {formatRupiahShort(hargaMulai(c))}
+          {daftar.map((c) => (
+            <option value={c.slug} data-otr={hargaMulai(c)!} data-nama={c.nama} selected={c.slug === selected.slug}>
+              {c.nama} — mulai {formatRupiahShort(hargaMulai(c)!)}
             </option>
           ))}
         </select>

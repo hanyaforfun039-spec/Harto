@@ -10,7 +10,7 @@ import Footer from '../../components/Footer.astro';
 import CarDetailHybrid from '../../components/CarDetailHybrid.astro';
 import CarImage from '../../components/CarImage.astro';
 import { heroFotoOverride, heroPesan } from '../../lib/harto-detail';
-import { getAllCars, hargaMulai } from '../../lib/cars';
+import { getAllCars, hargaMulai, merek, catatanHarga, faqTerisi } from '../../lib/cars';
 import { site } from '../../lib/site';
 import { formatRupiahShort } from '../../lib/format';
 import { linkTestDrive, linkPenawaran } from '../../lib/whatsapp';
@@ -42,6 +42,7 @@ const ptTitle: Record<Car['powertrain'], string> = {
 };
 
 const harga = hargaMulai(car);
+const brand = merek(car);
 const pesan = heroPesan[car.slug] ?? car.tagline;
 const waTd = linkTestDrive(site, car.nama);
 const waPenawaran = linkPenawaran(site, car.nama);
@@ -56,7 +57,7 @@ const pageUrl = new URL(Astro.url.pathname, siteUrl).href;
 
 const jsonLd = [
   productSchema(car, site, pageUrl, siteUrl.href, additionalProperty),
-  faqPageSchema(car.faq),
+  faqPageSchema(faqTerisi(car)),
   breadcrumbSchema([
     { name: 'Beranda', url: new URL('/', siteUrl).href },
     { name: 'Model', url: new URL('/#lineup', siteUrl).href },
@@ -65,10 +66,16 @@ const jsonLd = [
 ];
 
 const description =
-  `JAECOO ${car.namaPendek} di ${kota} — ${ptShort[car.powertrain].toLowerCase()}. ` +
-  `Harga OTR mulai ${formatRupiahShort(harga)}. Test drive & konsultasi via WhatsApp ${site.salesName}.`;
+  `${brand} ${car.namaPendek} di ${kota} — ${ptShort[car.powertrain].toLowerCase()}. ` +
+  (harga !== null
+    ? `Harga OTR mulai ${formatRupiahShort(harga)}. `
+    : `${catatanHarga(car)} `) +
+  `Test drive & konsultasi via WhatsApp ${site.salesName}.`;
 
-const seoTitle = `JAECOO ${car.namaPendek} ${kota} — ${ptTitle[car.powertrain]} & Harga`;
+const seoTitle =
+  harga !== null
+    ? `${brand} ${car.namaPendek} ${kota} — ${ptTitle[car.powertrain]} & Harga`
+    : `${brand} ${car.namaPendek} ${kota} — ${ptTitle[car.powertrain]}, Pre-Book`;
 ---
 <BaseLayout title={car.nama} seoTitle={seoTitle} description={description} jsonLd={jsonLd}>
   <Header slot="header" site={site} />
@@ -92,10 +99,16 @@ const seoTitle = `JAECOO ${car.namaPendek} ${kota} — ${ptTitle[car.powertrain]
         <span class="hd-rule" aria-hidden="true"></span>
         <h1>{car.nama}</h1>
         <p class="hd-lead">{pesan}</p>
-        <p class="hd-price">Harga OTR mulai <span class="tnum" data-harga-mulai={car.slug} data-harga-fmt="short">{formatRupiahShort(harga)}</span></p>
-        <div class="hd-cta">
+        {harga !== null ? (
+          <p class="hd-price">Harga OTR mulai <span class="tnum" data-harga-mulai={car.slug} data-harga-fmt="short">{formatRupiahShort(harga)}</span></p>
+        ) : (
+          <p class="hd-price hd-price--soon">{catatanHarga(car)}</p>
+        )}
+<div class="hd-cta">
           <Button href={waTd} variant="whatsapp" size="lg" iconLeft="whatsapp" target="_blank">Test Drive {car.namaPendek}</Button>
-          <Button href={waPenawaran} variant="outline" size="lg" iconLeft="whatsapp" target="_blank">Minta Penawaran</Button>
+          <Button href={waPenawaran} variant="outline" size="lg" iconLeft="whatsapp" target="_blank">
+            {harga === null ? 'Daftar Pre-Book' : 'Minta Penawaran'}
+          </Button>
         </div>
       </div>
     </div>
@@ -141,5 +154,7 @@ const seoTitle = `JAECOO ${car.namaPendek} ${kota} — ${ptTitle[car.powertrain]
   .hd-lead { color: rgba(244, 246, 244, 0.88); max-width: 50ch; font-size: var(--fs-lead); }
   .hd-price { color: rgba(244, 246, 244, 0.9); font-size: var(--fs-body); margin-top: var(--space-2xs); }
   .hd-price span { font-family: var(--font-display); font-size: var(--fs-h3); font-weight: var(--fw-bold); color: var(--paper); margin-left: var(--space-2xs); }
+  /* Model pre-book: kalimat biasa, jadi jangan pakai gaya angka besar. */
+  .hd-price--soon { max-width: 46ch; line-height: 1.55; }
   .hd-cta { display: flex; flex-wrap: wrap; gap: var(--space-sm); margin-top: var(--space-md); }
 </style>

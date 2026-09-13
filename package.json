@@ -7,11 +7,12 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "sync": "node scripts/sync-sites.mjs && node scripts/sync-cars.mjs",
+    "sync": "node scripts/sync-sites.mjs",
     "build": "npm run sync && astro build",
     "build:nosync": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "sync:cars": "node scripts/sync-cars.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",

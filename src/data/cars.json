@@ -1,5 +1,90 @@
 [
   {
+    "slug": "omoda-04-ev",
+    "nama": "OMODA 04 EV",
+    "namaPendek": "04 EV",
+    "kategori": "SUV Listrik",
+    "powertrain": "ev",
+    "status": "pre-order",
+    "tagline": "Cyber Mecha Design berpadu AI Smart Cockpit. Dibuka pre-book resmi untuk wilayah Semarang.",
+    "varian": [
+      {
+        "nama": "04 EV",
+        "hargaOtr": null
+      }
+    ],
+    "hargaCatatan": "Open pre-book. Harga OTR resmi diumumkan menjelang peluncuran.",
+    "specs": [
+      {
+        "icon": "power",
+        "label": "Tenaga",
+        "value": "160 kW (218 PS)"
+      },
+      {
+        "icon": "range",
+        "label": "Jarak Tempuh",
+        "value": "553 km (NEDC)"
+      },
+      {
+        "icon": "battery",
+        "label": "Baterai",
+        "value": "65,05 kWh"
+      },
+      {
+        "icon": "fuel",
+        "label": "Pengisian Cepat",
+        "value": "DC fast charging"
+      },
+      {
+        "icon": "drivetrain",
+        "label": "Penggerak",
+        "value": "Motor listrik tunggal"
+      }
+    ],
+    "fitur": [
+      "Cyber Mecha Design dengan lampu depan matriks",
+      "AI Smart Cockpit dengan layar sentuh besar",
+      "Jangkauan hingga 553 km sekali pengisian (NEDC)",
+      "Pengisian cepat DC untuk perjalanan luar kota",
+      "Paket ADAS berkendara semi-otonom",
+      "Pilihan warna Stellar Blue, Radiant White, dan Nocturne Black"
+    ],
+    "foto": {
+      "hero": {
+        "alt": "OMODA 04 EV tampak tiga perempat depan.",
+        "src": "/omoda-04-cutout.webp"
+      },
+      "galeri": [
+        {
+          "alt": "OMODA 04 EV biru di ruang pamer.",
+          "src": "/omoda-04-showroom.webp"
+        },
+        {
+          "alt": "OMODA 04 EV biru di panggung peluncuran.",
+          "src": "/omoda-04-panggung.jpeg"
+        }
+      ]
+    },
+    "faq": [
+      {
+        "q": "Berapa harga OMODA 04 EV di Semarang?",
+        "a": "OMODA 04 EV masih dalam masa pre-book, jadi harga OTR resminya belum diumumkan. Hubungi via WhatsApp untuk didaftarkan lebih dulu dan mendapat kabar begitu harganya keluar."
+      },
+      {
+        "q": "Apa itu pre-book dan apa untungnya?",
+        "a": "Pre-book adalah pemesanan awal sebelum peluncuran resmi. Pemesan awal mendapat prioritas alokasi unit dan pilihan warna, karena kuota unit pertama terbatas."
+      },
+      {
+        "q": "Berapa jarak tempuh OMODA 04 EV sekali pengisian?",
+        "a": "Hingga 553 km berdasarkan pengujian NEDC, dari baterai 65,05 kWh. Jarak nyata bisa berbeda tergantung gaya berkendara, muatan, dan kondisi jalan."
+      },
+      {
+        "q": "Warna apa saja yang tersedia?",
+        "a": "Tiga pilihan: Stellar Blue, Radiant White, dan Nocturne Black. Ketersediaan warna mengikuti alokasi unit, jadi sebaiknya dikonfirmasi saat pre-book."
+      }
+    ]
+  },
+  {
     "slug": "j5",
     "nama": "JAECOO J5 EV",
     "namaPendek": "J5 EV",
@@ -9,7 +94,7 @@
     "varian": [
       {
         "nama": "J5 EV Premium",
-        "hargaOtr": 334500000,
+        "hargaOtr": 339900000,
         "highlight": true
       }
     ],
@@ -70,7 +155,7 @@
     },
     "faq": [
       {
-        "a": "Harga OTR Semarang Rp 320,4 juta untuk J5 EV Premium. Hubungi via WhatsApp untuk penawaran dan ketersediaan stok terbaru.",
+        "a": "Harga OTR Semarang {harga} untuk J5 EV Premium. Hubungi via WhatsApp untuk penawaran dan ketersediaan stok terbaru.",
         "q": "Berapa harga OTR JAECOO J5 EV di Semarang?"
       },
       {
@@ -93,7 +178,7 @@
     "varian": [
       {
         "nama": "J7 SHS",
-        "hargaOtr": 521900000,
+        "hargaOtr": 526900000,
         "highlight": true
       }
     ],
@@ -166,7 +251,7 @@
         "q": "Berapa jarak tempuh JAECOO J7 SHS?"
       },
       {
-        "a": "Harga OTR Semarang Rp 520,4 juta. Hubungi via WhatsApp untuk penawaran terbaik dan ketersediaan unit.",
+        "a": "Harga OTR Semarang {harga}. Hubungi via WhatsApp untuk penawaran terbaik dan ketersediaan unit.",
         "q": "Berapa harga OTR-nya di Semarang?"
       }
     ]
@@ -250,7 +335,7 @@
     },
     "faq": [
       {
-        "a": "Harga OTR Semarang Rp 710,4 juta. Untuk penawaran khusus dan ketersediaan warna, hubungi via WhatsApp.",
+        "a": "Harga OTR Semarang {harga}. Untuk penawaran khusus dan ketersediaan warna, hubungi via WhatsApp.",
         "q": "Berapa harga OTR JAECOO J8 ARDIS di Semarang?"
       },
       {
@@ -273,7 +358,7 @@
     "varian": [
       {
         "nama": "J8 SHS ARDIS",
-        "hargaOtr": 847900000,
+        "hargaOtr": 857900000,
         "highlight": true
       }
     ],
@@ -342,7 +427,7 @@
         "q": "Apa keunggulan J8 SHS ARDIS dibanding J8 ARDIS biasa?"
       },
       {
-        "a": "Harga OTR Semarang Rp 838,5 juta. Hubungi via WhatsApp untuk penawaran terbaik dan ketersediaan unit.",
+        "a": "Harga OTR Semarang {harga}. Hubungi via WhatsApp untuk penawaran terbaik dan ketersediaan unit.",
         "q": "Berapa harga OTR-nya di Semarang?"
       },
       {
