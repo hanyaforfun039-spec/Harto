@@ -11,6 +11,41 @@ export interface SpecGroup {
 
 /* Spesifikasi lengkap per model (dikelompokkan agar rapi & mudah dibaca). */
 export const specsOverride: Record<string, SpecGroup[]> = {
+  /* Angka OMODA 04 EV disamakan dengan situs Dealer & AndreOmoda supaya satu
+     model tidak menyebut spesifikasi berbeda di dua situs milik dealer yang
+     sama. ADAS sengaja hanya disebut jumlahnya: 18 fitur itu set milik OMODA,
+     berbeda dari 19 fitur JAECOO yang namanya terdaftar di adasGroups. */
+  'omoda-04-ev': [
+    {
+      kategori: 'Motor & Performa',
+      items: [
+        { label: 'Tenaga Maksimum', value: '218 PS' },
+        { label: 'Torsi', value: '275 Nm' },
+        { label: 'Penggerak', value: 'Motor listrik' },
+      ],
+    },
+    {
+      kategori: 'Baterai & Jarak Tempuh',
+      items: [
+        { label: 'Kapasitas Baterai', value: '65,05 kWh (LFP)' },
+        { label: 'Jarak Tempuh (NEDC)', value: '553 km' },
+        { label: 'Pengisian Cepat', value: 'DC fast charging' },
+      ],
+    },
+    {
+      kategori: 'Kabin & Teknologi',
+      items: [
+        { label: 'Layar Sentuh', value: '13,2 inci' },
+        { label: 'Kamera Parkir', value: '540 derajat' },
+        { label: 'Pengisian Nirkabel', value: 'Tersedia' },
+        { label: 'Ambient Light', value: 'Multicolor' },
+      ],
+    },
+    {
+      kategori: 'Keselamatan',
+      items: [{ label: 'Fitur ADAS', value: '18 fitur' }],
+    },
+  ],
   j5: [
     {
       kategori: 'Motor & Performa',

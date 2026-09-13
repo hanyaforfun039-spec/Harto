@@ -18,7 +18,12 @@
       {
         "icon": "power",
         "label": "Tenaga",
-        "value": "160 kW (218 PS)"
+        "value": "218 PS"
+      },
+      {
+        "icon": "torque",
+        "label": "Torsi",
+        "value": "275 Nm"
       },
       {
         "icon": "range",
@@ -28,25 +33,20 @@
       {
         "icon": "battery",
         "label": "Baterai",
-        "value": "65,05 kWh"
+        "value": "65,05 kWh LFP"
       },
       {
         "icon": "fuel",
         "label": "Pengisian Cepat",
         "value": "DC fast charging"
-      },
-      {
-        "icon": "drivetrain",
-        "label": "Penggerak",
-        "value": "Motor listrik tunggal"
       }
     ],
     "fitur": [
-      "Cyber Mecha Design dengan lampu depan matriks",
-      "AI Smart Cockpit dengan layar sentuh besar",
-      "Jangkauan hingga 553 km sekali pengisian (NEDC)",
-      "Pengisian cepat DC untuk perjalanan luar kota",
-      "Paket ADAS berkendara semi-otonom",
+      "Cyber Mecha Design dengan AI Smart Cockpit",
+      "Layar sentuh 13,2 inci",
+      "Kamera parkir 540 derajat",
+      "Pengisian nirkabel dan ambient light multicolor",
+      "18 fitur ADAS",
       "Pilihan warna Stellar Blue, Radiant White, dan Nocturne Black"
     ],
     "foto": {
