@@ -5,6 +5,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import HeroCarousel from '../components/HeroCarousel.astro';
 import LineupSpec from '../components/LineupSpec.astro';
+import SorotPreBook from '../components/SorotPreBook.astro';
 import TrustHybrid from '../components/TrustHybrid.astro';
 import DeliveryGallery from '../components/DeliveryGallery.astro';
 import TestDriveForm from '../components/TestDriveForm.astro';
@@ -13,10 +14,13 @@ import Footer from '../components/Footer.astro';
 import Icon from '../components/Icon.astro';
 import Button from '../components/Button.astro';
 import { site } from '../lib/site';
-import { getLineup } from '../lib/cars';
+import { getLineup, sedangPreOrder } from '../lib/cars';
 import { organizationSchema, webSiteSchema, faqPageSchema } from '../lib/schema';
 
-const lineup = getLineup(site);
+/* Model pre-book dikeluarkan dari daftar: ia sudah punya segmennya sendiri
+   di atas. Membiarkannya di daftar berarti model yang sama muncul dua kali,
+   dan kartu tanpa harga kembali merusak kerapian barisnya. */
+const lineup = getLineup(site).filter((c) => !sedangPreOrder(c));
 const kota = site.address.locality;
 
 const siteUrl = Astro.site ?? new URL('https://jaecoo-semarang.example');
@@ -61,6 +65,8 @@ const homeDescription =
   <Header slot="header" site={site} />
 
   <HeroCarousel site={site} />
+
+  <SorotPreBook site={site} />
 
   <LineupSpec cars={lineup} site={site} />
 

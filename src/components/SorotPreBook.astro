@@ -1,0 +1,131 @@
+---
+/* =============================================================================
+   SorotPreBook — segmen sorot satu model yang masih dibuka pre-book,
+   ditempatkan SEBELUM daftar model.
+
+   Alasannya: model pre-book tidak punya harga, sehingga di dalam daftar ia
+   selalu jadi kartu yang "beda sendiri" — slot harganya kosong dan tidak bisa
+   dibandingkan dengan kartu lain. Dikeluarkan sebagai segmen tersendiri, ia
+   justru mendapat ruang untuk menjelaskan statusnya, dan daftar model di
+   bawahnya kembali rapi karena semua kartunya berharga.
+
+   Isinya dibaca dari cars.json, bukan ditulis mati di sini, supaya cukup ubah
+   data untuk mengganti teks atau menonaktifkannya.
+   ============================================================================ */
+import Button from './Button.astro';
+import type { SiteConfig } from '../lib/types';
+import { getLineup, sedangPreOrder, catatanHarga } from '../lib/cars';
+import { linkPreOrder } from '../lib/whatsapp';
+
+interface Props { site: SiteConfig }
+const { site } = Astro.props;
+
+/* Model pre-book pertama di lineup. Tidak ada -> segmen tidak dirender. */
+const car = getLineup(site).find(sedangPreOrder);
+const detail = car ? `/mobil/${car.slug}` : '#';
+---
+{car && (
+  <section class="sorot" aria-labelledby="sorot-h">
+    <div class="container">
+      <article class="sorot-card">
+        <div class="sorot-media">
+          <img
+            src={car.foto.hero.src}
+            alt={car.foto.hero.alt}
+            width="1200"
+            height="630"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+
+        <div class="sorot-body">
+          <p class="sorot-eyebrow">Pre-Order</p>
+          <h2 class="sorot-title" id="sorot-h">{car.nama}</h2>
+          <p class="sorot-sub">{car.kategori}</p>
+          <p class="sorot-desc">{car.tagline}</p>
+          <p class="sorot-note">{catatanHarga(car)}</p>
+
+          <div class="sorot-cta">
+            <Button href={linkPreOrder(site, car.nama)} variant="primary" iconLeft="whatsapp" target="_blank">
+              Pre-Book Sekarang
+            </Button>
+            <Button href={detail} variant="outline">Lihat Detail</Button>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+)}
+
+<style>
+  .sorot { padding-block: var(--space-2xl); }
+
+  .sorot-card {
+    display: grid;
+    gap: var(--space-lg);
+    align-items: center;
+    padding: var(--space-lg);
+    background: var(--color-surface);
+    border: 1px solid var(--color-accent, #0f8a3d);
+    border-radius: var(--radius-xl, 16px);
+  }
+
+  .sorot-media {
+    border-radius: var(--radius-lg, 12px);
+    overflow: hidden;
+    background: var(--color-surface-2, #f2f2f2);
+  }
+  /* aspect-ratio + object-fit menjaga foto tidak gepeng di lebar mana pun. */
+  .sorot-media img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1200 / 630;
+    object-fit: cover;
+  }
+
+  .sorot-eyebrow {
+    font-size: var(--fs-caption);
+    letter-spacing: var(--ls-wide, .08em);
+    text-transform: uppercase;
+    font-weight: var(--fw-semibold);
+    color: var(--color-accent, #0f8a3d);
+  }
+  .sorot-title {
+    margin-top: var(--space-2xs);
+    font-size: var(--fs-h2);
+    line-height: 1.1;
+  }
+  .sorot-sub {
+    margin-top: var(--space-3xs);
+    font-size: var(--fs-lead);
+    color: var(--color-text-muted);
+  }
+  .sorot-desc {
+    margin-top: var(--space-sm);
+    max-width: 56ch;
+    line-height: 1.6;
+  }
+  .sorot-note {
+    margin-top: var(--space-2xs);
+    max-width: 56ch;
+    font-size: var(--fs-body-sm);
+    color: var(--color-text-muted);
+  }
+  .sorot-cta {
+    margin-top: var(--space-md);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs);
+  }
+
+  /* Dua kolom baru sejak layar lebar; di ponsel foto di atas, teks di bawah. */
+  @media (min-width: 56rem) {
+    .sorot-card {
+      grid-template-columns: 1.05fr 1fr;
+      gap: var(--space-xl);
+      padding: var(--space-xl);
+    }
+  }
+</style>

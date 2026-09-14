@@ -59,3 +59,17 @@ export const linkTestDrive = (site: SiteConfig, mobil: string) =>
 /* Shortcut link siap pakai (server-render). */
 export const linkPenawaran = (site: SiteConfig, modelNama?: string) =>
   waLink(site.whatsapp, pesanPenawaran(site, modelNama));
+
+/** Pesan pre-book: model yang belum dijual bebas. Sengaja TIDAK menyebut
+    merek "JAECOO" seperti pesanPenawaran — model pre-book pertama justru
+    OMODA, dan menyebut merek yang salah di pesan pertama terbaca ceroboh. */
+export function pesanPreOrder(site: SiteConfig, modelNama: string): string {
+  return (
+    `Halo ${site.salesName}, saya ingin pre-book ${modelNama}.
+` +
+    `Boleh dibantu info alokasi unit, pilihan warna, dan cara pemesanannya?`
+  );
+}
+
+export const linkPreOrder = (site: SiteConfig, modelNama: string) =>
+  waLink(site.whatsapp, pesanPreOrder(site, modelNama));
