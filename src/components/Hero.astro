@@ -8,7 +8,7 @@ import Button from './Button.astro';
 import CarImage from './CarImage.astro';
 import CreditCalculator from './CreditCalculator.astro';
 import type { SiteConfig } from '../lib/types';
-import { getCarBySlug, getLineup, getLineupBerharga, hargaMulai, catatanHarga } from '../lib/cars';
+import { getCarBySlug, getLineup, getLineupBerharga, hargaMulai, labelHargaPendek } from '../lib/cars';
 import { formatRupiahShort } from '../lib/format';
 import { linkPenawaran } from '../lib/whatsapp';
 
@@ -76,7 +76,7 @@ const sCta: CtaDef = secondaryCta ?? { label: `Lihat ${car.namaPendek}`, href: d
           harga !== null ? (
             <p class="hero-price">Mulai dari <span class="price" data-harga-mulai={car.slug} data-harga-fmt="short">{formatRupiahShort(harga)}</span></p>
           ) : (
-            <p class="hero-price hero-price--soon">{catatanHarga(car)}</p>
+            <p class="hero-price"><span class="price">{labelHargaPendek(car)}</span></p>
           )
         )}
         <div class="hero-cta">
@@ -122,7 +122,7 @@ const sCta: CtaDef = secondaryCta ?? { label: `Lihat ${car.namaPendek}`, href: d
   .hero-price { font-size: var(--fs-body); color: var(--color-text-muted); }
   .hero-price .price { font-size: var(--fs-h3); color: var(--color-text); margin-left: var(--space-2xs); }
 
-  .hero-price--soon { max-width: 42ch; line-height: 1.55; }
+
 
   /* Angka pamungkas hero (efisiensi) di atas "engineering gauge" */
   .hero-stat { display: grid; gap: var(--space-3xs); }

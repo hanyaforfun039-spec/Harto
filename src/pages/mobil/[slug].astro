@@ -10,7 +10,7 @@ import Footer from '../../components/Footer.astro';
 import CarDetailHybrid from '../../components/CarDetailHybrid.astro';
 import CarImage from '../../components/CarImage.astro';
 import { heroFotoOverride, heroPesan } from '../../lib/harto-detail';
-import { getAllCars, hargaMulai, merek, catatanHarga, faqTerisi } from '../../lib/cars';
+import { getAllCars, hargaMulai, merek, catatanHarga, labelHargaPendek, faqTerisi } from '../../lib/cars';
 import { site } from '../../lib/site';
 import { formatRupiahShort } from '../../lib/format';
 import { linkTestDrive, linkPenawaran } from '../../lib/whatsapp';
@@ -102,7 +102,8 @@ const seoTitle =
         {harga !== null ? (
           <p class="hd-price">Harga OTR mulai <span class="tnum" data-harga-mulai={car.slug} data-harga-fmt="short">{formatRupiahShort(harga)}</span></p>
         ) : (
-          <p class="hd-price hd-price--soon">{catatanHarga(car)}</p>
+<p class="hd-price"><span>{labelHargaPendek(car)}</span></p>
+          <p class="hd-price-note">{catatanHarga(car)}</p>
         )}
 <div class="hd-cta">
           <Button href={waTd} variant="whatsapp" size="lg" iconLeft="whatsapp" target="_blank">Test Drive {car.namaPendek}</Button>
@@ -154,7 +155,8 @@ const seoTitle =
   .hd-lead { color: rgba(244, 246, 244, 0.88); max-width: 50ch; font-size: var(--fs-lead); }
   .hd-price { color: rgba(244, 246, 244, 0.9); font-size: var(--fs-body); margin-top: var(--space-2xs); }
   .hd-price span { font-family: var(--font-display); font-size: var(--fs-h3); font-weight: var(--fw-bold); color: var(--paper); margin-left: var(--space-2xs); }
-  /* Model pre-book: kalimat biasa, jadi jangan pakai gaya angka besar. */
-  .hd-price--soon { max-width: 46ch; line-height: 1.55; }
+  /* Model pre-book: label pendek dapat gaya angka besar, kalimat penjelasnya
+     jadi baris kecil di bawahnya — bukan satu kalimat panjang di slot harga. */
+  .hd-price-note { max-width: 46ch; line-height: 1.55; margin-top: var(--space-3xs); font-size: var(--fs-body-sm); color: rgba(244, 246, 244, 0.72); }
   .hd-cta { display: flex; flex-wrap: wrap; gap: var(--space-sm); margin-top: var(--space-md); }
 </style>

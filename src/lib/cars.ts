@@ -68,9 +68,18 @@ export function cicilanMulai(car: Car, site: SiteConfig): CicilanResult | null {
   return h === null ? null : estimasiCicilanDefault(h, site);
 }
 
-/** Kalimat pengganti saat harga belum ada. */
+/** Kalimat penjelas saat harga belum ada. Panjang — hanya untuk halaman
+    detail, tempat ada ruang untuk menjelaskan. */
 export function catatanHarga(car: Car): string {
   return car.hargaCatatan ?? 'Hubungi kami untuk info harga';
+}
+
+/** Label PENDEK pengganti angka harga di kartu dan daftar.
+    Dipisahkan dari `catatanHarga` dengan sengaja: di kartu lineup, satu
+    kalimat panjang di tempat yang seharusnya berisi "Rp 339,9 jt" membuat
+    kartu itu terlihat rusak dibanding kartu lain di sebelahnya. */
+export function labelHargaPendek(car: Car): string {
+  return sedangPreOrder(car) ? 'Open pre-book' : 'Hubungi kami';
 }
 
 /** FAQ dengan token {harga} diisi harga terkini saat build.

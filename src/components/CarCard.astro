@@ -4,7 +4,7 @@
 import CarImage from './CarImage.astro';
 import Button from './Button.astro';
 import type { Car, SiteConfig } from '../lib/types';
-import { hargaMulai, cicilanMulai, punyaHarga, catatanHarga } from '../lib/cars';
+import { hargaMulai, cicilanMulai, punyaHarga, labelHargaPendek } from '../lib/cars';
 import { formatRupiahShort, formatRupiah } from '../lib/format';
 import { linkTestDrive } from '../lib/whatsapp';
 
@@ -41,8 +41,10 @@ const waTd = linkTestDrive(site, car.nama);
           )}
         </>
       ) : (
-        /* Model yang masih pre-book: tampilkan catatannya, bukan angka kosong. */
-        <span class="card-price-soon">{catatanHarga(car)}</span>
+        /* Model pre-book: label pendek di slot yang sama dengan harga,
+           supaya kartunya sejajar dengan kartu lain. Kalimat penjelasnya
+           ada di halaman detail. */
+        <span class="card-price-soon">{labelHargaPendek(car)}</span>
       )}
     </div>
 
@@ -66,10 +68,13 @@ const waTd = linkTestDrive(site, car.nama);
   }
   .card:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
 
+  /* Bobot visualnya disamakan dengan harga, hanya warnanya aksen supaya
+     terbaca sebagai status, bukan angka. */
   .card-price-soon {
-    font-size: var(--fs-sm);
-    color: var(--color-text-muted);
-    line-height: 1.5;
+    font-size: var(--fs-h3);
+    line-height: 1;
+    font-weight: var(--fw-bold);
+    color: var(--color-accent, #0f8a3d);
   }
 
   .card-media {

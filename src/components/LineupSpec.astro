@@ -4,7 +4,7 @@
 import CarImage from './CarImage.astro';
 import Button from './Button.astro';
 import type { Car, SiteConfig } from '../lib/types';
-import { hargaMulai, catatanHarga } from '../lib/cars';
+import { hargaMulai, labelHargaPendek } from '../lib/cars';
 import { formatRupiahShort } from '../lib/format';
 import { linkTestDrive } from '../lib/whatsapp';
 
@@ -41,7 +41,7 @@ const fotoOverride: Record<string, string> = {
               <h3 class="ls-name"><a href={detail}>{car.nama}</a></h3>
               {(() => { const h = hargaMulai(car); return h !== null
                 ? <p class="ls-price"><span class="ls-price-lbl">Mulai</span> <span class="price" data-harga-mulai={car.slug} data-harga-fmt="short">{formatRupiahShort(h)}</span></p>
-                : <p class="ls-price ls-price--soon">{catatanHarga(car)}</p>; })()}
+                : <p class="ls-price"><span class="ls-price-soon">{labelHargaPendek(car)}</span></p>; })()}
               <div class="ls-cta">
                 <Button href={detail} variant="primary" size="sm" icon="arrow-right">Detail</Button>
                 <Button href={linkTestDrive(site, car.nama)} variant="whatsapp" size="sm" iconLeft="whatsapp" target="_blank">Test Drive</Button>
@@ -114,6 +114,6 @@ const fotoOverride: Record<string, string> = {
   .ls-price { display: flex; align-items: baseline; gap: var(--space-2xs); margin-top: var(--space-3xs); }
   .ls-price-lbl { font-size: var(--fs-caption); text-transform: uppercase; letter-spacing: var(--ls-wide); color: var(--color-text-subtle); }
   .ls-price .price { font-size: var(--fs-h5); font-weight: var(--fw-bold); }
-  .ls-price--soon { display: block; font-size: var(--fs-sm); color: var(--color-text-muted); line-height: 1.5; }
+  .ls-price-soon { font-size: var(--fs-h5); font-weight: var(--fw-bold); color: var(--color-accent, #0f8a3d); }
   .ls-cta { display: flex; flex-wrap: wrap; gap: var(--space-2xs); margin-top: var(--space-sm); }
 </style>

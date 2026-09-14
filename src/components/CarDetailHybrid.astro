@@ -7,7 +7,7 @@ import CarImage from './CarImage.astro';
 import Icon from './Icon.astro';
 import Button from './Button.astro';
 import type { Car, CarFaq, SiteConfig } from '../lib/types';
-import { getLineup, merek, faqTerisi, catatanHarga } from '../lib/cars';
+import { getLineup, merek, faqTerisi, labelHargaPendek } from '../lib/cars';
 import { formatRupiah } from '../lib/format';
 import { linkTestDrive, linkPenawaran } from '../lib/whatsapp';
 import { specsOverride, adasGroups, adasCount } from '../lib/harto-detail';
@@ -139,7 +139,7 @@ const t = tech[pt];
           <tr>
             <td>{v.nama}{v.highlight && <span class="cdh-tag-rec">Populer</span>}</td>
             <td class="tnum" data-varian-nama={v.nama}>
-              {v.hargaOtr === null ? catatanHarga(car) : formatRupiah(v.hargaOtr)}
+              {v.hargaOtr === null ? labelHargaPendek(car) : formatRupiah(v.hargaOtr)}
             </td>
           </tr>
         ))}
